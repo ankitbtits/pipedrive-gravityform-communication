@@ -1,0 +1,373 @@
+.pgfc-addpgfc {
+  padding: 50px 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+}
+.pgfc-addpgfc form {
+  width: 100%;
+  max-width: 600px;
+}
+
+.pgfc-addpgfc .pgfc_addpgfcItemCon {
+  width: 100%;
+}
+.pgfc-addpgfc .pgfcFormInn {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 20px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.pgfc-addpgfc .pgfcFormInn table tr td {
+  width: 33.3333333333%;
+}
+.pgfc-addpgfc .pgfcFormInn table tr td select {
+  width: 100%;
+}
+.pgfc-addpgfc .pgfcFormInn.pgfc_itemsCon {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+.pgfc-addpgfc .pgfcFormInn.radioButtonCon {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
+}
+.pgfc-addpgfc .pgfcFormInn.radioButtonCon h3 {
+  font-weight: normal;
+  width: 100%;
+  margin: 0 0 10px;
+}
+.pgfc-addpgfc .pgfcFormInn.radioButtonCon .radioButtons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.pgfc-addpgfc .pgfcFormInn.radioButtonCon .radioButtons label {
+  margin-right: 10px;
+}
+.pgfc-addpgfc .pgfcFormInn .pgfcItem {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 6px;
+}
+.pgfc-addpgfc .pgfcFormInn .selectWrapper {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+.pgfc-addpgfc .pgfcFormInn .selectWrapper h3 {
+  font-weight: normal;
+  width: 100%;
+  margin: 0 0 10px;
+}
+.pgfc-addpgfc form .button {
+  background-color: #007cba;
+  color: #fff;
+}
+.pgfc-addpgfc form .selectFieldStyle {
+  max-width: 600px;
+  padding: 6px 30px 6px 10px;
+  background-color: #f6f7f7;
+  border: 1px solid #c3c4c7;
+}
+.pgfc-addpgfc form .textFieldStyle {
+  width: 100%;
+  max-width: 600px;
+  padding: 6px 10px;
+  background-color: #f6f7f7;
+  border: 1px solid #c3c4c7;
+}
+.pgfc-addpgfc form .textAreaStyle {
+  width: 100%;
+  max-width: 600px;
+  padding: 6px 10px;
+  background-color: #f6f7f7;
+  border: 1px solid #c3c4c7;
+  height: 150px;
+}
+.pgfc-addpgfc form .fullWidth {
+  width: 100%;
+}
+.pgfc-addpgfc form .halfWidth {
+  width: calc(50% - 10px);
+}
+.pgfc-addpgfc form .oneThirdWidth {
+  width: calc(33% - 10px);
+}
+.pgfc-addpgfc .disableField {
+  background-color: #c3c4c7 !important;
+}
+
+.pgfc-settings ._CISettingIn {
+  width: 100%;
+  background-color: #fff;
+  display: block;
+  padding: 20px 30px;
+  margin-top: 30px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.pgfc-settings ._CISettingIn h2 {
+  color: #007cba;
+  text-transform: uppercase;
+}
+.pgfc-settings ._CISettingIn table {
+  border-spacing: 0;
+  width: 100%;
+  border: none;
+}
+.pgfc-settings ._CISettingIn table th {
+  text-align: left;
+  font-weight: 600;
+  width: 200px;
+  padding: 10px 20px 10px 0;
+  vertical-align: top;
+}
+.pgfc-settings ._CISettingIn table td {
+  padding: 10px 0;
+  vertical-align: top;
+}
+.pgfc-settings ._CISettingIn table form {
+  max-width: 600px;
+}
+
+.pgfc-inovice-hideElm {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  z-index: -1;
+}
+
+.pgfcSettingsWrapper {
+  margin-top: 1rem;
+}
+.pgfcSettingsWrapper .dflex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+.pgfcSettingsWrapper .pgfc_submit_wrapper {
+  width: 100%;
+}
+.pgfcSettingsWrapper #pgfc-settings-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  gap: 0.875rem;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset {
+  background: #fff;
+  border: 1px solid #e3e6ef;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 1px 4px rgba(18, 25, 97, 0.0779552);
+          box-shadow: 0 1px 4px rgba(18, 25, 97, 0.0779552);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 calc(50% - 0.875rem);
+          flex: 0 0 calc(50% - 0.875rem);
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset.fullWidth {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 100%;
+          flex: 0 0 100%;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset#pgfc-firm-details-fields hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  opacity: 0;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset#pgfc-firm-details-fields .dflex {
+  gap: 24px;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset#pgfc-firm-details-fields .dflex > div {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset#pgfc-firm-details-fields .dflex > div.toggle_firm_logo {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  min-width: 200px;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset#pgfc-firm-details-fields .dflex .removeFieldWrapper {
+  -webkit-box-flex: 100%;
+      -ms-flex: 100%;
+          flex: 100%;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset#pgfc-firm-details-fields .is_removable_field:nth-of-type(odd) {
+  background: #F6F7F7;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset#pgfc-firm-details-fields .dynamic-field-template + div.is_removable_field {
+  padding-top: 1rem !important;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset#pgfc-firm-details-fields .removeFieldWrapper {
+  width: 100%;
+  text-align: right;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset#pgfc-firm-details-fields .add_firm_new {
+  border-top: 1px solid #e3e6ef;
+  padding: 1rem;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset div, .pgfcSettingsWrapper #pgfc-settings-form fieldset h3, .pgfcSettingsWrapper #pgfc-settings-form fieldset textarea, .pgfcSettingsWrapper #pgfc-settings-form fieldset label, .pgfcSettingsWrapper #pgfc-settings-form fieldset input[type=text] {
+  width: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset .removeWrapper, .pgfcSettingsWrapper #pgfc-settings-form fieldset label.form-label {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+  font-weight: 500;
+  gap: 0.7rem;
+  padding: 0px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset h3 {
+  margin: 0px 0px 1rem 0px;
+  padding: 1rem;
+  border-bottom: 1px solid #e3e6ef;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset label.description_label {
+  margin-bottom: 10px;
+  display: inline-block;
+  font-weight: 500;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset > div {
+  padding: 1rem;
+  padding-top: 0px;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset > .is_removable_field {
+  padding: 2rem 1rem;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset textarea, .pgfcSettingsWrapper #pgfc-settings-form fieldset input[type=text] {
+  border: 1px solid #c3c4c7;
+  padding: 6px 10px;
+}
+.pgfcSettingsWrapper #pgfc-settings-form fieldset .remove-dynamic-field {
+  border: none;
+  margin: 0px;
+  background: transparent;
+  color: #d94f4f;
+  cursor: pointer;
+}
+
+#pgfc_extra_fields button.remove-field {
+  border: none;
+  margin: 0px;
+  background: transparent;
+  color: #d94f4f;
+  cursor: pointer;
+}
+
+.pgfc_admin_tabs ul li {
+  display: inline-block;
+  margin-right: 10px;
+}
+.pgfc_admin_tabs ul li:after {
+  content: "|";
+  margin-left: 10px;
+}
+.pgfc_admin_tabs ul li:last-child:after {
+  content: "";
+}
+.pgfc_admin_tabs ul li a {
+  text-decoration: none;
+  color: #2271b1;
+}
+.pgfc_admin_tabs ul li a.active {
+  color: #000;
+}
+
+#adminmenu a[href="admin.php?page=pgfc-settings"] {
+  display: none;
+}
+
+#pgfc_receipt_modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+#pgfc_receipt_modal .modal-content {
+  background-color: #fefefe;
+  margin: clamp(50px, 5vw, 5vw) auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: calc(100% - 30px);
+  text-align: center;
+  max-width: 1500px;
+  position: relative;
+}
+#pgfc_receipt_modal .close {
+  font-size: 28px;
+  font-weight: bold;
+  display: block;
+  aspect-ratio: 1/1;
+  background: #080808;
+  padding: 5px;
+  border-radius: 50%;
+  color: white;
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  z-index: 5;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  #pgfc-settings-form fieldset {
+    -webkit-box-flex: 100%;
+        -ms-flex: 100%;
+            flex: 100%;
+  }
+}/*# sourceMappingURL=admin_style.css.map */

@@ -1,0 +1,339 @@
+$color1 : #007cba;
+
+.pgfc-addpgfc{
+    padding: 50px 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;    
+    form{
+        width: 100%;
+        max-width: 600px;
+    }
+}
+.pgfc-addpgfc{
+    .pgfc_addpgfcItemCon{
+        width: 100%; 
+    }
+    .pgfcFormInn{
+        width: 100%;
+        display: flex;
+        margin-bottom: 20px;
+        justify-content: space-between;
+        table{
+            tr{
+                td{
+                    width: calc(100% / 3);
+                    select{
+                        width: 100%;
+                    }
+                }
+            }
+        }
+        &.pgfc_itemsCon{
+            flex-wrap: wrap;        
+        }
+        &.radioButtonCon{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: baseline;
+            h3{
+                font-weight: normal;
+                width: 100%;
+                margin: 0 0 10px;
+            }
+            .radioButtons{
+                display: flex;
+                align-items: center;
+                label{
+                    margin-right: 10px;
+                }
+            }
+        }
+        .pgfcItem{
+            width: 100%;    
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        .selectWrapper{
+            flex-wrap: wrap;
+            h3{
+                font-weight: normal;
+                width: 100%;
+                margin: 0 0 10px;
+            }
+        }
+    }
+    form{
+        .button{
+            background-color: $color1;
+            color: #fff;
+        }
+        .selectFieldStyle{
+            // width: 100%;
+            max-width: 600px;
+            padding: 6px 30px 6px 10px;
+            background-color: #f6f7f7;
+            border: 1px solid #c3c4c7;
+        }
+        .textFieldStyle{
+            width: 100%;
+            max-width: 600px;
+            padding: 6px 10px;
+            background-color: #f6f7f7;
+            border: 1px solid #c3c4c7;
+        }
+        .textAreaStyle{
+            width: 100%;
+            max-width: 600px;
+            padding: 6px 10px;
+            background-color: #f6f7f7;
+            border: 1px solid #c3c4c7;
+            height: 150px;
+        }
+        .fullWidth{
+            width: 100%;
+        }
+        .halfWidth{
+            width: calc(50% - 10px);
+        }
+        .oneThirdWidth{
+            width: calc(33% - 10px);
+        }
+        
+    }
+    .disableField{
+        background-color: #c3c4c7!important;
+    }
+}
+
+
+.pgfc-settings{
+    ._CISettingIn{
+        width: 100%;
+        background-color: #fff;
+        display: block;
+        padding: 20px 30px;
+        margin-top: 30px;
+        box-sizing: border-box;
+        h2{
+            color: $color1;
+            text-transform: uppercase;
+        }
+        table{
+            border-spacing: 0;
+            width: 100%;
+            border: none;
+            th{
+                text-align: left;
+                font-weight: 600;
+                width: 200px;
+                padding: 10px 20px 10px 0;
+                vertical-align: top;
+            }
+            td{
+                padding: 10px 0;
+                vertical-align: top;
+            }
+            form{
+                max-width: 600px;
+            }
+        }
+    }
+}
+
+.pgfc-inovice-hideElm{
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    z-index: -1;
+}
+.pgfcSettingsWrapper{
+    margin-top: 1rem;
+    .dflex{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .pgfc_submit_wrapper{
+        width: 100%;
+    }
+    #pgfc-settings-form{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 0.875rem;
+        fieldset{
+            background: #fff;
+            border: 1px solid #e3e6ef;
+            border-radius: 3px;
+            box-shadow: 0 1px 4px rgba(18, 25, 97, .0779552);
+            box-sizing: border-box;           
+            flex: 0 0 calc(50% - 0.875rem);
+            &.fullWidth{
+                flex: 0 0 100%;
+            }
+            &#pgfc-firm-details-fields{
+                hr{
+                    margin-top: 20px;
+                    margin-bottom: 20px;
+                    opacity: 0;
+                }
+                .dflex{
+                    gap: 24px;
+                    &>div{
+                        flex: 1;
+                        &.toggle_firm_logo{
+                            flex: 0 0 auto;
+                            width: fit-content;
+                            min-width: 200px;
+                        }
+                    }
+                    .removeFieldWrapper{
+                        flex: 100%;
+                    }
+                }
+                .is_removable_field{
+                    &:nth-of-type(odd){
+                        background: #F6F7F7;
+                    }
+                    
+                }
+                .dynamic-field-template{
+                    &+div.is_removable_field{
+                        padding-top: 1rem !important;
+                    }
+                }
+                .removeFieldWrapper{
+                    width: 100%;
+                    text-align: right;
+                }
+                .add_firm_new{
+                    border-top: 1px solid #e3e6ef;
+                    padding: 1rem;
+                }
+            }
+            div, h3, textarea, label, input[type="text"]{
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .removeWrapper, label.form-label{
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                margin-bottom: 10px;
+                font-weight: 500;
+                gap: 0.7rem;
+                padding: 0px;
+                justify-content: space-between;
+            }
+            h3{
+                margin: 0px 0px 1rem 0px;
+                padding: 1rem;
+                border-bottom: 1px solid #e3e6ef;            
+            }
+            label.description_label{
+                margin-bottom: 10px;
+                display: inline-block;
+                font-weight: 500;
+            }
+            &>div{
+                padding: 1rem;
+                padding-top: 0px;                
+            }
+            &>.is_removable_field{
+                padding: 2rem 1rem;                           
+            }            
+            textarea, input[type="text"]{
+                border: 1px solid #c3c4c7;
+                padding: 6px 10px;
+            }
+            .remove-dynamic-field{
+                border: none;
+                margin: 0px;
+                background: transparent;
+                color: #d94f4f;
+                cursor: pointer;
+            }
+        }
+    }
+}
+#pgfc_extra_fields button.remove-field{
+    border: none;
+    margin: 0px;
+    background: transparent;
+    color: #d94f4f;
+    cursor: pointer;
+}
+.pgfc_admin_tabs{
+    ul{
+        li{
+            display: inline-block;
+            margin-right: 10px;
+            &:after{
+                content: '|';
+                margin-left: 10px;
+            }
+            &:last-child{
+                &:after{
+                    content: '';
+                }
+            }
+            a{
+                text-decoration: none;
+                color: #2271b1;
+                &.active{
+                    color: #000;
+                }
+            }
+        }
+    }
+}
+#adminmenu a[href="admin.php?page=pgfc-settings"] { 
+    display: none;
+}
+#pgfc_receipt_modal {
+    display: none; 
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    .modal-content {
+        background-color: #fefefe;
+        margin: clamp(50px, 5vw, 5vw) auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: calc(100% - 30px);
+        text-align: center;
+        max-width: 1500px;
+        position: relative;
+    }    
+    .close {
+        font-size: 28px;
+        font-weight: bold;
+        display: block;
+        aspect-ratio: 1 / 1;
+        background: #080808;
+        padding: 5px;
+        border-radius: 50%;
+        color: white;
+        position: absolute;
+        right: -10px;
+        top: -10px;
+        z-index: 5;
+        text-decoration: none;
+        cursor: pointer;
+    }    
+}
+
+@media(max-width: 767px){
+    #pgfc-settings-form{
+        fieldset{            
+            flex: 100%;
+        }
+    }
+}

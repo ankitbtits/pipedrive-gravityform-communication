@@ -1,0 +1,61 @@
+[2025-03-25 10:18:55] API Error: persons
+Payload: {
+    "name": "testing one",
+    "07aaf6652ad9c3267cf10b014b3b8ac139e69054": "Il \/La sottoscritto\/a nel trasmettere i propri dati a PromoFirenze Azienda Speciale della Camera di Commercio di Firenze, dichiara ai sensi dell\u2019art. 13 del Regolamento UE 2016\/679 del 27 aprile 2016 e del Codice Privacy D.lgs n. 196\/2003 come modificato dal D.lgs n. 101\/2018, di aver preso visione sul sito www.promofirenze.it nell\u2019apposita sezione, dell\u2019intera informativa al consenso del trattamento dei dati.",
+    "marketing_status": "Consento",
+    "ec9fda99f1140b87d4c68162f19e726a61c12033": ""
+}
+Response: {
+    "success": false,
+    "error": "Email must be given if marketing status is set.",
+    "error_info": "Please check developers.pipedrive.com for more information about Pipedrive API.",
+    "data": null,
+    "additional_data": null
+}
+-------------------------------------------------
+[2025-03-25 10:23:30] API Error: persons
+Payload: {
+    "name": "test",
+    "07aaf6652ad9c3267cf10b014b3b8ac139e69054": "Il \/La sottoscritto\/a nel trasmettere i propri dati a PromoFirenze Azienda Speciale della Camera di Commercio di Firenze, dichiara ai sensi dell\u2019art. 13 del Regolamento UE 2016\/679 del 27 aprile 2016 e del Codice Privacy D.lgs n. 196\/2003 come modificato dal D.lgs n. 101\/2018, di aver preso visione sul sito www.promofirenze.it nell\u2019apposita sezione, dell\u2019intera informativa al consenso del trattamento dei dati.",
+    "marketing_status": "",
+    "ec9fda99f1140b87d4c68162f19e726a61c12033": ""
+}
+Response: {
+    "success": false,
+    "error": "Email must be given if marketing status is set.",
+    "error_info": "Please check developers.pipedrive.com for more information about Pipedrive API.",
+    "data": null,
+    "additional_data": null
+}
+-------------------------------------------------
+[2025-03-25 10:36:49] API Error: persons
+Payload: {
+    "name": "test",
+    "07aaf6652ad9c3267cf10b014b3b8ac139e69054": "Il \/La sottoscritto\/a nel trasmettere i propri dati a PromoFirenze Azienda Speciale della Camera di Commercio di Firenze, dichiara ai sensi dell\u2019art. 13 del Regolamento UE 2016\/679 del 27 aprile 2016 e del Codice Privacy D.lgs n. 196\/2003 come modificato dal D.lgs n. 101\/2018, di aver preso visione sul sito www.promofirenze.it nell\u2019apposita sezione, dell\u2019intera informativa al consenso del trattamento dei dati.",
+    "ec9fda99f1140b87d4c68162f19e726a61c12033": ""
+}
+Response: {
+    "success": false,
+    "error": "Invalid field(s) in the payload: 07aaf6652ad9c3267cf10b014b3b8ac139e69054, ec9fda99f1140b87d4c68162f19e726a61c12033",
+    "error_info": "Please check developers.pipedrive.com for more information about Pipedrive API.",
+    "data": null,
+    "additional_data": null
+}
+-------------------------------------------------
+[2025-03-25 11:10:43] API Error: deals
+Payload: {
+    "bff24285d5d5c6e649ca3a8875fcd580a4a49cc2": "AUDITORIUM (283 PAX + UN MASSIMO DI 11 RELATORI SUL PALCO)",
+    "b370a763902f85e313e6bde334286e4f549ea11f": "0123",
+    "e60952ebaeacebf6385d61b08fa2365fd38aee33": "2025-03-28",
+    "6701c8059191327d63f51a268b5e3193ea31e64f": "",
+    "e15dbf269b379050828b0133c7fba81bcd68a49d": "this is just a testing submission by developer to test pipedrive ciommunication",
+    "person_id": 10696
+}
+Response: {
+    "success": false,
+    "error": "Deal title must be given.",
+    "error_info": "Please check developers.pipedrive.com for more information about Pipedrive API.",
+    "data": null,
+    "additional_data": null
+}
+-------------------------------------------------
