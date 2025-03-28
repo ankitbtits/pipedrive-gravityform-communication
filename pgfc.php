@@ -25,6 +25,9 @@ require_once 'inc/hardCoded.php';
 require_once 'inc/functions.php';
 require_once 'inc/gravityForm.php';
 require_once 'admin/tabs.php';
+require_once 'admin/show_pipedrive_data.php';
+require_once 'admin/manage_pipedrive_data.php';
+require_once 'admin/manage_organizations_profile.php';
 
 add_action('admin_notices', 'pgfc_admin_notice_notice');
 function pgfc_admin_notice_notice(){

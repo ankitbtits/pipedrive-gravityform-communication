@@ -64,7 +64,7 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
                             <?php
                                 if(!empty(getPipeDriveAPIEndPoint())){
                                     ?>
-                                        <select required name="mapping[0][apiLabel]" class="pipeDriveAPI"  id="pipeDriveAPI">
+                                        <select required name="mapping[0][apiLabel]" class="pipeDriveAPISelect"  id="pipeDriveAPI">
                                             <option value="">Select API</option>
                                             <?php
                                                 foreach(getPipeDriveAPIEndPoint() as $apiName){
@@ -127,25 +127,5 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
         }
 
         
-        // if(!empty(getPipeDriveAPIEndPoint('attributes'))){
-        //     foreach(getPipeDriveAPIEndPoint('attributes') as $key => $attributes){
-        //         if(!empty($attributes)){
-        //             $keyModified = strtolower(str_replace(' ', '', $key));
-             ?>
-        <!-- //         <select required name="mapping[0][apiAttribute]" class="apiAttributeSelect" id="pipeDriveAPIAttributes_<?php //echo $keyModified;?>">
-        //             <option value="">Select Attribute</option>
-        //             <?php
-        //                 foreach($attributes as $attribute){
-        //                     echo '<option value="'.$attribute.'">'.$attribute.'</option>';
-        //                 }
-        //             ?>
-                 </select> -->
-
-             <?php
-        //         }else{
-        //             _e('Selected form does not have any field. Please change form or add fields.', 'pgfc');
-        //         }
-        //     }
-        // }
     ?>
 </div>

@@ -110,3 +110,132 @@ function getMapping($formID = false){
     }
     return $mappingResult;
 }   
+
+function insertApiErrorLog($action ,$api_end_point, $payload, $response){
+    $timestamp = date('Y-m-d H:i:s');
+    $title = $action . ' - '. $timestamp;
+    $post_data = array(
+        'post_title'    => sanitize_text_field($title),
+        'post_status'   => 'publish',
+        'post_type'     => 'pgfc_api_logs',
+    );
+    // Insert the post into the database
+    $post_id = wp_insert_post($post_data);
+
+    if (is_wp_error($post_id)) {
+        return $post_id;
+    }
+
+    if (isset($action) && !empty($action)) {
+        update_post_meta($post_id, 'action', sanitize_text_field($action));
+    }
+    if (isset($api_end_point) && !empty($api_end_point)) {
+        update_post_meta($post_id, 'api_end_point', sanitize_text_field($api_end_point));
+    }
+    if (isset($payload) && !empty($payload)) {
+        update_post_meta($post_id, 'payload', $payload);
+    }
+    if (isset($response) && !empty($response)) {
+        update_post_meta($post_id, 'response', $response);
+    }
+    update_post_meta($post_id, 'timestamp', sanitize_text_field($timestamp));
+}
+
+function alloedProfileData(){
+    $arg =[
+        'post_type' => 'pgfc', 
+        'posts_per_page'=> -1
+    ];
+    $posts = get_posts($arg);
+    $mergedArray = [];
+    foreach($posts as $post){
+        $ID = $post->ID;
+        $formID = get_post_meta($ID, 'form_id', true);
+        $subArray = getMapping($formID);
+        foreach ($subArray as $key => $items) {
+            $key = getPipeDriveAPIEndPoint($key);
+            if (!isset($mergedArray[$key])) {
+                $mergedArray[$key] = [];
+            }
+    
+            foreach ($items as $newItem) {
+                $exists = false;
+    
+                // Check if the same key already exists
+                foreach ($mergedArray[$key] as &$existingItem) {
+                    if ($existingItem['key'] === $newItem['apiAttribute']) {
+                        $exists = true;
+                        break;
+                    }
+                }
+    
+                // Add only if it does not already exist
+                if (!$exists) {
+                    $mergedArray[$key][] = [
+                        'key' => $newItem['apiAttribute']
+                    ];
+                }
+            }
+        }
+    }
+    return $mergedArray;
+}
+
+
+
+// custom fields handler
+function pipedriveGetCustomFields($entity) {
+    $response = pipedrive_api_request('GET', "{$entity}Fields");
+    if (!empty($response['success']) && !empty($response['data'])) {
+        return $response['data'];
+    }  else{
+        insertApiErrorLog('Getting custom fields API failed ',"{$entity}Fields", '', $response);   
+    }
+}
+
+function pipedriveStoreCustomFields() {
+    $entities = ['person', 'organization', 'deal', 'activity'];
+    $fieldsData = [];
+
+    foreach ($entities as $entity) {
+        $fieldsData[$entity] = pipedriveGetCustomFields($entity);
+    }
+    update_option('pipedrive_custom_fields', $fieldsData);
+}
+
+function pipedriveGetVieldName($fieldID = false) {
+    $fieldsData = get_option('pipedrive_custom_fields');
+
+    if (!$fieldsData) {
+        // Fetch and store fields if not found in options
+        pipedriveStoreCustomFields();
+        $fieldsData = get_option('pipedrive_custom_fields');
+    }
+    if(!$fieldID){
+        return $fieldsData;
+    }
+    // Search in all entities
+    foreach ($fieldsData as $entityFields) {
+        foreach ($entityFields as $field) {
+            if ($field['key'] === $fieldID) {
+                return $field;
+            }
+        }
+    }
+
+    // If field is not found, refresh fields and try again
+    pipedriveStoreCustomFields();
+    $fieldsData = get_option('pipedrive_custom_fields');
+
+    foreach ($fieldsData as $entityFields) {
+        foreach ($entityFields as $field) {
+            if ($field['key'] === $fieldID) {
+                return $field;
+            }
+        }
+    }
+
+    return "No field found with this key";
+}
+
+// custom fields handler

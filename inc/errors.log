@@ -59,3 +59,11 @@ Response: {
     "additional_data": null
 }
 -------------------------------------------------
+[2025-03-27 05:24:48] API Error: activities
+Payload: 10700
+Response: null
+-------------------------------------------------
+[2025-03-27 05:24:48] API Error: activities
+Payload: 23
+Response: null
+-------------------------------------------------

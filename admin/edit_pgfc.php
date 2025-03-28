@@ -118,7 +118,7 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                             <?php
                                 if(!empty(getPipeDriveAPIEndPoint())){
                                     ?>
-                                        <select required name="mapping[<?php echo $index;?>][apiLabel]" class="pipeDriveAPI onChangeFun" data-slug="pipeDriveAPIAttributes" id="pipeDriveAPI">
+                                        <select required name="mapping[<?php echo $index;?>][apiLabel]" class="pipeDriveAPISelect" id="pipeDriveAPI">
                                             <option value="">Select API</option>
                                             <?php
                                                 foreach(getPipeDriveAPIEndPoint() as $apiName){
@@ -128,7 +128,11 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                                                 }
                                             ?>
                                         </select>
-
+                                        <?php
+                                            if($apiLabel == 'Add an activities' && isset($map['apiLabelIndex'])){
+                                                echo '<input type="number" name="mapping['.$index.'][apiLabelIndex]" required class="apiActivityIndex" value="'.$map['apiLabelIndex'].'" />';
+                                            }
+                                        ?>
                                     <?php
                                 }
                             ?>
@@ -188,24 +192,6 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
             <?php
                 }
             }
-        }
-        // if(!empty(getPipeDriveAPIEndPoint('attributes'))){
-        //     foreach(getPipeDriveAPIEndPoint('attributes') as $key => $attributes){
-        //         if(!empty($attributes)){
-        //             $keyModified = strtolower(str_replace(' ', '', $key));
-             ?>
-        <!-- //         <select required name="mapping[0][apiAttribute]" class="apiAttributeSelect" id="pipeDriveAPIAttributes_<?php //echo $keyModified;?>">
-        //             <option value="">Select Attribute</option>
-                     <?php
-        //                 foreach($attributes as $attribute){
-        //                     echo '<option value="'.$attribute.'">'.$attribute.'</option>';
-        //                 }
-        //             ?>
-        //         </select> -->
-
-             <?php
-        //         }
-        //     }
-        // }
+        }    
     ?>
 </div>

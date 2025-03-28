@@ -215,33 +215,4 @@ function pgfc_delete_all_logs() {
 //     insertApiErrorLog('forTesting', 'persons', ['one', 'two', 'threee'], ['error', 'asdasd']);
 // }
 
-function insertApiErrorLog($action ,$api_end_point, $payload, $response){
-    $timestamp = date('Y-m-d H:i:s');
-    $title = $action . ' - '. $timestamp;
-    $post_data = array(
-        'post_title'    => sanitize_text_field($title),
-        'post_status'   => 'publish',
-        'post_type'     => 'pgfc_api_logs',
-    );
-    // Insert the post into the database
-    $post_id = wp_insert_post($post_data);
-
-    if (is_wp_error($post_id)) {
-        return $post_id;
-    }
-
-    if (isset($action) && !empty($action)) {
-        update_post_meta($post_id, 'action', sanitize_text_field($action));
-    }
-    if (isset($api_end_point) && !empty($api_end_point)) {
-        update_post_meta($post_id, 'api_end_point', sanitize_text_field($api_end_point));
-    }
-    if (isset($payload) && !empty($payload)) {
-        update_post_meta($post_id, 'payload', $payload);
-    }
-    if (isset($response) && !empty($response)) {
-        update_post_meta($post_id, 'response', $response);
-    }
-    update_post_meta($post_id, 'timestamp', sanitize_text_field($timestamp));
-}
 ?>

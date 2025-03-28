@@ -370,4 +370,16 @@
         -ms-flex: 100%;
             flex: 100%;
   }
+}
+.adminTable {
+  width: 100%;
+}
+.adminTable th {
+  text-align: left;
+  font-weight: normal;
+  padding: 10px;
+  width: 30%;
+}
+.adminTable td {
+  padding: 10px;
 }/*# sourceMappingURL=admin_style.css.map */

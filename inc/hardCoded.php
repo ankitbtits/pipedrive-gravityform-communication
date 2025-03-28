@@ -28,7 +28,63 @@ function getPipeDriveAPIEndPoint($atr = false){
     
     return $pipedriveAPI;
 }
-
+// function alloedProfileData($attr = false){
+//     $res = [
+//         'persons'=>[
+//             [
+//                 'key' => 'name',
+//                 'action' => 'edit',
+//             ],
+//             [
+//                 'key' => 'email',
+//                 'action' => 'edit',
+//             ],
+//             [
+//                 'key' => 'phone',
+//                 'action' => 'edit',
+//             ],
+           
+//             [
+//                 'key' => 'marketing_status',
+//                 'action' => 'edit',
+//             ],
+//             [
+//                 'key' => 'ec9fda99f1140b87d4c68162f19e726a61c12033',
+//                 'action' => 'edit',
+//             ],
+//             [
+//                 'key' => '1857792581662799944dcb3f2eadc7b78e477120',
+//                 'action' => 'edit',
+//             ],
+//             [
+//                 'key' => 'd71b88d861c0644607d4a070a78daa90951fd7f4',
+//                 'action' => 'edit',
+//             ]
+//         ],
+//         'organizations'=>[
+//             [
+//                 'key' => 'name',
+//                 'action' => 'edit',
+//             ]
+//         ],
+//         'deals'=>[
+//             [
+//                 'key' => 'title',
+//                 'action' => 'edit',
+//             ]
+//         ],
+//         'activities'=>[
+//             [
+//                 'key' => 'subject',
+//                 'action' => 'edit',
+//             ]
+//         ]
+//     ];
+//     if($attr){
+//         $res = $res[$attr];
+//     }
+//     return $res;
+// }
 function getSampleData() {
     return [
         'id' => 6,
@@ -71,3 +127,40 @@ function getSampleData() {
         '13.2' => null,
     ];
 }
+function getSampleData2() {
+    return [
+        'id' => 16,
+        'status' => 'active',
+        'form_id' => 8,
+        'ip' => '::1',
+        'source_url' => 'http://localhost/pipedrive/sample-page/',
+        'currency' => 'USD',
+        'post_id' => null,
+        'date_created' => '2025-03-27 05:15:33',
+        'date_updated' => '2025-03-27 05:15:33',
+        'is_starred' => 0,
+        'is_read' => 0,
+        'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
+        'payment_status' => null,
+        'payment_date' => null,
+        'payment_amount' => null,
+        'payment_method' => null,
+        'transaction_id' => null,
+        'is_fulfilled' => null,
+        'created_by' => 1,
+        'transaction_type' => null,
+        'source_id' => 2,
+        '1.2' => null,
+        '1.3' => 'deve 003',
+        '1.4' => null,
+        '1.6' => 'last',
+        '1.8' => null,
+        '3' => 'te@gmail.com',
+        '5' => 'activity one by dev',
+        '6' => 'activity 2 label',
+        '7' => 'dealname for test',
+        '8' => 'orgname',
+    ];
+}
+
+
