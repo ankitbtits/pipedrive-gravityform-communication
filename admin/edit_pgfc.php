@@ -118,12 +118,12 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                             <?php
                                 if(!empty(getPipeDriveAPIEndPoint())){
                                     ?>
-                                        <select required name="mapping[<?php echo $index;?>][apiLabel]" class="pipeDriveAPISelect" id="pipeDriveAPI">
+                                        <select required name="mapping[<?php echo $index;?>][apiLabel]" class="pipeDriveAPISelect onChangeFun" data-slug="pipeDriveAPIAttributes" id="pipeDriveAPI">
                                             <option value="">Select API</option>
                                             <?php
                                                 foreach(getPipeDriveAPIEndPoint() as $apiName){
-                                                    echo '<option value="'.$apiName['label'] .'"
-                                                    '.(($apiName['label'] == $apiLabel)?'selected':'').'
+                                                    echo '<option value="'.$apiName['singular_end_point'] .'"
+                                                    '.(($apiName['singular_end_point'] == $apiLabel)?'selected':'').'
                                                     >'.$apiName['label'].'</option>';
                                                 }
                                             ?>
@@ -138,7 +138,27 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                             ?>
                         </td>
                         <td>   
-                            <input type="text" name="mapping[<?php echo $index;?>][apiAttribute]" value="<?php echo $apiAttribute;?>" placeholder="Enter APIs Attribute name/key" />
+                           <?php
+                                if(!empty(pipedriveGetVieldName())){
+                                    $fields = pipedriveGetVieldName()[$apiLabel];
+                                ?>
+                                        <select required name="mapping[<?php echo $index;?>][apiAttribute]" class="apiAttributeSelect" id="pipeDriveAPIAttributes_<?php echo $apiLabel;?>">
+                                             <option value="">Select Attribute</option>
+                                             <?php
+                                                 foreach($fields as $field){
+                                                    $fieldKey = $field['key'];
+                                                    $fieldName = $field['name'];
+                                                    echo '<option value="'.$fieldKey.'" 
+                                                    '.(($fieldKey == $apiAttribute)?'selected':'').'
+                                                    >'.$fieldName.'</option>';
+                                                 }
+                                             ?>
+                                         </select>
+                        
+                                     <?php
+                                }
+                            ?>  
+                            <!-- <input type="text" name="mapping[<?php echo $index;?>][apiAttribute]" value="<?php echo $apiAttribute;?>" placeholder="Enter APIs Attribute name/key" /> -->
                         </td>
                         <td>
                             <a href="javascript:;" class="removeMapping">Remove X</a>
@@ -192,6 +212,24 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
             <?php
                 }
             }
-        }    
+        } 
+        
+        if(!empty(pipedriveGetVieldName())){
+            foreach(pipedriveGetVieldName() as $key => $fields){
+        ?>
+                <select required name="mapping[0][apiAttribute]" class="apiAttributeSelect" id="pipeDriveAPIAttributes_<?php echo $key;?>">
+                     <option value="">Select Attribute</option>
+                     <?php
+                         foreach($fields as $field){
+                            $fieldKey = $field['key'];
+                            $fieldName = $field['name'];
+                            echo '<option value="'.$fieldKey.'">'.$fieldName.'</option>';
+                         }
+                     ?>
+                 </select>
+
+             <?php
+            }
+        }
     ?>
 </div>

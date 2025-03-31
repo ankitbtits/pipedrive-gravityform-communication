@@ -15,6 +15,7 @@ jQuery(document).ready(function($) {
     function pgfc_addNewItem() {
       currentIndex++; // Increment the item index
       var newItem = $('.pgfcItem:first').clone(); // Clone the first pgfcItem      
+      newItem.find('td:last select').remove();
       newItem.find('input, select').val('');
       newItem.find('input, select').attr('name', function(index, attr) {
         return attr.replace(/\[0\]/g, '[' + currentIndex + ']');
@@ -37,44 +38,9 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('change', '.onChangeFun', function () {
-      let theSlug = $(this).data('slug');
-      let theID = $(this).val();
-  
-      let $thisTr = $(this).closest('tr');
-      let $cloneSource = $('#' + theSlug + '_' + theID);
-  
-      if ($thisTr.length) {
-          // If inside a tr, run your original logic
-          let index = $thisTr.index();
-          let $element = $cloneSource.clone(true).removeAttr('id');
-          $element.attr('name', $element.attr('name').replace(/\[\d+\]/, '[' + index + ']'));
-          $element.val('')
-          $('.' + theSlug).eq(index).html($element);
-      } else {
-          // If NOT inside a tr, loop through all theSlug instances
-          $('.' + theSlug).each(function () {
-              let $target = $(this);
-              let index = $target.closest('tr').index();
-  
-              let $element = $cloneSource.clone(true).removeAttr('id');
-              $element.attr('name', $element.attr('name').replace(/\[\d+\]/, '[' + index + ']'));
-              $element.val('')
-              $target.html($element);
-          });
-      }
-    });
-  
-    // $(document).on('change', ".apiAttributeSelect", function(){
-    //   let theVal = $(this).val();
-    //   let originalName = $(this).attr('name') || '';
-    //   let newName = originalName.replace(/\[apiAttribute\](?!.*\[apiAttribute\])/, '[apiAttributeValue]');
-    //   if(theVal == 'Other'){
-    //     $(this).after('<input name="' + newName + '" class="apiAttributeValue" placeholder="Add field name/key" />');
-    //   }else{
-    //     $(this).closest('td').find('.apiAttributeValue').remove()
-    //   }
-    // })
-
+        addAttributeDropDown($(this))
+      
+    });  
     $(document).on('click', '.removeMapping', function(){
       let entryRow = $(this).closest('tr');
       entryRow.remove()
@@ -93,23 +59,14 @@ jQuery(document).ready(function($) {
       });       
     }
 
-    $(document).on('change', '.pipeDriveAPISelect', function(){
-      let isActivity = $(this).val() === 'Add an activities';
-      let originalName = $(this).attr('name') || '';
-      let newName = originalName.replace(/\[apiLabel\](?!.*\[apiLabel\])/, '[apiLabelIndex]');
-      if(isActivity){
-        $(this).after('<input name="' + newName + '" type="number" required class="apiActivityIndex" placeholder="Add array key" />');
-      }else{
-        $(this).closest('td').find('.apiActivityIndex').remove()
-      }
-    });
-
     // add/remove organization
     $(".modify-organization").on("click", function() {
         var button = $(this);
+        var Text = button.text()
         var orgID = button.data("org-id");
         var personID = button.data("person-id");
-
+        var targetTD = button.closest('td')
+        button.text('Loading...')
         $.ajax({
             url: ajaxurl,
             type: "POST",
@@ -122,14 +79,24 @@ jQuery(document).ready(function($) {
                 $("#action-buttons-" + orgID).html("Checking...");
             },
             success: function(response) {
+                var status = response.data.status;
                 if (response.success) {
-                    var actionText = response.data.is_member ? "Remove" : "Add";
-                    var actionClass = response.data.is_member ? "remove-person" : "add-person";
-                    var actionButton = `<button class='${actionClass}' data-org-id='${orgID}' data-person-id='${personID}'>${actionText}</button>`;
+                    let exist = false;
+                    if(status == 'exists'){
+                        exist = true;
+                    }
+                    var actionText = exist ? "Remove" : "Add";
+                    var actionClass = exist ? "remove-person" : "add-person";                  
+                    
+                    var actionButton = `<div class="responseMessage">${response.data.message} :</div> <button class='${actionClass}' data-org-id='${orgID}' data-person-id='${personID}'>${actionText}</button>`;
 
-                    $("#action-buttons-" + orgID).html(actionButton);
-                } else {
-                    $("#action-buttons-" + orgID).html("Error checking status.");
+                    targetTD.html(actionButton);
+                } else if(response.data.message) {
+                    alert(response.data.message);
+                    button.text(Text)
+                }else{
+                    alert("Action failed!");
+                    button.text(Text)
                 }
             }
         });
@@ -137,15 +104,16 @@ jQuery(document).ready(function($) {
 
     $(document).on("click", ".add-person, .remove-person", function() {
         var button = $(this);
+        var Text = button.text()
         var orgID = button.data("org-id");
         var personID = button.data("person-id");
         var action = button.hasClass("add-person") ? "add" : "remove";
-
+        button.text('Loading')
         $.ajax({
             url: ajaxurl,
             type: "POST",
             data: {
-                action: "modify_person_organization",
+                action: "modifyPersonOrganization",
                 org_id: orgID,
                 person_id: personID,
                 modify_action: action
@@ -157,12 +125,67 @@ jQuery(document).ready(function($) {
                 if (response.success) {
                     var newActionText = action === "add" ? "Remove" : "Add";
                     var newActionClass = action === "add" ? "remove-person" : "add-person";
+                    button.closest('td').find('.responseMessage').html(response.data.message)
                     button.prop("disabled", false).removeClass("add-person remove-person").addClass(newActionClass).text(newActionText);
-                } else {
+                } else if(response.data.message) {
+                    alert(response.data.message);
+                    button.text(Text)
+                }else{
                     alert("Action failed!");
-                    button.prop("disabled", false);
+                    button.text(Text)
                 }
             }
         });
     });
+    function addAttributeDropDown(theElm){
+        addIndexField(theElm)
+        let theSlug = theElm.data('slug');
+          let theID = theElm.val();
+      
+          let $thisTr = theElm.closest('tr');
+          let $cloneSource = $('#' + theSlug + '_' + theID);
+            if(!theID){
+                $('.'+theSlug).html('')
+                return
+            }
+          if ($thisTr.length) {
+              // If inside a tr, run your original logic
+              let index = $thisTr.index();
+              let $element = $cloneSource.clone(true).removeAttr('id');
+              $element.attr('name', $element.attr('name').replace(/\[\d+\]/, '[' + index + ']'));
+              $element.val('')
+              $('.' + theSlug).eq(index).html($element);
+          } else {
+              // If NOT inside a tr, loop through all theSlug instances
+              $('.' + theSlug).each(function () {
+                  let $target = $(this);
+                  let index = $target.closest('tr').index();
+      
+                  let $element = $cloneSource.clone(true).removeAttr('id');
+                  $element.attr('name', $element.attr('name').replace(/\[\d+\]/, '[' + index + ']'));
+                  $element.val('')
+                  $target.html($element);
+              });
+          }
+    }
+    function addIndexField(theElm){
+        let theID = theElm.val();
+        if(!theID){
+            theElm.closest('td').find('.apiActivityIndex').remove()
+            return
+        }
+        let isActivity = theElm.val() === 'activity';
+        let originalName = theElm.attr('name') || '';
+        let newName = originalName.replace(/\[apiLabel\](?!.*\[apiLabel\])/, '[apiLabelIndex]');
+        let ifExist = theElm.closest('td').find('.apiActivityIndex').length
+        console.log(ifExist)
+        if(isActivity){
+            if(!ifExist){
+                theElm.after('<input name="' + newName + '" type="number" required class="apiActivityIndex" placeholder="Add array key" />');
+            }
+        }else{
+            theElm.closest('td').find('.apiActivityIndex').remove()
+        }
+    }
 });
+

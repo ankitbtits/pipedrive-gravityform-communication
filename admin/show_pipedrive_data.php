@@ -2,7 +2,7 @@
 
 // displaying pipedrive data on profile page
 function pipedriveDataShowProfile($user) {     
-    $manage_url = admin_url('admin.php?page=manage_organizations');
+    $manage_url = admin_url('admin.php?page=manage_organizations&user_id='.$user->ID);
     echo '<p><a href="' . esc_url($manage_url) . '" class="button button-primary">Manage Organizations</a></p>';  
     showPipedriveData($user->ID);
 }

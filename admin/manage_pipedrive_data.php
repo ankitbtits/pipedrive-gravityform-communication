@@ -10,6 +10,10 @@ function showPipedriveData($userID){
     }
     $pipeDriveData = [];
     $personData = pipedrive_api_request('GET', 'persons/'.$personID, []);
+    if(!isset($personData['data'])){
+        echo 'We are unable to load data for personID : '.$personID.'. Either person does not exist in the pipedrive. Or contact plugin developer.';
+        return;
+    }
     $personData = $personData['data'];
     $pipeDriveData['persons'] = $personData;
     

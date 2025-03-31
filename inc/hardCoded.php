@@ -3,24 +3,28 @@ function getPipeDriveAPIEndPoint($atr = false){
     $pipedriveAPI = [
         [
             'label' => 'Add a Person',
-            'end_point'=> 'persons'
+            'end_point'=> 'persons',
+            'singular_end_point'=> 'person',
         ],
         [
             'label' => 'Add an organization',
-            'end_point'=> 'organizations'
+            'end_point'=> 'organizations',
+            'singular_end_point'=> 'organization',
         ],
         [
             'label' => 'Add a deal',
-            'end_point'=> 'deals'
+            'end_point'=> 'deals',
+            'singular_end_point'=> 'deal',
         ],
         [
             'label' => 'Add an activities',
-            'end_point'=> 'activities'
+            'end_point'=> 'activities',
+            'singular_end_point'=> 'activity',
         ],
     ]; 
     if($atr){
         foreach($pipedriveAPI as $val){
-            if($val['label'] == $atr){
+            if($val['singular_end_point'] == $atr){
                 $pipedriveAPI = $val['end_point'];
             }
         }
@@ -131,7 +135,7 @@ function getSampleData2() {
     return [
         'id' => 16,
         'status' => 'active',
-        'form_id' => 8,
+        'form_id' => 3,
         'ip' => '::1',
         'source_url' => 'http://localhost/pipedrive/sample-page/',
         'currency' => 'USD',

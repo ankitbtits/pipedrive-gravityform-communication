@@ -1,47 +1,10 @@
 <?php
 
-function createAccount($email){
-    if (!$email) {
-        // Log error if email is missing
-        log_api_error('missing_email', ['error' => 'Email is missing in the form'], null);
-        return; // Stop execution if email is missing
-    }
-    // Use the email address as the username
-    $username = sanitize_user(explode('@', $email)[0]); // Extract username part from email
-    $email = sanitize_email($email);
 
-    $user_id = wp_insert_user([
-        'user_login' => $username,
-        'user_email' => $email,
-        'user_pass' => wp_generate_password(), // Generate a random password
-        'role' => 'subscriber', // Set the role as needed
-    ]);
-
-    if (is_wp_error($user_id)) {
-        log_api_error('wordpress_user', ['username' => $username, 'email' => $email], $user_id->get_error_message());
-        return;
-    }
-    // Generate password reset key
-    $reset_key = get_password_reset_key(get_user_by('ID', $user_id));
-    if (!is_wp_error($reset_key)) {
-        $reset_link = network_site_url("wp-login.php?action=rp&key=$reset_key&login=" . rawurlencode($username));
-
-        // Email subject and message
-        $subject = 'Set Your Password';
-        $message = "Hello $username,\n\n";
-        $message .= "Your account has been created. Please use the link below to set your password:\n\n";
-        $message .= "$reset_link\n\n";
-        $message .= "Thank you!";
-
-        // Send email
-        wp_mail($email, $subject, $message);
-    }
-    return $user_id;
-}
 
 add_action('gform_after_submission', 'handle_pipedrive_integration', 10, 2);
 function handle_pipedrive_integration($entries, $form) {
-    $payloads = getPayLoads($entries);    
+    $payloads = getPayLoads($entries);       
     $personId = null;
     $orgId = null;
     $dealID = null;
@@ -234,10 +197,50 @@ function log_api_error($api_name, $payload, $response) {
     file_put_contents($log_file, $log_data, FILE_APPEND);
 }
 
+
+function createAccount($email){
+    if (!$email) {
+        // Log error if email is missing
+        log_api_error('missing_email', ['error' => 'Email is missing in the form'], null);
+        return; // Stop execution if email is missing
+    }
+    // Use the email address as the username
+    $username = sanitize_user(explode('@', $email)[0]); // Extract username part from email
+    $email = sanitize_email($email);
+
+    $user_id = wp_insert_user([
+        'user_login' => $username,
+        'user_email' => $email,
+        'user_pass' => wp_generate_password(), // Generate a random password
+        'role' => 'subscriber', // Set the role as needed
+    ]);
+
+    if (is_wp_error($user_id)) {
+        log_api_error('wordpress_user', ['username' => $username, 'email' => $email], $user_id->get_error_message());
+        return;
+    }
+    // Generate password reset key
+    $reset_key = get_password_reset_key(get_user_by('ID', $user_id));
+    if (!is_wp_error($reset_key)) {
+        $reset_link = network_site_url("wp-login.php?action=rp&key=$reset_key&login=" . rawurlencode($username));
+
+        // Email subject and message
+        $subject = 'Set Your Password';
+        $message = "Hello $username,\n\n";
+        $message .= "Your account has been created. Please use the link below to set your password:\n\n";
+        $message .= "$reset_link\n\n";
+        $message .= "Thank you!";
+
+        // Send email
+        wp_mail($email, $subject, $message);
+    }
+    return $user_id;
+}
+
 add_action('wp_head', 'forTesting');
 function forTesting(){
-    $fieldsData = pipedriveGetVieldName();
-    echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($fieldsData) ,'</pre></div>';
+    // $fieldsData = pipedriveGetVieldName();
+    // echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($fieldsData) ,'</pre></div>';
     if(isset($_GET['pipe_drive_id'])){
         $user_id = get_current_user_id();
         update_user_meta($user_id, 'pipedrive_person_id', $_GET['pipe_drive_id']);
@@ -245,10 +248,11 @@ function forTesting(){
     if(isset($_GET['debug'])){
         $entries = getSampleData2();
         $payloads = getPayLoads($entries);
-        $mapping = getMapping(6);
-        //echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($entries) ,'</pre></div>';
-        echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($payloads) ,'</pre></div>';
-        //echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($mapping) ,'</pre></div>';
+        $mapping = getMapping(3);
+        echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($entries) ,'</pre></div>';
+        echo '2222222<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($payloads) ,'</pre></div>';
+        echo '3333<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($mapping) ,'</pre></div>';
         die;
     }
 }
+
