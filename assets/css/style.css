@@ -1,0 +1,79 @@
+.manage-pipe-table {
+  margin-bottom: 20px;
+}
+.manage-pipe-table .adminTable th, .manage-pipe-table .adminTable td {
+  padding: 10px !important;
+  border: 1px solid #dee2e6 !important;
+  background: rgba(177, 51, 37, 0.05);
+}
+.manage-pipe-table input, .manage-pipe-table select {
+  border: 1px solid #ced4da !important;
+  border-radius: 5px !important;
+  background-color: #fff !important;
+}
+.manage-pipe-table h3 {
+  text-transform: capitalize;
+  margin-bottom: 20px;
+}
+
+.dataTabs ul {
+  padding: 0px;
+  list-style: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-column-gap: 20px;
+     -moz-column-gap: 20px;
+          column-gap: 20px;
+  text-transform: capitalize;
+  padding: 20px 0px;
+}
+.dataTabs li a {
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 1px solid #B13325;
+  display: block;
+  text-decoration: none;
+}
+.dataTabs li a.active {
+  background: #B13325;
+  color: #fff;
+}
+
+.pagina-senza-elementor .form-table th, .pagina-senza-elementor .form-table td {
+  background: rgba(177, 51, 37, 0.0509803922);
+  vertical-align: middle;
+  border: 1px solid #dee2e6 !important;
+  padding: 20px !important;
+}
+.pagina-senza-elementor .form-table th label, .pagina-senza-elementor .form-table td label {
+  margin-bottom: 0;
+}
+
+.pagina-senza-elementor h1 {
+  margin-top: 30px;
+  font-size: 20px;
+}
+
+#your-profile .dataTabs li a {
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 1px solid #2271b1;
+  display: block;
+}
+#your-profile .dataTabs li a.active {
+  background: #2271b1;
+  color: #fff;
+}
+#your-profile .adminTable th, #your-profile .adminTable td {
+  background: #F1F4F9;
+}
+
+.pgfcLoginForm {
+  background: rgba(177, 51, 37, 0.0509803922);
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+  border-radius: 5px;
+}/*# sourceMappingURL=style.css.map */

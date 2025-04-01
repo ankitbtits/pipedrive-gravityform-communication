@@ -1,10 +1,10 @@
 <?php
 
-function showPipedriveData($userID){
+function showPipedriveData($userID){    
     if(!$userID){
         return;
     }
-    $personID = get_user_meta($userID, 'pipedrive_person_id', true);
+    $personID = (int) get_user_meta($userID, 'pipedrive_person_id', true);
     if(!$personID){
         return;
     }
@@ -12,6 +12,7 @@ function showPipedriveData($userID){
     $personData = pipedrive_api_request('GET', 'persons/'.$personID, []);
     if(!isset($personData['data'])){
         echo 'We are unable to load data for personID : '.$personID.'. Either person does not exist in the pipedrive. Or contact plugin developer.';
+        echo '<pre>', print_r($personData);
         return;
     }
     $personData = $personData['data'];
@@ -26,10 +27,13 @@ function showPipedriveData($userID){
 
     $allDeals = pipedrive_api_request('GET', 'persons/'.$personID.'/deals/', []);
     $pipeDriveData['deals'] = $allDeals['data'];
-
-
     $allActivites = pipedrive_api_request('GET', 'persons/'.$personID.'/activities/', []);
     $pipeDriveData['activities'] = $allActivites['data'];
+    ?>
+    <?php
+        if(!is_user_profile_page()){
+            echo '<form method="post">';
+        }
     ?>
     <h3>Pipedrive Information</h3>
     <table class="form-table">
@@ -43,54 +47,89 @@ function showPipedriveData($userID){
     <?php
     if(!empty($personData) && is_array($personData)):
     $alloweData = alloedProfileData();
+    echo '<div class="dataTabs"><ul>';
+    $count = 0;
+    foreach($alloweData as $endPoint => $data){
+        $count++;
+        echo '<li><a href="javascript:;" data-id="'.$endPoint.'" class="
+        '.(($count == 1)?'active':'').'
+        ">'.$endPoint.'</a></li>';
+    }   
+    echo '</ul></div>';
+    $count = 0;
     foreach($alloweData as $endPoint => $data):
-        $apiData = $pipeDriveData[$endPoint];
+        $count++;
+        $apiData = $pipeDriveData[$endPoint];       
     ?>
-    <div class="manage-pipe-table">
-    <h3><?php echo $endPoint;?></h3>
-    <table class="adminTable" border="1">
-    <?php
-    if(in_array($endPoint, ['deals','activities'])){        
-        foreach($apiData as $key3 => $val3){
+    <div class="manage-pipe-table dataTabsContent" id="dataTabs_<?php echo $endPoint;?>"
+    <?php echo (($count != 1)?'style="display:none;"':'');?>
+    >
+        <h3><?php echo $endPoint;?></h3>   
+        <?php
+             if(empty($apiData)){
+                _e('Could not find any '.$endPoint.' for this user.');
+             }
+        ?>
+
+        <?php
+        if(!empty($apiData)){
+        if(in_array($endPoint, ['deals','activities'])){ 
+            //echo '<pre>', print_r($apiData), '</pre>';       
+            foreach($apiData as $key3 => $val3){
+                echo '<table class="adminTable" border="1">';
+                foreach($data as $key2 => $data2){
+                    $key = $data2['key'];
+                    $value = $val3[$key];
+                    $keyInfo = pipedriveGetVieldName($key);
+                    $keyName = $keyInfo['name'];
+                ?>
+                    <input type="hidden" name="pipedrive[<?php echo $endPoint;?>][<?php echo $key3 + 1;?>][id]" value="<?php echo $val3['id'];?>">            
+                    <tr>
+                        <th><?php echo $keyName;?></th>
+                        <td>
+                            <?php echo formatDisplayData($keyInfo, $key, $value, $endPoint, $key3 + 1);?>
+                        </td>
+                    </tr>
+                
+
+                    <?php
+                }    
+                echo '</table>';        
+            }  
+        } else{
+            echo '<table class="adminTable" border="1">';
             foreach($data as $key2 => $data2){
                 $key = $data2['key'];
-                $value = $val3[$key];
+                $value = $apiData[$key];
                 $keyInfo = pipedriveGetVieldName($key);
                 $keyName = $keyInfo['name'];
-            ?>
-                <input type="hidden" name="pipedrive[<?php echo $endPoint;?>][<?php echo $key3 + 1;?>][id]" value="<?php echo $val3['id'];?>">
-                <tr>
-                    <th><?php echo $keyName;?></th>
-                    <td>
-                        <?php echo formatDisplayData($keyInfo, $key, $value, $endPoint, $key3 + 1);?>
-                    </td>
-                </tr>
-                <?php
-            }            
-        }  
-    } else{
-        foreach($data as $key2 => $data2){
-            $key = $data2['key'];
-            $value = $apiData[$key];
-            $keyInfo = pipedriveGetVieldName($key);
-            $keyName = $keyInfo['name'];
-    ?>    
-        <input type="hidden" name="pipedrive[<?php echo $endPoint;?>][id]" value="<?php echo $apiData['id'];?>">                
-        <tr>
-            <th><?php echo $keyName;?></th>
-            <td>
-                <?php echo formatDisplayData($keyInfo, $key, $value, $endPoint);?>
-            </td>
-        </tr>
-    <?php
+        ?>    
+            <input type="hidden" name="pipedrive[<?php echo $endPoint;?>][id]" value="<?php echo $apiData['id'];?>">      
+                    
+            <tr>
+                <th><?php echo $keyName;?></th>
+                <td>
+                    <?php echo formatDisplayData($keyInfo, $key, $value, $endPoint);?>
+                </td>
+            </tr>
+            
+        <?php
+            }
+        echo '</table>';
         }
-    }
-    ?>
-    </table>
-</div>
+        }
+        ?>
+
+    </div>
     <?php 
-        endforeach; 
+    endforeach; 
     endif;
+    if(!is_user_profile_page()){
+        echo '
+        <input type="submit" value="Update" class="button formButton" />
+        </form>
+        ';
+    }
 }
 
 function formatDisplayData($keyInfo, $key, $value, $endpoint, $key3 = false){
@@ -220,14 +259,14 @@ function updatePipeDriveData($data){
                     $id = $val2['id'];
                     $apiRes = pipedrive_api_request('PUT',$key.'/'.$id, $val2);
                     if(!isset($apiRes['success'])){
-                        insertApiErrorLog('Updating  '.$key.' through profile page for userID '.$user_id ,$key, $val2, $apiRes);
+                        insertApiErrorLog('Updating  '.$key.' for userID '.$user_id ,$key, $val2, $apiRes);
                     }
                 }
             }else{
                 $id = $val['id'];
                 $apiRes = pipedrive_api_request('PUT',$key.'/'.$id, $val);
                 if(!isset($apiRes['success'])){
-                    insertApiErrorLog('Updating  '.$key.' through profile page for userID '.$user_id ,$key, $val, $apiRes);
+                    insertApiErrorLog('Updating  '.$key.' for userID '.$user_id ,$key, $val, $apiRes);
                 }
             }
         }

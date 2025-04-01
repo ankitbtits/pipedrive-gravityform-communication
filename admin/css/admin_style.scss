@@ -51,7 +51,7 @@ $color1 : #007cba;
             tr{
                 td{
                     width: calc(100% / 3);
-                    &:last-child {
+                    &:first-child {
                         width: 3%;
                     }
                     select{
@@ -253,21 +253,14 @@ $color1 : #007cba;
     width: 808px;
     margin-bottom: 40px;
     h3 {
-        width: 100%;
-        display: flex;
         margin-bottom: 20px;
-        justify-content: space-between;
-        background: #F1F4F9;
-        padding: 20px;
-        border: 1px solid #E2E3E8;
-        box-sizing: border-box;
         color: #000;
         text-transform: capitalize;
     }
     .adminTable {
         width: 800px;
         text-align: left;
-        margin-bottom: 50px;
+        margin-bottom: 10px;
         border-collapse: collapse;
         border: 1px solid #E2E3E8;
         tr{

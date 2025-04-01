@@ -151,7 +151,7 @@ function pgfc_display_pgfcs_list_table() {
             $tabs = new PGFC_Admin_Tabs();
             echo $tabs->render();
     }   ?>
-    <h1 class="wp-heading-inline"><?php esc_html_e('pgfcs', 'pgfc');?></h1>
+    <h1 class="wp-heading-inline"><?php esc_html_e('Gravity Form Pipedrive Sync', 'pgfc');?></h1>
     <?php 
         if(isset($_GET['pgfc_id']) && !empty($_GET['pgfc_id'])):
             require_once'edit_pgfc.php';

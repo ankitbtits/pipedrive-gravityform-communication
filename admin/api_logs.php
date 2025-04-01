@@ -134,7 +134,7 @@ function pgfc_display_pgfcs_Error_Log_Table() {
             $tabs = new PGFC_Admin_Tabs();
             echo $tabs->render();
     }   ?>
-    <h1 class="wp-heading-inline"><?php esc_html_e('pgfcs', 'pgfc');?></h1>   
+    <h1 class="wp-heading-inline"><?php esc_html_e('Gravity Form Pipedrive Sync', 'pgfc');?></h1>   
 
     <form method="post">
         <div class="rightButton" style="float:right;">

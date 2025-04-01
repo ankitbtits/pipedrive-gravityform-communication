@@ -76,6 +76,11 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                             $apiAttribute = $map['apiAttribute'];
                     ?>
                     <tr class="pgfcItem">
+                        <td>
+                            <a href="javascript:;" class="removeMapping">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 8 8" fill="none"><path d="M7.25 0.75L0.75 7.25M0.75 0.75L7.25 7.25" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </a>
+                        </td>
                         <td class="gravityFormsFields">
                             <?php
                                 if(!empty(getGravityForms('fields'))){
@@ -129,7 +134,8 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                                             ?>
                                         </select>
                                         <?php
-                                            if($apiLabel == 'Add an activities' && isset($map['apiLabelIndex'])){
+                                        
+                                            if($apiLabel == 'activity' && isset($map['apiLabelIndex'])){
                                                 echo '<input type="number" name="mapping['.$index.'][apiLabelIndex]" required class="apiActivityIndex" value="'.$map['apiLabelIndex'].'" />';
                                             }
                                         ?>
@@ -137,12 +143,12 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                                 }
                             ?>
                         </td>
-                        <td>   
+                        <td class="pipeDriveAPIAttributes">   
                            <?php
                                 if(!empty(pipedriveGetVieldName())){
                                     $fields = pipedriveGetVieldName()[$apiLabel];
                                 ?>
-                                        <select required name="mapping[<?php echo $index;?>][apiAttribute]" class="apiAttributeSelect" id="pipeDriveAPIAttributes_<?php echo $apiLabel;?>">
+                                        <select required name="mapping[<?php echo $index;?>][apiAttribute]" class="apiAttributeSelect">
                                              <option value="">Select Attribute</option>
                                              <?php
                                                  foreach($fields as $field){
@@ -159,11 +165,6 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                                 }
                             ?>  
                             <!-- <input type="text" name="mapping[<?php echo $index;?>][apiAttribute]" value="<?php echo $apiAttribute;?>" placeholder="Enter APIs Attribute name/key" /> -->
-                        </td>
-                        <td>
-                            <a href="javascript:;" class="removeMapping">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 8 8" fill="none"><path d="M7.25 0.75L0.75 7.25M0.75 0.75L7.25 7.25" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            </a>
                         </td>
                     </tr>
                     <?php endforeach;

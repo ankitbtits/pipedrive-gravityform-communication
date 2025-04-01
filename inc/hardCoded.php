@@ -24,7 +24,7 @@ function getPipeDriveAPIEndPoint($atr = false){
     ]; 
     if($atr){
         foreach($pipedriveAPI as $val){
-            if($val['singular_end_point'] == $atr){
+            if($val['singular_end_point'] == $atr || $val['label'] == $atr){
                 $pipedriveAPI = $val['end_point'];
             }
         }

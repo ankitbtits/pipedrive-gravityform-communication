@@ -4,6 +4,7 @@
 
 add_action('gform_after_submission', 'handle_pipedrive_integration', 10, 2);
 function handle_pipedrive_integration($entries, $form) {
+    log_api_error('form initiate', [], []);
     $payloads = getPayLoads($entries);       
     $personId = null;
     $orgId = null;
@@ -201,7 +202,7 @@ function log_api_error($api_name, $payload, $response) {
 function createAccount($email){
     if (!$email) {
         // Log error if email is missing
-        log_api_error('missing_email', ['error' => 'Email is missing in the form'], null);
+        log_api_error('createAccount email not found', [], []);
         return; // Stop execution if email is missing
     }
     // Use the email address as the username
@@ -216,7 +217,7 @@ function createAccount($email){
     ]);
 
     if (is_wp_error($user_id)) {
-        log_api_error('wordpress_user', ['username' => $username, 'email' => $email], $user_id->get_error_message());
+        log_api_error($user_id->get_error_message(), [], []);
         return;
     }
     // Generate password reset key
@@ -233,6 +234,7 @@ function createAccount($email){
 
         // Send email
         wp_mail($email, $subject, $message);
+        log_api_error('account created successfully', [], []);
     }
     return $user_id;
 }

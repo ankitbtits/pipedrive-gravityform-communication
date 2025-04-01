@@ -1,7 +1,7 @@
 <?php
 /***
-  Plugin Name: Pipedrive Gravity-Form Communication
-  Description: The Pipedrive Gravity-Form Communication Plugin provides an intuitive solution to manage communication between gravity forms and pipedrive APIs
+  Plugin Name: Gravity Form Pipedrive Sync
+  Description: The Gravity Form Pipedrive Sync Plugin provides an intuitive solution to manage communication between gravity forms and pipedrive APIs
   Requires at least: 5.2.0
   License:GPL2
   Tested up to: 6.7.1
@@ -15,8 +15,8 @@ if (!defined('ABSPATH') ) {
     exit; // Exit if accessed directly
 }
 
-if (!defined('PGFC')) {
-	define('PGFC', '1.0.3');
+if (!defined('PGFC_VERSION')) {
+	define('PGFC_VERSION', '1.0.2');
 }
 
 define('PGFC_SLUG', 'pgf-communication');
@@ -35,7 +35,7 @@ function pgfc_admin_notice_notice(){
         ?>
 
         <div class="notice notice-error is-dismissible">
-            <p><?php esc_attr_e( 'Pipedrive Gravity-Form Communication plugin requires Gravity form plugin to be install.', 'pgfc' ); ?></p>
+            <p><?php esc_attr_e( 'Gravity Form Pipedrive Sync plugin requires Gravity form plugin to be install.', 'pgfc' ); ?></p>
         </div>
         <?php
     }
@@ -44,21 +44,32 @@ function pgfc_admin_notice_notice(){
 add_action('admin_enqueue_scripts', 'pgfc_pluginAdminScripts');
 function pgfc_pluginAdminScripts() {    
     wp_enqueue_media(); 
-    wp_enqueue_style(PGFC_SLUG.'_admin_style', plugin_dir_url(__FILE__).'admin/css/admin_style.css', array(), PGFC);
+    wp_enqueue_style(PGFC_SLUG.'_admin_style', plugin_dir_url(__FILE__).'admin/css/admin_style.css', array(), PGFC_VERSION);
     wp_enqueue_script('jquery', false, array(), true, true); // Load jQuery in the footer
-    wp_enqueue_script(PGFC_SLUG.'_admin_js', plugin_dir_url(__FILE__).'admin/js/admin_script.js?v='.time().'', array('jquery'), PGFC,true); 
+    wp_enqueue_script(PGFC_SLUG.'_admin_js', plugin_dir_url(__FILE__).'admin/js/admin_script.js?v='.time().'', array('jquery'),PGFC_VERSION, true); 
     wp_localize_script(PGFC_SLUG.'_admin_js', 'pgfc_pdf_ajax_admin', array(
         'ajax_url' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('pgfc_generate_pdf_nonce'),
     ));
 }
 
+/**
+ * Never worry about cache again!
+ */
+function scriptsFrontendBackend($hook) {
+	wp_enqueue_style(PGFC_SLUG.'_style', plugin_dir_url(__FILE__).'assets/css/style.css', array(), PGFC_VERSION);
+    wp_enqueue_script('jquery', false, array(), true, true); // Load jQuery in the footer
+    wp_enqueue_script(PGFC_SLUG.'_js', plugin_dir_url(__FILE__).'assets/js/script.js', array('jquery'), PGFC_VERSION, true); 
+}
+add_action('wp_enqueue_scripts', 'scriptsFrontendBackend');
+add_action('admin_enqueue_scripts', 'scriptsFrontendBackend');
+
 // Hook into plugin activation
 register_activation_hook( __FILE__, 'pgfc_plugin_activation_hook' );
 
 function pgfc_plugin_activation_hook() {
     update_option('pgfc_plugin_activated', true);
-    update_option('pgfc_plugin_version', PGFC);
+    update_option('pgfc_plugin_version', PGFC_VERSION);
 }
 
 if (!class_exists('pgfc_Communication')) {
@@ -70,8 +81,8 @@ if (!class_exists('pgfc_Communication')) {
         public function pgfc_add_admin_menu() {
             // Add the top-level menu item
             add_menu_page(
-                'pgfc title',          
-                'PGDC',          
+                'Gravity Form Pipedrive Sync',          
+                'Gravity Form Pipedrive Sync',          
                 'manage_options',  
                 'pgfc',      
                 array($this, 'pgfc_render_page'), 

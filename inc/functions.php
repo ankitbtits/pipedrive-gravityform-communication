@@ -152,8 +152,11 @@ function alloedProfileData(){
         $ID = $post->ID;
         $formID = get_post_meta($ID, 'form_id', true);
         $subArray = getMapping($formID);
-        foreach ($subArray as $key => $items) {
-            $key = getPipeDriveAPIEndPoint($key);
+        foreach ($subArray as $key2 => $items) {
+            $key = getPipeDriveAPIEndPoint($key2);
+            if (!is_string($key)) {                
+                continue; // Skip invalid keys
+            }
             if (!isset($mergedArray[$key])) {
                 $mergedArray[$key] = [];
             }
@@ -201,6 +204,7 @@ function pipedriveStoreCustomFields() {
         $fieldsData[$entity] = pipedriveGetCustomFields($entity);
     }
     update_option('pipedrive_custom_fields', $fieldsData);
+    update_option('pipedrive_custom_fields_last_updated', current_time('mysql'));
 }
 
 function pipedriveGetVieldName($fieldID = false) {
@@ -239,3 +243,85 @@ function pipedriveGetVieldName($fieldID = false) {
 }
 
 // custom fields handler
+
+function is_user_profile_page() {
+    if (is_admin()) {
+        $screen = get_current_screen();
+        return ($screen && $screen->id === 'profile' || $screen->id === 'user-edit');
+    }
+    return false;
+}
+
+
+function custom_login_form() {
+    if (is_user_logged_in()) {
+        echo '<p>You are already logged in.</p>';
+        return;
+    }
+
+    // Capture login errors if any
+    $error_message = '';
+    if (isset($_GET['login_error'])) {
+        $error_code = sanitize_text_field($_GET['login_error']);
+        if ($error_code === 'empty') {
+            $error_message = '<p class="login-error" style="color: red;">Please fill in both fields.</p>';
+        } else {
+            $error_message = '<p class="login-error" style="color: red;">Invalid username or password.</p>';
+        }
+    }
+
+    // Handle the form submission
+    if (isset($_POST['wp_custom_login'])) {
+        $username = sanitize_text_field($_POST['log']);
+        $password = sanitize_text_field($_POST['pwd']);
+        $redirect_to = isset($_POST['redirect_to']) ? $_POST['redirect_to'] : home_url();
+
+        // If any field is empty, show error
+        if (empty($username) || empty($password)) {
+            wp_redirect(add_query_arg('login_error', 'empty', $redirect_to));
+            exit;
+        }
+
+        // Authenticate the user
+        $creds = array(
+            'user_login'    => $username,
+            'user_password' => $password,
+            'remember'      => true,
+        );
+
+        $user = wp_signon($creds, false);
+
+        // On successful login
+        if (!is_wp_error($user)) {
+            wp_redirect($redirect_to); // Redirect to the original page after login
+            exit;
+        } else {
+            // If there's an error with login, pass error back to the form
+            wp_redirect(add_query_arg('login_error', 'invalid', $redirect_to));
+            exit;
+        }
+    }
+
+    // Display the login form
+    ob_start();
+    ?>
+    <div class="pgfcLoginForm">
+        <form method="post" action="">
+            <?php echo $error_message; ?>
+            <p>
+                <label for="user_login">Username or Email</label>
+                <input type="text" name="log" id="user_login" required>
+            </p>
+            <p>
+                <label for="user_pass">Password</label>
+                <input type="password" name="pwd" id="user_pass" required>
+            </p>
+            <p>
+                <input type="submit" name="wp_custom_login" value="Log In">
+            </p>
+            <input type="hidden" name="redirect_to" value="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>">
+        </form>
+    </div>
+    <?php
+    return ob_get_clean();
+}

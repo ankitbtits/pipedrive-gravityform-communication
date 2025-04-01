@@ -113,7 +113,7 @@ add_action('admin_menu', 'hide_manage_organizations_menu', 999);
 function render_organizations_page() {
     echo '<div class="wrap">';
     echo '<h1>Manage Organizations</h1>';
-    showOrganizations(get_current_user_id()); // Show organizations table with search
+        showOrganizations(get_current_user_id()); // Show organizations table with search
     echo '</div>';
 }
 
