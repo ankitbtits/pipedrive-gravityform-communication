@@ -46,6 +46,7 @@ function showPipedriveData($userID){
     foreach($alloweData as $endPoint => $data):
         $apiData = $pipeDriveData[$endPoint];
     ?>
+    <div class="manage-pipe-table">
     <h3><?php echo $endPoint;?></h3>
     <table class="adminTable" border="1">
     <?php
@@ -86,6 +87,7 @@ function showPipedriveData($userID){
     }
     ?>
     </table>
+</div>
     <?php 
         endforeach; 
     endif;
