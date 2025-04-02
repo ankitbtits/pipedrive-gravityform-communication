@@ -325,3 +325,48 @@ function custom_login_form() {
     <?php
     return ob_get_clean();
 }
+
+
+//create rewrite rule for manage-organizations
+// function pgfc_add_rewrite_rule() {
+//     add_rewrite_rule('^manage-organizations/?$', 'index.php?pgfc_manage_organizations=1', 'top');
+// }
+// add_action('init', 'pgfc_add_rewrite_rule');
+
+// /**
+//  * Add custom query var to handle page request.
+//  */
+// function pgfc_add_query_vars($query_vars) {
+//     $query_vars[] = 'pgfc_manage_organizations';
+//     return $query_vars;
+// }
+// add_filter('query_vars', 'pgfc_add_query_vars');
+
+// /**
+//  * Display content for the custom page.
+//  */
+// function pgfc_display_custom_page() {
+//     if (get_query_var('pgfc_manage_organizations') == 1) {
+//         status_header(200);
+//         include plugin_dir_path(__FILE__) . 'manage_organizations.php';
+//         exit;
+//     }
+// }
+// add_action('template_redirect', 'pgfc_display_custom_page');
+
+// /**
+//  * Flush rewrite rules upon plugin activation.
+//  */
+// function pgfc_flush_rewrite_rules() {
+//     pgfc_add_rewrite_rule();
+//     flush_rewrite_rules();
+// }
+// register_activation_hook(__FILE__, 'pgfc_flush_rewrite_rules');
+
+// /**
+//  * Flush rewrite rules upon plugin deactivation.
+//  */
+// function myplugin_remove_rewrite_rules() {
+//     flush_rewrite_rules();
+// }
+// register_deactivation_hook(__FILE__, 'myplugin_remove_rewrite_rules');

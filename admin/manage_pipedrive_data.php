@@ -27,8 +27,8 @@ function showPipedriveData($userID){
 
     $allDeals = pipedrive_api_request('GET', 'persons/'.$personID.'/deals/', []);
     $pipeDriveData['deals'] = $allDeals['data'];
-    $allActivites = pipedrive_api_request('GET', 'persons/'.$personID.'/activities/', []);
-    $pipeDriveData['activities'] = $allActivites['data'];
+    // $allActivites = pipedrive_api_request('GET', 'persons/'.$personID.'/activities/', []);
+    // $pipeDriveData['activities'] = $allActivites['data'];
     ?>
     <?php
         if(!is_user_profile_page()){
@@ -47,6 +47,8 @@ function showPipedriveData($userID){
     <?php
     if(!empty($personData) && is_array($personData)):
     $alloweData = alloedProfileData();
+    unset($alloweData['activities']);
+
     echo '<div class="dataTabs"><ul>';
     $count = 0;
     foreach($alloweData as $endPoint => $data){
@@ -59,7 +61,10 @@ function showPipedriveData($userID){
     $count = 0;
     foreach($alloweData as $endPoint => $data):
         $count++;
-        $apiData = $pipeDriveData[$endPoint];       
+        $apiData = [];
+        if(isset($pipeDriveData[$endPoint])){
+            $apiData = $pipeDriveData[$endPoint];  
+        }     
     ?>
     <div class="manage-pipe-table dataTabsContent" id="dataTabs_<?php echo $endPoint;?>"
     <?php echo (($count != 1)?'style="display:none;"':'');?>
@@ -73,9 +78,15 @@ function showPipedriveData($userID){
 
         <?php
         if(!empty($apiData)){
-        if(in_array($endPoint, ['deals','activities'])){ 
-            //echo '<pre>', print_r($apiData), '</pre>';       
+        if(in_array($endPoint, ['deals','activities'])){  
+            $actCount = 0;    
             foreach($apiData as $key3 => $val3){
+                $allActivites = pipedrive_api_request('GET', "deals/".$val3['id']."/activities", []);
+                if(isset($allActivites['data'])){
+                    $allActivites = $allActivites['data'];
+                }else{
+                    $allActivites = null;
+                }
                 echo '<table class="adminTable" border="1">';
                 foreach($data as $key2 => $data2){
                     $key = $data2['key'];
@@ -94,7 +105,37 @@ function showPipedriveData($userID){
 
                     <?php
                 }    
-                echo '</table>';        
+                echo '</table>';   
+                if(!empty($allActivites)){
+                    $actData = alloedProfileData()['activities'];
+                    echo '<a href="javascript:;" class="activityToggle" data-id="activityContainer_'.$key3.'">Show Deals Activities</a>
+                    <div class="activityContainer" id="activityContainer_'.$key3.'" style="display:none;">
+                    ';
+                    foreach($allActivites as $actKey => $activity){
+                    $actCount++;
+                    echo '
+                    <table class="adminTable" border="1">
+                    ';
+                    foreach($actData as $key2 => $data2){
+                        $key = $data2['key'];
+                        $value = $activity[$key];
+                        $keyInfo = pipedriveGetVieldName($key);
+                        $keyName = $keyInfo['name'];
+                        $endPoint = 'activities';
+                    ?>
+                        <input type="hidden" name="pipedrive[<?php echo $endPoint;?>][<?php echo $actCount;?>][id]" value="<?php echo $val3['id'];?>">            
+                        <tr>
+                            <th><?php echo $keyName;?></th>
+                            <td>
+                                <?php echo formatDisplayData($keyInfo, $key, $value, $endPoint, $actCount);?>
+                            </td>
+                        </tr>
+                    <?php
+                    }
+                    echo '</table>';
+                    }
+                    echo '</div>';
+                }  
             }  
         } else{
             echo '<table class="adminTable" border="1">';
@@ -145,6 +186,10 @@ function getRightFieldType($type, $name, $value, $options = []) {
 
     // Detect multi-value fields that Pipedrive marks as "varchar"
     $isMultiValue = (stripos($name, 'email') !== false || stripos($name, 'phone') !== false);
+    $readonly = '';
+    if (strpos($name, "[activities]") !== false || strpos($name, "[deals]") !== false) {
+        $readonly = 'disabled readonly';
+    } 
 
     switch ($type) {
         case 'varchar': // Handles both single and multi-value varchar fields
@@ -152,35 +197,35 @@ function getRightFieldType($type, $name, $value, $options = []) {
             if ($isMultiValue && is_array($value)) {
                 // Multi-value handling (email/phone)
                 foreach ($value as $item) {
-                    $res .= '<input type="text" value="'.esc_attr($item['value']).'" name="'.esc_attr($name).'[]" /><br/>';
+                    $res .= '<input '.$readonly.' type="text" value="'.esc_attr($item['value']).'" name="'.esc_attr($name).'[]" /><br/>';
                 }
-                $res .= '<input type="text" name="'.esc_attr($name).'[]" placeholder="Add new value" />';
+                $res .= '<input '.$readonly.' type="text" name="'.esc_attr($name).'[]" placeholder="Add new value" />';
             } else {
                 // Standard text input
-                $res = '<input type="text" value="'.esc_attr($value).'" name="'.esc_attr($name).'" />';
+                $res = '<input '.$readonly.' type="text" value="'.esc_attr($value).'" name="'.esc_attr($name).'" />';
             }
             break;
 
         case 'int': // Integer Field
         case 'double': // Decimal Field
-            $res = '<input type="number" value="'.esc_attr($value).'" name="'.esc_attr($name).'" />';
+            $res = '<input '.$readonly.' type="number" value="'.esc_attr($value).'" name="'.esc_attr($name).'" />';
             break;
 
         case 'date': // Date Field
-            $res = '<input type="date" value="'.esc_attr($value).'" name="'.esc_attr($name).'" />';
+            $res = '<input '.$readonly.' type="date" value="'.esc_attr($value).'" name="'.esc_attr($name).'" />';
             break;
 
         case 'time': // Time Field
-            $res = '<input type="time" value="'.esc_attr($value).'" name="'.esc_attr($name).'" />';
+            $res = '<input '.$readonly.' type="time" value="'.esc_attr($value).'" name="'.esc_attr($name).'" />';
             break;
 
         case 'daterange': // DateTime Field
-            $res = '<input type="datetime-local" value="'.esc_attr($value).'" name="'.esc_attr($name).'" />';
+            $res = '<input '.$readonly.' type="datetime-local" value="'.esc_attr($value).'" name="'.esc_attr($name).'" />';
             break;
 
         case 'enum': // Single Select Dropdown
             if (!empty($options) && is_array($options)) {
-                $res = '<select name="'.esc_attr($name).'">';
+                $res = '<select '.$readonly.' name="'.esc_attr($name).'">';
                 foreach ($options as $option) {
                     $id = esc_attr($option['id']);
                     $label = esc_html($option['label']);
@@ -202,7 +247,7 @@ function getRightFieldType($type, $name, $value, $options = []) {
                     $id = esc_attr($option['id']);
                     $label = esc_html($option['label']);
                     $checked = (in_array($id, $selectedValues)) ? 'checked' : '';
-                    $res .= "<label><input type='checkbox' name='".esc_attr($name)."[]' value='$id' $checked> $label</label><br/>";
+                    $res .= "<label><input $readonly type='checkbox' name='".esc_attr($name)."[]' value='$id' $checked> $label</label><br/>";
                 }
             } else {
                 $res = 'Options not provided';
@@ -213,7 +258,7 @@ function getRightFieldType($type, $name, $value, $options = []) {
         case 'org': // Organization Field (Dropdown)
         case 'people': // Person Field (Dropdown)
             if (!empty($options) && is_array($options)) {
-                $res = '<select name="'.esc_attr($name).'">';
+                $res = '<select '.$readonly.' name="'.esc_attr($name).'">';
                 foreach ($options as $option) {
                     $id = esc_attr($option['id']);
                     $label = esc_html($option['name']);
@@ -227,7 +272,7 @@ function getRightFieldType($type, $name, $value, $options = []) {
             break;
 
         case 'address': // Address Field
-            $res = '<input type="text" value="'.esc_attr($value).'" name="'.esc_attr($name).'" />';
+            $res = '<input '.$readonly.' type="text" value="'.esc_attr($value).'" name="'.esc_attr($name).'" />';
             break;
 
         case 'phone': // Phone Field (Multiple Values Possible)
@@ -235,10 +280,10 @@ function getRightFieldType($type, $name, $value, $options = []) {
             if (!empty($value) && is_array($value)) {
                 foreach ($value as $phone) {
                     $phoneValue = esc_attr($phone['value']);
-                    $res .= "<input type='text' name='".esc_attr($name)."[]' value='$phoneValue' /><br/>";
+                    $res .= "<input '.$readonly.' type='text' name='".esc_attr($name)."[]' value='$phoneValue' /><br/>";
                 }
             }
-            $res .= "<input type='text' name='".esc_attr($name)."[]' placeholder='Add new phone' />";
+            $res .= "<input '.$readonly.' type='text' name='".esc_attr($name)."[]' placeholder='Add new phone' />";
             break;
 
         default:

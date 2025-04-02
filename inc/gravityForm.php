@@ -4,8 +4,10 @@
 
 add_action('gform_after_submission', 'handle_pipedrive_integration', 10, 2);
 function handle_pipedrive_integration($entries, $form) {
-    log_api_error('form initiate', [], []);
-    $payloads = getPayLoads($entries);       
+    $payloads = getPayLoads($entries);    
+    echo '<pre>', print_r($entries), '</pre>';   
+    echo '<pre>', print_r($payloads), '</pre>';  
+    die; 
     $personId = null;
     $orgId = null;
     $dealID = null;
@@ -161,19 +163,28 @@ function getPayLoads($entries){
             if(is_array($val) && !empty($val)){
                 foreach($val as $key2 => $val2){
                     $fieldID = $val2['field'];
+                    $fieldIDFloor = floor($fieldID);
                     $apiKey = $val2['apiAttribute'];
+                    $entryVal = '';
+                    $combine = true;
+                    if(array_key_exists($fieldID, $entries)){
+                        $entryVal = $entries[$fieldID];
+                    }else{
+                        $entryVal = $entries[$fieldIDFloor];
+                        $combine = false;
+                    }
                     if(isset($val2['apiLabelIndex'])){
                         $theIndex = $val2['apiLabelIndex'];
-                        if (!isset($payLoads[$endPoint][$theIndex][$apiKey]) && isset($entries[$fieldID])) {
-                            $payLoads[$endPoint][$theIndex][$apiKey] = $entries[$fieldID];
-                        } elseif(isset($entries[$fieldID])) {
-                            $payLoads[$endPoint][$theIndex][$apiKey] .= ' - ' . $entries[$fieldID];
+                        if (!isset($payLoads[$endPoint][$theIndex][$apiKey])) {
+                            $payLoads[$endPoint][$theIndex][$apiKey] = $entryVal;
+                        } elseif(isset($entryVal) && $combine) {
+                            $payLoads[$endPoint][$theIndex][$apiKey] .= ' - ' . $entryVal;
                         }  
                     }else{
-                        if (!isset($payLoads[$endPoint][$apiKey]) && isset($entries[$fieldID])) {
-                            $payLoads[$endPoint][$apiKey] = $entries[$fieldID];
-                        } elseif(isset($entries[$fieldID])) {
-                            $payLoads[$endPoint][$apiKey] .= ' - ' . $entries[$fieldID];
+                        if (!isset($payLoads[$endPoint][$apiKey])) {
+                            $payLoads[$endPoint][$apiKey] = $entryVal;
+                        } elseif(isset($entryVal) && $combine) {
+                            $payLoads[$endPoint][$apiKey] .= ' - ' . $entryVal;
                         }  
                     }
                                     
@@ -241,8 +252,11 @@ function createAccount($email){
 
 add_action('wp_head', 'forTesting');
 function forTesting(){
-    // $fieldsData = pipedriveGetVieldName();
-    // echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($fieldsData) ,'</pre></div>';
+    // echo '<div style="width:100%; display:flex;">';
+    // echo '33333<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r(getMapping(3)) ,'</pre></div>';
+    // echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r(getSampleData_3()) ,'</pre></div>';
+    // echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r(getPayLoads(getSampleData_3())) ,'</pre></div>';
+    // echo '</div>';
     if(isset($_GET['pipe_drive_id'])){
         $user_id = get_current_user_id();
         update_user_meta($user_id, 'pipedrive_person_id', $_GET['pipe_drive_id']);

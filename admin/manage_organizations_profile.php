@@ -38,6 +38,7 @@ function showOrganizations($userID) {
     // Display search form
     echo '<form method="GET" action="">
             <input type="hidden" name="page" value="manage_organizations">
+            <input type="hidden" name="page-name" value="manage_organizations">
             '.
             ((isset($_GET['user_id']) && !empty($_GET['user_id']))?
             '<input type="hidden" name="user_id" value="'.$_GET['user_id'].'">'
@@ -57,15 +58,19 @@ function showOrganizations($userID) {
                     <th style="width:60%">Address</th>
                     <th style="width:15%">Action<br><small>Check if user exist in the organization or not.</small></th>
                 </thead>';
-
+        $serNo = 0;
+        if(isset($_GET['start']) && !empty($_GET['start'])){
+            $serNo = (int) $_GET['start'];
+        }
         foreach ($organizationsData as $key => $org):
+            $serNo++;
             $name = $org['name'];
             $name = $org['name'];
             $orgID = $org['id'];
             $address = $org['address'] ?? 'N/A';
             ?>
             <tr>
-                <td><?php echo $key + 1; ?></td>
+                <td><?php echo $serNo; ?></td>
                 <td><?php echo esc_html($name); ?></td>
                 <td><?php echo esc_html($address); ?></td>
                 <td>
@@ -80,10 +85,10 @@ function showOrganizations($userID) {
         // Pagination Links
         echo '<div class="pagination">';
         if ($start > 0) {
-            echo '<a href="?page=manage_organizations&search=' . urlencode($searchTerm) . '&start=' . $prevStart . '">« Previous</a>';
+            echo '<a href="?page=manage_organizations&page-name=manage_organizations&search=' . urlencode($searchTerm) . '&start=' . $prevStart . '">« Previous</a>';
         }
         if (!empty($nextStart)) {
-            echo '<a href="?page=manage_organizations&search=' . urlencode($searchTerm) . '&start=' . $nextStart . '">Next »</a>';
+            echo '<a href="?page=manage_organizations&page-name=manage_organizations&search=' . urlencode($searchTerm) . '&start=' . $nextStart . '">Next »</a>';
         }
         echo '</div>';
 

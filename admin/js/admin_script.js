@@ -59,84 +59,8 @@ jQuery(document).ready(function($) {
       });       
     }
 
-    // add/remove organization
-    $(".modify-organization").on("click", function() {
-        var button = $(this);
-        var Text = button.text()
-        var orgID = button.data("org-id");
-        var personID = button.data("person-id");
-        var targetTD = button.closest('td')
-        button.text('Loading...')
-        $.ajax({
-            url: ajaxurl,
-            type: "POST",
-            data: {
-                action: "modifyOrganization",
-                org_id: orgID,
-                person_id: personID
-            },
-            beforeSend: function() {
-                $("#action-buttons-" + orgID).html("Checking...");
-            },
-            success: function(response) {
-                var status = response.data.status;
-                if (response.success) {
-                    let exist = false;
-                    if(status == 'exists'){
-                        exist = true;
-                    }
-                    var actionText = exist ? "Remove" : "Add";
-                    var actionClass = exist ? "remove-person" : "add-person";                  
-                    
-                    var actionButton = `<div class="responseMessage">${response.data.message} :</div> <button class='${actionClass}' data-org-id='${orgID}' data-person-id='${personID}'>${actionText}</button>`;
+    
 
-                    targetTD.html(actionButton);
-                } else if(response.data.message) {
-                    alert(response.data.message);
-                    button.text(Text)
-                }else{
-                    alert("Action failed!");
-                    button.text(Text)
-                }
-            }
-        });
-    });
-
-    $(document).on("click", ".add-person, .remove-person", function() {
-        var button = $(this);
-        var Text = button.text()
-        var orgID = button.data("org-id");
-        var personID = button.data("person-id");
-        var action = button.hasClass("add-person") ? "add" : "remove";
-        button.text('Loading')
-        $.ajax({
-            url: ajaxurl,
-            type: "POST",
-            data: {
-                action: "modifyPersonOrganization",
-                org_id: orgID,
-                person_id: personID,
-                modify_action: action
-            },
-            beforeSend: function() {
-                button.prop("disabled", true).text("Processing...");
-            },
-            success: function(response) {
-                if (response.success) {
-                    var newActionText = action === "add" ? "Remove" : "Add";
-                    var newActionClass = action === "add" ? "remove-person" : "add-person";
-                    button.closest('td').find('.responseMessage').html(response.data.message)
-                    button.prop("disabled", false).removeClass("add-person remove-person").addClass(newActionClass).text(newActionText);
-                } else if(response.data.message) {
-                    alert(response.data.message);
-                    button.text(Text)
-                }else{
-                    alert("Action failed!");
-                    button.text(Text)
-                }
-            }
-        });
-    });
     function addAttributeDropDown(theElm){
         addIndexField(theElm)
         let theSlug = theElm.data('slug');

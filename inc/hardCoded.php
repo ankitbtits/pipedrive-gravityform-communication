@@ -167,4 +167,66 @@ function getSampleData2() {
     ];
 }
 
+function getSampleData_3() {
+    return array(
+        'id' => 30,
+        'status' => 'active',
+        'form_id' => 3,
+        'ip' => '38.137.49.58',
+        'source_url' => 'https://promofirenzdev.wpenginepowered.com/nuove-imprese/',
+        'currency' => 'EUR',
+        'post_id' => '',
+        'date_created' => '2025-04-01 14:14:33',
+        'date_updated' => '2025-04-01 14:14:33',
+        'is_starred' => 0,
+        'is_read' => 0,
+        'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
+        'payment_status' => '',
+        'payment_date' => '',
+        'payment_amount' => '',
+        'payment_method' => '',
+        'transaction_id' => '',
+        'is_fulfilled' => '',
+        'created_by' => 12,
+        'transaction_type' => '',
+        'source_id' => 22699,
+        1 => '2024-04-05',
+        '3.2' => '',
+        '3.3' => 'name',
+        '3.4' => '',
+        '3.6' => 'last name',
+        '3.8' => '',
+        4 => '001122',
+        5 => 'test@gmail.com',
+        6 => 'Codice Fiscale',
+        7 => '2023-03-02',
+        8 => 'Aspirante Imprenditore',
+        9 => 'Turismo',
+        10 => 'Specificare attività, settore, dove si intende localiz',
+        '11.1' => '',
+        '14.1' => 'Il/La sottoscritto/a nel trasmettere i propri dati a PromoFirenze Azienda Speciale della Camera di Commercio di Firenze, dichiara ai sensi dell’art. 13 del Regolamento UE 2016/679 del 27 aprile 2016 e del Codice Privacy D.lgs n. 196/2003 come modificato dal D.lgs n. 101/2018, di aver preso visione sul sito https://www.promofirenze.it/informativa-privacy/ nell’apposita sezione, dell’intera informativa al consenso del trattamento dei dati.',
+        '12.1' => 'Il /La sottoscritto/a dichiara altresì che, riguardo al trattamento dei dati per le finalità promozionali e commerciali proprie del titolare',
+        '13.1' => '',
+        15 => 'Dev deal',
+    );
+}
+function getSampleData_4() {
+    return array(
+        'persons' => array(
+            'name' => 'name - last name',
+            'email' => 'test@gmail.com',
+            'd71b88d861c0644607d4a070a78daa90951fd7f4' => 'Codice Fiscale',
+            '627e61b2befdbf7020b0cbbb362618dd7f1e6d91' => 'Aspirante Imprenditore',
+            '07aaf6652ad9c3267cf10b014b3b8ac139e69054' => 'Il/La sottoscritto/a nel trasmettere i propri dati a PromoFirenze Azienda Speciale della Camera di Commercio di Firenze, dichiara ai sensi dell’art. 13 del Regolamento UE 2016/679 del 27 aprile 2016 e del Codice Privacy D.lgs n. 196/2003 come modificato dal D.lgs n. 101/2018, di aver preso visione sul sito https://www.promofirenze.it/informativa-privacy/ nell’apposita sezione, dell’intera informativa al consenso del trattamento dei dati.',
+            'marketing_status' => 'Il /La sottoscritto/a dichiara altresì che, riguardo al trattamento dei dati per le finalità promozionali e commerciali proprie del titolare',
+            'ec9fda99f1140b87d4c68162f19e726a61c12033' => '',
+        ),
+        'deals' => array(
+            '1447c372161752b96ec178bdc807e041ea581bb5' => 'Specificare attività, settore, dove si intende localiz',
+            'title' => 'name',
+        ),
+    );
+}
+
+
 

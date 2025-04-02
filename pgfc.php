@@ -47,8 +47,8 @@ function pgfc_pluginAdminScripts() {
     wp_enqueue_style(PGFC_SLUG.'_admin_style', plugin_dir_url(__FILE__).'admin/css/admin_style.css', array(), PGFC_VERSION);
     wp_enqueue_script('jquery', false, array(), true, true); // Load jQuery in the footer
     wp_enqueue_script(PGFC_SLUG.'_admin_js', plugin_dir_url(__FILE__).'admin/js/admin_script.js?v='.time().'', array('jquery'),PGFC_VERSION, true); 
-    wp_localize_script(PGFC_SLUG.'_admin_js', 'pgfc_pdf_ajax_admin', array(
-        'ajax_url' => admin_url('admin-ajax.php'),
+    wp_localize_script(PGFC_SLUG.'_admin_js', 'pgfc_ajax_admin', array(
+        'ajaxurl' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('pgfc_generate_pdf_nonce'),
     ));
 }
@@ -60,6 +60,10 @@ function scriptsFrontendBackend($hook) {
 	wp_enqueue_style(PGFC_SLUG.'_style', plugin_dir_url(__FILE__).'assets/css/style.css', array(), PGFC_VERSION);
     wp_enqueue_script('jquery', false, array(), true, true); // Load jQuery in the footer
     wp_enqueue_script(PGFC_SLUG.'_js', plugin_dir_url(__FILE__).'assets/js/script.js', array('jquery'), PGFC_VERSION, true); 
+    wp_localize_script(PGFC_SLUG.'_js', 'dynamicConten', array(
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('pgfc_generate_pdf_nonce'),
+    ));
 }
 add_action('wp_enqueue_scripts', 'scriptsFrontendBackend');
 add_action('admin_enqueue_scripts', 'scriptsFrontendBackend');

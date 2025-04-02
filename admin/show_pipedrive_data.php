@@ -2,7 +2,11 @@
 
 // displaying pipedrive data on profile page
 function pipedriveDataShowProfile($user) {     
-    $manage_url = admin_url('admin.php?page=manage_organizations&user_id='.$user->ID);
+    $personID = get_user_meta($user->ID, 'pipedrive_person_id', true);
+    if (!$personID) {
+        return;
+    }
+    $manage_url = admin_url('admin.php?page=manage_organizations&user_id='.$user->ID);    
     echo '<p><a href="' . esc_url($manage_url) . '" class="button button-primary">Manage Organizations</a></p>';  
     echo showPipedriveData($user->ID);
 }
@@ -25,19 +29,25 @@ function editPipeDriveData() {
     if (!is_user_logged_in()) {
         return custom_login_form();
     }
-
-    $user_id = get_current_user_id();
     $res = '';
-
-    if (isset($_POST['pipedrive'])) {
-        $res .= updatePipeDriveData($_POST);
+    $user_id = get_current_user_id();
+    if(isset($_GET['page-name']) && $_GET['page-name'] == 'manage_organizations'){
+        ob_start();
+        showOrganizations($user_id);
+        $res .= ob_get_clean();
+    }else{
+        $existing_query = $_SERVER['QUERY_STRING'] ?? ''; // Get existing query string
+        $new_query = empty($existing_query) ? 'page-name=manage_organizations' : $existing_query . '&page-name=manage_organizations';
+        $manage_url = esc_url('?' . $new_query);
+        $res .= '<div class="manageProfileBtnFront"><a href="' . $manage_url . '" class="button button-primary">Manage Organizations</a></div>';
+        if (isset($_POST['pipedrive'])) {
+            $res .= updatePipeDriveData($_POST);
+        }
+        // Capture the echoed output instead of modifying showPipedriveData
+        ob_start();
+        showPipedriveData($user_id);
+        $res .= ob_get_clean();
     }
-
-    // Capture the echoed output instead of modifying showPipedriveData
-    ob_start();
-    showPipedriveData($user_id);
-    $res .= ob_get_clean();
-
     return $res;
 }
 
