@@ -141,11 +141,11 @@ $color1 : #007cba;
 }
 .pgfc_toggleNewpgfc {
     .pgfcItem {
-        td{ 
-            &:last-child {
+        td
+             {
                 width: 33%!important;
             }
-        }
+        
     }
 }
 
@@ -257,6 +257,21 @@ $color1 : #007cba;
         color: #000;
         text-transform: capitalize;
     }
+    .activityToggle {
+        background: #2271b1;
+        color: #fff;
+        padding: 10px 20px;
+        display: block;
+        width: max-content;
+        border-radius: 5px;
+        margin: 20px 0px;
+        text-decoration: none;
+    }
+    .activityContainer:last-child {
+        border-bottom: 2px solid #2271b1;
+        margin-bottom: 30px;
+        padding-bottom: 10px;
+    }
     .adminTable {
         width: 800px;
         text-align: left;
@@ -269,5 +284,17 @@ $color1 : #007cba;
                 padding: 15px;
             }
         }
+    }
+}
+.activityContainer {
+    background: #f1f4f9;
+    padding: 10px;
+    border: 1px solid #dee2e6 !important;
+    width: 96%;
+    .adminTable {
+        width: 100%;
+    }
+    th, td {
+        background: #fff !important;
     }
 }

@@ -82,6 +82,11 @@ function showPipedriveData($userID){
             $actCount = 0;    
             foreach($apiData as $key3 => $val3){
                 $allActivites = pipedrive_api_request('GET', "deals/".$val3['id']."/activities", []);
+                $files = pipedrive_api_request('GET', "deals/".$val3['id']."/files", []);
+                $filesData = [];
+                if(isset($files['data'])){
+                    $filesData = $files['data'];
+                }
                 if(isset($allActivites['data'])){
                     $allActivites = $allActivites['data'];
                 }else{
@@ -101,18 +106,31 @@ function showPipedriveData($userID){
                             <?php echo formatDisplayData($keyInfo, $key, $value, $endPoint, $key3 + 1);?>
                         </td>
                     </tr>
-                
+                    
 
                     <?php
-                }    
+                }   
+                if (!empty($filesData)) {
+                    echo '<tr><th>Files </th>';
+                    echo '<td><ul>';
+                    foreach ($filesData as $file) {
+                        $fileName = esc_html($file['file_name']);
+                        $fileID = esc_attr($file['id']);
+                        $downloadURL = getPipedriveFileDownloadLink($fileID);
+                        echo "<li><a href='{$downloadURL}' target='_blank' download>{$fileName}</a></li>";
+                    }
+                    echo '</ul></td></tr>';
+                } 
                 echo '</table>';   
                 if(!empty($allActivites)){
                     $actData = alloedProfileData()['activities'];
-                    echo '<a href="javascript:;" class="activityToggle" data-id="activityContainer_'.$key3.'">Show Deals Activities</a>
+                    echo '
                     <div class="activityContainer" id="activityContainer_'.$key3.'" style="display:none;">
                     ';
+                    echo'<h3>Activities</h3>';
                     foreach($allActivites as $actKey => $activity){
                     $actCount++;
+                    
                     echo '
                     <table class="adminTable" border="1">
                     ';
@@ -134,7 +152,9 @@ function showPipedriveData($userID){
                     }
                     echo '</table>';
                     }
-                    echo '</div>';
+                    echo '</div> <a href="javascript:;" class="activityToggle" data-id="activityContainer_'.$key3.'">Show Deals Activities</a>' ;
+
+                    
                 }  
             }  
         } else{
@@ -296,6 +316,8 @@ function getRightFieldType($type, $name, $value, $options = []) {
 
 function updatePipeDriveData($data){
     if (isset($_POST['pipedrive'])) {
+        // echo '<pre>', print_r($_POST['pipedrive']), '</pre>';
+        // die;
         $_POST['pipedrive']['persons'] = $_POST['pipedrive']['persons'];
         $apiData = $_POST['pipedrive'];
         foreach($apiData as $key => $val){
@@ -318,4 +340,16 @@ function updatePipeDriveData($data){
     }else{
         return;
     }
+}
+
+function getPipedriveFileDownloadLink($fileID) {
+    if (!$fileID) {
+        return false;
+    }
+    $fileData = pipedrive_api_request('GET', "files/$fileID/download", []);
+    if (isset($fileData['data']['file_url'])) {
+        return $fileData['data']['file_url'];
+    }
+    insertApiErrorLog('Download url for file API did not work' ,"files/$fileID/download", $fileID, $fileData);
+    return false;
 }

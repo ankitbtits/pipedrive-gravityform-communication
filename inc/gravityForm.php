@@ -5,9 +5,9 @@
 add_action('gform_after_submission', 'handle_pipedrive_integration', 10, 2);
 function handle_pipedrive_integration($entries, $form) {
     $payloads = getPayLoads($entries);    
-    echo '<pre>', print_r($entries), '</pre>';   
-    echo '<pre>', print_r($payloads), '</pre>';  
-    die; 
+    // echo '<pre>', print_r($entries), '</pre>';   
+    // echo '<pre>', print_r($payloads), '</pre>';  
+    // die; 
     $personId = null;
     $orgId = null;
     $dealID = null;
@@ -165,6 +165,7 @@ function getPayLoads($entries){
                     $fieldID = $val2['field'];
                     $fieldIDFloor = floor($fieldID);
                     $apiKey = $val2['apiAttribute'];
+                    $fieldType = pipedriveGetVieldName($apiKey)['field_type'];                    
                     $entryVal = '';
                     $combine = true;
                     if(array_key_exists($fieldID, $entries)){
@@ -178,13 +179,21 @@ function getPayLoads($entries){
                         if (!isset($payLoads[$endPoint][$theIndex][$apiKey])) {
                             $payLoads[$endPoint][$theIndex][$apiKey] = $entryVal;
                         } elseif(isset($entryVal) && $combine) {
-                            $payLoads[$endPoint][$theIndex][$apiKey] .= ' - ' . $entryVal;
+                            if($fieldType == 'daterange'){
+                                $payLoads[$endPoint][$theIndex][$apiKey.'_until'] = $entryVal;
+                            }else{
+                                $payLoads[$endPoint][$theIndex][$apiKey] .= ' - ' . $entryVal;
+                            }
                         }  
                     }else{
                         if (!isset($payLoads[$endPoint][$apiKey])) {
                             $payLoads[$endPoint][$apiKey] = $entryVal;
                         } elseif(isset($entryVal) && $combine) {
-                            $payLoads[$endPoint][$apiKey] .= ' - ' . $entryVal;
+                            if($fieldType == 'daterange'){
+                                $payLoads[$endPoint][$apiKey.'_until'] = $entryVal;
+                            }else{
+                                $payLoads[$endPoint][$apiKey] .= ' - ' . $entryVal;
+                            }
                         }  
                     }
                                     
@@ -260,6 +269,9 @@ function forTesting(){
     if(isset($_GET['pipe_drive_id'])){
         $user_id = get_current_user_id();
         update_user_meta($user_id, 'pipedrive_person_id', $_GET['pipe_drive_id']);
+    }
+    if(isset($_GET['customField'])){
+        echo '<pre>', print_r(get_option('pipedrive_custom_fields')), '</pre>';
     }
     if(isset($_GET['debug'])){
         $entries = getSampleData2();

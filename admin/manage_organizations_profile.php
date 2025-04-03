@@ -36,7 +36,7 @@ function showOrganizations($userID) {
     $prevStart = max(0, $start - $limit);
 
     // Display search form
-    echo '<form method="GET" action="">
+    echo '<form method="GET" action="" class="frontorgmang">
             <input type="hidden" name="page" value="manage_organizations">
             <input type="hidden" name="page-name" value="manage_organizations">
             '.
@@ -51,7 +51,7 @@ function showOrganizations($userID) {
 
     if (!empty($organizationsData)):
         echo '<h3>Organizations</h3>
-              <table class="adminTable" border="1" style="width:1000px;">
+              <table class="adminTable adminTableFront" border="1" style="width:1000px;">
                 <thead>
                     <th style="width:25px"></th>
                     <th style="width:25%">Name</th>
@@ -83,7 +83,7 @@ function showOrganizations($userID) {
         echo '</table>';
 
         // Pagination Links
-        echo '<div class="pagination">';
+        echo '<div class="pagination paginationfront">';
         if ($start > 0) {
             echo '<a href="?page=manage_organizations&page-name=manage_organizations&search=' . urlencode($searchTerm) . '&start=' . $prevStart . '">« Previous</a>';
         }

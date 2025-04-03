@@ -6,6 +6,9 @@
 // form does not send some fields - DONE
 // orgniza manage for front user - DONE
 // rearrange edit pipedrive data. show activityies under and don't make them editable and show file attachment if exist - DONE
+// show files in deals
+// all form
+
 
 
 

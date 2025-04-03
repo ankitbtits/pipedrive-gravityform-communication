@@ -86,3 +86,49 @@
     margin: auto;
     border-radius: 5px;
 } 
+.manageProfileBtnFront a {
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid #B13325;
+    display: block;
+    text-decoration: none;
+    background: #B13325;
+    color: #fff !important;
+    width: max-content;
+    margin: 20px 0px;
+}
+.adminTableFront.table {
+    td {
+        padding: 10px !important;
+        border: 1px solid #dee2e6 !important;
+        background: rgba(177, 51, 37, 0.05);
+    }
+    th {
+        background: #b13325;
+        color: #fff;
+        line-height: 18px;
+    }
+}
+
+.page-template-default {
+    .frontorgmang {
+        display: flex;
+        width: 300px;
+        margin: 20px 0px;
+        input {
+            border: 1px solid #dee2e6 !important;
+        }
+        button{
+            background: #b13325;
+            border: none;
+            color: #fff;
+            padding: 10px;
+        }
+    }
+    .paginationfront a{
+        border: 1px solid #B13325;
+        padding: 4px 20px;
+        border-radius: 50px;
+        margin: 0px 10px;
+    }
+}

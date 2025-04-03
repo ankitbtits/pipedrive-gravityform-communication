@@ -166,7 +166,7 @@
   background-color: #c3c4c7 !important;
 }
 
-.pgfc_toggleNewpgfc .pgfcItem td:last-child {
+.pgfc_toggleNewpgfc .pgfcItem td {
   width: 33% !important;
 }
 
@@ -274,6 +274,23 @@
   color: #000;
   text-transform: capitalize;
 }
+.manage-pipe-table .activityToggle {
+  background: #2271b1;
+  color: #fff;
+  padding: 10px 20px;
+  display: block;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  border-radius: 5px;
+  margin: 20px 0px;
+  text-decoration: none;
+}
+.manage-pipe-table .activityContainer:last-child {
+  border-bottom: 2px solid #2271b1;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+}
 .manage-pipe-table .adminTable {
   width: 800px;
   text-align: left;
@@ -286,4 +303,17 @@
 }
 .manage-pipe-table .adminTable tr th, .manage-pipe-table .adminTable tr td {
   padding: 15px;
+}
+
+.activityContainer {
+  background: #f1f4f9;
+  padding: 10px;
+  border: 1px solid #dee2e6 !important;
+  width: 96%;
+}
+.activityContainer .adminTable {
+  width: 100%;
+}
+.activityContainer th, .activityContainer td {
+  background: #fff !important;
 }/*# sourceMappingURL=admin_style.css.map */
