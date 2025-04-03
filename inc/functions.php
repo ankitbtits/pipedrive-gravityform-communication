@@ -192,7 +192,7 @@ function pipedriveGetCustomFields($entity) {
     if (!empty($response['success']) && !empty($response['data'])) {
         return $response['data'];
     }  else{
-        insertApiErrorLog('Getting custom fields API failed ',"{$entity}Fields", '', $response);   
+        //insertApiErrorLog('Getting custom fields API failed ',"{$entity}Fields", '', $response);   
     }
 }
 
@@ -315,6 +315,9 @@ function custom_login_form() {
             <p>
                 <label for="user_pass">Password</label>
                 <input type="password" name="pwd" id="user_pass" required>
+            </p>
+            <p>
+                <a href="<?php echo wp_lostpassword_url(); ?>">Forgot Password?</a>
             </p>
             <p>
                 <input type="submit" name="wp_custom_login" value="Log In">

@@ -35,7 +35,7 @@ function handle_pipedrive_integration($entries, $form) {
     if (isset($payloads['organizations']) && !empty($payloads['organizations'])) {
         $org = pipedrive_api_request('POST','organizations', $payloads['organizations']);     
         if (!$org || empty($org['data']['id'])) {
-            insertApiErrorLog('Add organization through form - '.$entries['form_id'] ,'organizations', $payloads['organizations'], $org);   
+            //insertApiErrorLog('Add organization through form - '.$entries['form_id'] ,'organizations', $payloads['organizations'], $org);   
             log_api_error('organizations', $payloads['organizations'], $org);
         } else {
             $orgId = $org['data']['id'];
@@ -49,7 +49,7 @@ function handle_pipedrive_integration($entries, $form) {
         }
         $person = pipedrive_api_request('POST','persons', $payloads['persons']);
         if (!$person || empty($person['data']['id'])) {
-            insertApiErrorLog('Add Person through form - '.$entries['form_id'] ,'persons', $payloads['persons'], $person);
+           // insertApiErrorLog('Add Person through form - '.$entries['form_id'] ,'persons', $payloads['persons'], $person);
             log_api_error('persons', $payloads['persons'], $person);
             return; // Stop execution if person creation fails
         }
@@ -65,7 +65,7 @@ function handle_pipedrive_integration($entries, $form) {
         }
         $updatePerson = pipedrive_api_request('PUT','persons/'.$personId, ["org_id"=> $orgId]);
         if (!$updatePerson || empty($updatePerson['data']['id'])) {
-            insertApiErrorLog('Add Person through form - '.$entries['form_id'] ,'persons', ["org_id"=> $orgId], $updatePerson);
+           // insertApiErrorLog('Add Person through form - '.$entries['form_id'] ,'persons', ["org_id"=> $orgId], $updatePerson);
             log_api_error('persons', ["org_id"=> $orgId], $updatePerson);
             return; // Stop execution if person creation fails
         }
@@ -80,7 +80,7 @@ function handle_pipedrive_integration($entries, $form) {
         $deal = pipedrive_api_request('POST','deals', $payloads['deals']);
         
         if (!$deal || empty($deal['data']['id'])) {
-            insertApiErrorLog('Add deals through form - '.$entries['form_id'] ,'deals', $payloads['deals'], $deal);
+            //insertApiErrorLog('Add deals through form - '.$entries['form_id'] ,'deals', $payloads['deals'], $deal);
             log_api_error('deals', $payloads['deals'], $deal);
         } else {
             $dealID = $deal['data']['id'];
@@ -100,7 +100,7 @@ function handle_pipedrive_integration($entries, $form) {
             }
             $activityResponse = pipedrive_api_request('POST','activities', $activity);
             if (!$activityResponse || empty($activityResponse['data']['id'])) {
-                insertApiErrorLog('Add activities through form - '.$entries['form_id'] ,'activities', $activity, $activityResponse);
+                //insertApiErrorLog('Add activities through form - '.$entries['form_id'] ,'activities', $activity, $activityResponse);
                 log_api_error('activities', $activity, $activityResponse);
             }
         }
@@ -148,6 +148,12 @@ function pipedrive_api_request($method, $endpoint, $data = []) {
     // Decode response
     $decodedResponse = json_decode($response, true);
 
+    if (!isset($decodedResponse['success']) || $decodedResponse['success'] === false) {
+        insertApiErrorLog('', $endpoint, $data, $decodedResponse);
+    }
+    
+    // echo '<pre>', print_r($decodedResponse), '<pre>';
+    // die;
     return $decodedResponse;
 }
 

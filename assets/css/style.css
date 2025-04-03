@@ -19,12 +19,9 @@
 .dataTabs ul {
   padding: 0px;
   list-style: none;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-column-gap: 20px;
-     -moz-column-gap: 20px;
-          column-gap: 20px;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
   text-transform: capitalize;
   padding: 20px 0px;
 }
@@ -86,7 +83,6 @@
   text-decoration: none;
   background: #B13325;
   color: #fff !important;
-  width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
   margin: 20px 0px;
@@ -104,8 +100,6 @@
 }
 
 .page-template-default .frontorgmang {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   width: 300px;
   margin: 20px 0px;
@@ -124,4 +118,23 @@
   padding: 4px 20px;
   border-radius: 50px;
   margin: 0px 10px;
+}
+
+.page-template-default .activityContainer {
+  background: #fbf5f4;
+  padding: 20px;
+  border: 1px solid #dee2e6 !important;
+}
+.page-template-default .activityContainer th, .page-template-default .activityContainer td {
+  background: #fff;
+}
+.page-template-default .manage-pipe-table a.activityToggle {
+  background: #b13325;
+  color: #fff;
+  padding: 5px 15px;
+  display: block;
+  width: -moz-max-content;
+  width: max-content;
+  border-radius: 37px;
+  margin-top: 10px;
 }/*# sourceMappingURL=style.css.map */

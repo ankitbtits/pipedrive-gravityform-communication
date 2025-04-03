@@ -52,7 +52,7 @@ if (!class_exists('pgfcs_Error_Log_Table')) {
                 $timestamp = get_post_meta($postID, 'timestamp', true);
                 $data[] = array(
                     'ID'               => $postID,
-                    'action'               => $action,
+                    //'action'               => $action,
                     'api_end_point'             => $api_end_point,
                     'payload'             => is_array($payload) ? wp_json_encode($payload, JSON_PRETTY_PRINT) : $payload,
                     'response'             => is_array($response) ? wp_json_encode($response, JSON_PRETTY_PRINT) : $response,
@@ -67,7 +67,7 @@ if (!class_exists('pgfcs_Error_Log_Table')) {
                 $cols['cb'] = '<input type="checkbox" />';                
             }
             $cols = array_merge($cols, array(
-                'action'              => esc_html__('Action', 'pgfc'),
+                //'action'              => esc_html__('Action', 'pgfc'),
                 'api_end_point'     => esc_html__('API end point', 'pgfc'),   
                 'payload'              => esc_html__('Payload', 'pgfc'),             
                 'response'              => esc_html__('Response', 'pgfc'), 

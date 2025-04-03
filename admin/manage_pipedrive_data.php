@@ -326,14 +326,14 @@ function updatePipeDriveData($data){
                     $id = $val2['id'];
                     $apiRes = pipedrive_api_request('PUT',$key.'/'.$id, $val2);
                     if(!isset($apiRes['success'])){
-                        insertApiErrorLog('Updating  '.$key.' for userID '.$user_id ,$key, $val2, $apiRes);
+                        //insertApiErrorLog('Updating  '.$key.' for userID '.$user_id ,$key, $val2, $apiRes);
                     }
                 }
             }else{
                 $id = $val['id'];
                 $apiRes = pipedrive_api_request('PUT',$key.'/'.$id, $val);
                 if(!isset($apiRes['success'])){
-                    insertApiErrorLog('Updating  '.$key.' for userID '.$user_id ,$key, $val, $apiRes);
+                   // insertApiErrorLog('Updating  '.$key.' for userID '.$user_id ,$key, $val, $apiRes);
                 }
             }
         }
@@ -350,6 +350,6 @@ function getPipedriveFileDownloadLink($fileID) {
     if (isset($fileData['data']['file_url'])) {
         return $fileData['data']['file_url'];
     }
-    insertApiErrorLog('Download url for file API did not work' ,"files/$fileID/download", $fileID, $fileData);
+    //insertApiErrorLog('Download url for file API did not work' ,"files/$fileID/download", $fileID, $fileData);
     return false;
 }

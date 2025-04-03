@@ -132,3 +132,24 @@
         margin: 0px 10px;
     }
 }
+.page-template-default {
+	.activityContainer {
+		background: #fbf5f4;
+		padding: 20px;
+		border: 1px solid #dee2e6 !important;
+		th, td {
+			background: #fff;
+		}
+	}
+	.manage-pipe-table {
+		a.activityToggle {
+			background: #b13325;
+			color: #fff;
+			padding: 5px 15px;
+			display: block;
+			width: max-content;
+			border-radius: 37px;
+			margin-top: 10px;
+		}
+	}
+}
