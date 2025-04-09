@@ -30,9 +30,14 @@ function handle_pipedrive_integration($entries, $form) {
         $user_id = get_current_user_id();
         $personId = get_user_meta($user_id, 'pipedrive_person_id', true);
     }
-
+    if($personId){
+        $personData = pipedrive_api_request('GET', 'persons/'.$personId, []);
+        if(isset($personData['data']['org_id']['value'])){
+            $orgId = $personData['data']['org_id']['value'];
+        }
+    }
     // 1. Create Organization and link with person
-    if (isset($payloads['organizations']) && !empty($payloads['organizations'])) {
+    if (!$orgId && isset($payloads['organizations']) && !empty($payloads['organizations'])) {
         $org = pipedrive_api_request('POST','organizations', $payloads['organizations']);     
         if (!$org || empty($org['data']['id'])) {
             //insertApiErrorLog('Add organization through form - '.$entries['form_id'] ,'organizations', $payloads['organizations'], $org);   
@@ -88,9 +93,10 @@ function handle_pipedrive_integration($entries, $form) {
     }
 
     // 4. Create Activity
-    if (isset($payloads['activities']) && !empty($payloads['activities'])) {
-        
+    if (isset($payloads['activities']) && !empty($payloads['activities'])) {        
         foreach($payloads['activities'] as $activity){
+            if(!is_array($activity)){ return;}
+            
             $activity['person_id'] = $personId;
             if ($dealID) {
                 $activity['deal_id'] = $dealID;

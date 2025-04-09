@@ -228,5 +228,7 @@ function getSampleData_4() {
     );
 }
 
-
+function skipPopulateFieldTypes(){
+    return ['date', 'radio', 'multi_choice', 'checkbox'];
+}
 

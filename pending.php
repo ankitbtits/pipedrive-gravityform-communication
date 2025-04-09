@@ -8,6 +8,7 @@
 // rearrange edit pipedrive data. show activityies under and don't make them editable and show file attachment if exist - DONE
 // show files in deals
 // all form
+// clean all print and hardcore file
 
 
 
@@ -18,3 +19,7 @@
 //For create new account checkbox
 // I am using a specific value(createAccountWP) as recognizer. So when admin creates checkbox for "create an account" make sure to "createAccountWP" as checkbox value. For existing forms I will set it. But for future forms. Client have to takecare of this. I can also add this info on plugin settings as general instructions. 
 // Besides this create account requires an email field as well. I see one of the form(https://promofirenzdev.wpenginepowered.com/prenotazione-sale/) has "Create account" checkbox but not the email field. So we have to add email fields there. Since we are creating person in all forms I am using "Person's email" to create this account. But if you think this can change. Then we can something similar to "createAccountWP". We can use an specific value email field in case user create account like "userEmail"
+
+
+//NOTES
+// for dates field make sure you follow the same format pipedrive is using
