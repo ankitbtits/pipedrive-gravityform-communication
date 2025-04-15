@@ -283,7 +283,12 @@ function forTesting(){
         update_user_meta($user_id, 'pipedrive_person_id', $_GET['pipe_drive_id']);
     }
     if(isset($_GET['customField'])){
-        echo '<pre>**', print_r(pipedriveGetVieldName('07aaf6652ad9c3267cf10b014b3b8ac139e69054')), '</pre>';
+        echo '<pre>', print_r(pipedriveGetVieldName('07aaf6652ad9c3267cf10b014b3b8ac139e69054')), '</pre>';
+    }
+    if(isset($_GET['stages'])){
+        update_option('pipedrive_stages', getSampleData());
+        echo '<pre>stages =', print_r(get_option('pipedrive_stages', true)), '</pre>';
+        die;
     }
     if(isset($_GET['debug'])){
         $entries = getSampleData2();

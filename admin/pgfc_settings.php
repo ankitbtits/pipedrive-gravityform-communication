@@ -4,8 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 class PGFC_Settings_Page {
     private $pipeDriveApiToken;
-
+    public $pipeDriveIDError = false;
+    public $stagesKey;
     public function __construct() {
+        $this->stagesKey = 'pipedrive_stages';
         $this->handle_form_submission();
         $this->load_saved_options();
     }
@@ -19,7 +21,6 @@ class PGFC_Settings_Page {
             $pipeDriveApiToken = isset($_POST['pgfc_option']['pipeDriveApiToken'])
                 ? sanitize_text_field($_POST['pgfc_option']['pipeDriveApiToken'])
                 : '';
-
             update_option('pipeDriveApiToken', $pipeDriveApiToken);
             echo '<div class="updated"><p>' . esc_html__('Field saved successfully!', 'pgfc') . '</p></div>';
         }elseif(
@@ -29,9 +30,30 @@ class PGFC_Settings_Page {
         ){
             pipedriveStoreCustomFields();
             echo '<div class="updated"><p>' . esc_html__('Custom fields from pipedrive are synced successfully!', 'pgfc') . '</p></div>';
+        }elseif(
+            isset($_POST['pgfc_syncStages']) &&
+            isset($_POST['_wpnonce_pgfc_settings']) &&
+            wp_verify_nonce(sanitize_text_field($_POST['_wpnonce_pgfc_settings']), 'pgfc-settings-nonce')
+        ){
+            if(!isset($_POST['pipeDriveID']) || empty($_POST['pipeDriveID'])){
+                $this->pipeDriveIDError = __('Please enter pipedrive ID to sync its stages', 'pgfc');
+            }else{
+                $syncStages = pipedrive_api_request('GET', 'stages', ['pipeline_id'=>$_POST['pipeDriveID']]);
+                if(isset($syncStages['data'])){
+                    $this->updateStages($_POST['pipeDriveID'], $syncStages['data']);
+                }else{
+                    $this->pipeDriveIDError = __('Stages could not be synced. Please check API Logs for the error.', 'pgfc');
+                }
+            }
         }
     }
-
+    private function updateStages($pipeDriveID, $stages){
+        if(is_array($stages) && !empty($stages)){
+            $curentStages = get_option($this->stagesKey, true);
+            $curentStages[$pipeDriveID] = $stages;
+            update_option($this->stagesKey, $curentStages);
+        }
+    }
     private function load_saved_options() {
         $this->pipeDriveApiToken = get_option('pipeDriveApiToken', '');
         $this->pipedrive_custom_fields_last_updated = get_option('pipedrive_custom_fields_last_updated', '');
@@ -39,12 +61,13 @@ class PGFC_Settings_Page {
 
     public function render() {
         $tabs = new PGFC_Admin_Tabs();
+        $stages = get_option($this->stagesKey, true);
         echo $tabs->render();
         ?>
         <div class="wrap pgfc-settings">
-            <h1 class="wp-heading-inline"><?php esc_html_e('Gravity Form Pipedrive Sync', 'pgfc'); ?></h1>
-            <div class="_CISettingIn">
-                <form action="#" method="post" autocomplete="off">
+            <form action="#" method="post" autocomplete="off">
+                <h1 class="wp-heading-inline"><?php esc_html_e('Gravity Form Pipedrive Sync', 'pgfc'); ?></h1>
+                <div class="_CISettingIn">
                     <?php wp_nonce_field('pgfc-settings-nonce', '_wpnonce_pgfc_settings'); ?>
                     <table>
                         <tr>
@@ -69,9 +92,53 @@ class PGFC_Settings_Page {
                             </td>
                         </tr>
                     </table>
-                </form>
-            </div>
-
+                </div>
+                <div class="_CISettingIn">
+                    <h3>PipeDrive Stages </h3>
+                    <table>
+                        <tr>
+                            <td>
+                                <span>
+                                    <?php
+                                        if($this->pipeDriveIDError){
+                                            echo "<span class='pgfcErrorField'>".$this->pipeDriveIDError."</span><br>";
+                                        }
+                                    ?>
+                                    <input name="pipeDriveID" type="number" class="regular-text" placeholder="Enter Pipedrive ID" />
+                                </span>
+                                <input name="pgfc_syncStages" class="button button-primary" type="submit" value="<?php esc_html_e('Sync stages', 'pgfc'); ?>" />
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="adminTableStyle1">
+                        <?php
+                            if(is_array($stages) && !empty($stages)){
+                                echo '<tr>
+                                    <th>Stage Name</th>
+                                    <th>Stage ID</th>
+                                    <th>Pipeline name</th>
+                                    <th>Pipeline ID</th>
+                                </tr>';
+                                foreach($stages as $pipeDeriveKey => $stage){
+                                    foreach($stage as $val){
+                                        $stageName = $val['name'];
+                                        $stageID = $val['id'];
+                                        $pipelineName = $val['pipeline_name'];
+                                        $pipelineID = $val['pipeline_id'];
+                                        echo "<tr>
+                                            <td>$stageName</td>
+                                            <td>$stageID</td>
+                                            <td>$pipelineName</td>
+                                            <td>$pipelineID</td>
+                                        </tr>
+                                        ";
+                                    }
+                                }
+                            }
+                        ?>
+                    </table>
+                </div>
+            </form>
             <div class="_CISettingIn">
                 <h3>General Info</h3>
                 <table>
@@ -123,3 +190,4 @@ class PGFC_Settings_Page {
 }
 $settings_page = new PGFC_Settings_Page();
 $settings_page->render();
+

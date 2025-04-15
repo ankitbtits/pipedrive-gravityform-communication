@@ -316,4 +316,13 @@
 }
 .activityContainer th, .activityContainer td {
   background: #fff !important;
+}
+
+.pgfcErrorField {
+  color: red;
+  font-size: 13px;
+}
+
+.pgfcErrorFieldField {
+  border: solid 1px red;
 }/*# sourceMappingURL=admin_style.css.map */
