@@ -305,3 +305,17 @@ $color1 : #007cba;
 .pgfcErrorFieldField{
     border: solid 1px red;
 }
+table.adminTableStyle1 {
+    margin-top: 10px;
+    th {
+        background: #007cba;
+        color: #fff;
+        border: 1px solid #dee2e6 !important;
+        padding: 10px 10px !important;
+    }
+    td {
+        background: #F1F4F9;
+        border: 1px solid #dee2e6 !important;
+        padding: 10px 10px !important;
+    }
+}

@@ -50,6 +50,9 @@ class PGFC_Settings_Page {
     private function updateStages($pipeDriveID, $stages){
         if(is_array($stages) && !empty($stages)){
             $curentStages = get_option($this->stagesKey, true);
+            if(!is_array($curentStages)){
+                $curentStages = [];
+            }
             $curentStages[$pipeDriveID] = $stages;
             update_option($this->stagesKey, $curentStages);
         }

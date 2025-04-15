@@ -1,35 +1,24 @@
 .pgfc-addpgfc {
   padding: 50px 0;
   margin: 10px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
   width: 100%;
 }
 .pgfc-addpgfc form {
   width: 100%;
   max-width: 1000px;
   background: #fff;
-  -webkit-box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-          box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border-radius: 5px;
   padding: 30px;
 }
 
 .pgfc-addpgfc .pgfc_addpgfcItemCon {
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: flex-end;
+  align-items: center;
   margin-top: 13px;
 }
 .pgfc-addpgfc .pgfc_addpgfcItemCon .pgfc_addItem {
@@ -43,18 +32,13 @@
 }
 .pgfc-addpgfc .pgfcFormInn {
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   margin-bottom: 20px;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   background: #F1F4F9;
   padding: 20px;
   border: 1px solid #E2E3E8;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 .pgfc-addpgfc .pgfcFormInn:last-child {
   background: #fff;
@@ -74,21 +58,13 @@
   width: 100%;
 }
 .pgfc-addpgfc .pgfcFormInn.pgfc_itemsCon {
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 .pgfc-addpgfc .pgfcFormInn.radioButtonCon {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
-  -webkit-box-align: baseline;
-      -ms-flex-align: baseline;
-          align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: baseline;
 }
 .pgfc-addpgfc .pgfcFormInn.radioButtonCon h3 {
   font-weight: normal;
@@ -96,32 +72,22 @@
   margin: 0 0 10px;
 }
 .pgfc-addpgfc .pgfcFormInn.radioButtonCon .radioButtons {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 .pgfc-addpgfc .pgfcFormInn.radioButtonCon .radioButtons label {
   margin-right: 10px;
 }
 .pgfc-addpgfc .pgfcFormInn .pgfcItem {
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   margin-bottom: 6px;
-  -webkit-column-gap: 10px;
-     -moz-column-gap: 10px;
-          column-gap: 10px;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
 }
 .pgfc-addpgfc .pgfcFormInn .selectWrapper {
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 .pgfc-addpgfc .pgfcFormInn .selectWrapper h3 {
   font-weight: normal;
@@ -176,8 +142,7 @@
   display: block;
   padding: 20px 30px;
   margin-top: 30px;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 .pgfc-settings ._CISettingIn h2 {
   color: #007cba;
@@ -225,15 +190,9 @@
 .removeMapping {
   background: #B4BCC6;
   padding: 0px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -262,8 +221,7 @@
 
 .manage-pipe-table {
   background: #fff;
-  -webkit-box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-          box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border-radius: 5px;
   padding: 30px;
   width: 808px;
@@ -279,7 +237,6 @@
   color: #fff;
   padding: 10px 20px;
   display: block;
-  width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
   border-radius: 5px;
@@ -325,4 +282,19 @@
 
 .pgfcErrorFieldField {
   border: solid 1px red;
+}
+
+table.adminTableStyle1 {
+  margin-top: 10px;
+}
+table.adminTableStyle1 th {
+  background: #007cba;
+  color: #fff;
+  border: 1px solid #dee2e6 !important;
+  padding: 10px 10px !important;
+}
+table.adminTableStyle1 td {
+  background: #F1F4F9;
+  border: 1px solid #dee2e6 !important;
+  padding: 10px 10px !important;
 }/*# sourceMappingURL=admin_style.css.map */
