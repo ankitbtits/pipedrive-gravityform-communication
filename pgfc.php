@@ -28,6 +28,9 @@ require_once 'admin/tabs.php';
 require_once 'admin/show_pipedrive_data.php';
 require_once 'admin/manage_pipedrive_data.php';
 require_once 'admin/manage_organizations_profile.php';
+// if(isset($_GET['runpipe'])){
+//     require_once 'inc/populate_fields.php';
+// }
 require_once 'inc/populate_fields.php';
 
 add_action('admin_notices', 'pgfc_admin_notice_notice');

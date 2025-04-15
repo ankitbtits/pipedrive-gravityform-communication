@@ -89,6 +89,32 @@ class PGFC_Settings_Page {
                             2. Creating user accounts requires an email. The email will be taken from either <b>Pipedrive → Persons → Email</b> field or an email field with <b>"userEmail"</b> as its value. Ensure that at least one of these email fields exists in the form.
                         </td>
                     </tr>
+                    <tr>
+                        <th>For Privacy Policy</th>
+                        <td>
+                        In Gravity Forms, either the field label or value must exactly match the corresponding Pipedrive label name.
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Marketing Status</th>
+                        <td>
+                        In Gravity Forms, either the label or value must match the Pipedrive label name. The option values for marketing status must exactly match those in Pipedrive.
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>For Country dropdown</th>
+                        <td>
+                            The country names in the Gravity Forms dropdown must exactly match those in the Pipedrive country list.
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Checkbox and Radio Fields:</th>
+                        <td>
+                            The option values in checkbox and radio fields in Gravity Forms must exactly match the corresponding values in Pipedrive.
+                        </td>
+                    </tr>
+
+
                 </table>
             <div>
         </div>

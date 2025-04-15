@@ -266,7 +266,10 @@ function getRightFieldType($type, $name, $value, $options = []) {
                     $id = esc_attr($option['id']);
                     $label = esc_html($option['label']);
                     $checked = (in_array($id, $selectedValues)) ? 'checked' : '';
-                    $res .= "<label><input $readonly type='checkbox' name='".esc_attr($name)."[]' value='$id' $checked> $label</label><br/>";
+                    $res .= "<label>
+                    <input type='hidden' name='".esc_attr($name)."[]' value='0'>
+                    <input $readonly type='checkbox' name='".esc_attr($name)."[]' value='$id' $checked> $label</label>
+                    <br/>";
                 }
             } else {
                 $res = 'Options not provided';
@@ -330,6 +333,23 @@ function updatePipeDriveData($data){
                 }
             }else{
                 $id = $val['id'];
+                foreach ($val as $fieldKey => $fieldValue) {
+                    if (is_array($fieldValue)) {
+                        // $cleaned = array_filter($fieldValue, function ($v) {
+                        //     return $v !== '0';
+                        // });
+                        // $val[$fieldKey] = empty($cleaned) ? null : array_values($cleaned)[0];
+
+                        $cleaned = array_filter($fieldValue, fn($v) => $v !== '0');
+
+                        if (count($fieldValue) > 1) {
+                        $val[$fieldKey] = empty($cleaned) ? null : implode(',', $cleaned);
+                        } else {
+                        $val[$fieldKey] = empty($cleaned) ? null : array_values($cleaned)[0];
+                        }
+                        
+                    }
+                }
                 $apiRes = pipedrive_api_request('PUT',$key.'/'.$id, $val);
                 if(!isset($apiRes['success'])){
                    // insertApiErrorLog('Updating  '.$key.' for userID '.$user_id ,$key, $val, $apiRes);
@@ -352,3 +372,20 @@ function getPipedriveFileDownloadLink($fileID) {
     //insertApiErrorLog('Download url for file API did not work' ,"files/$fileID/download", $fileID, $fileData);
     return false;
 }
+
+// add_action('wp_head' , function(){
+//     $userID = 3;
+
+//     echo "1111";
+//     $personID = 1075;
+//     if(!$personID){
+//         return;
+//     }
+//     $pipeDriveData = [];
+//     $personData = pipedrive_api_request('GET', 'persons/'.$personID, []);
+
+//     echo '<pre>', var_dump($personData); echo '</pre>';
+//     die();
+
+
+// });

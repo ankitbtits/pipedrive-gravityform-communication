@@ -232,3 +232,6 @@ function skipPopulateFieldTypes(){
     return ['date', 'radio', 'multi_choice', 'checkbox'];
 }
 
+function skipPopulateFieldTypesNew(){
+    return ['date', 'multi_choice'];
+}

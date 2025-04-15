@@ -45,7 +45,7 @@ function editPipeDriveData() {
         }
         // Capture the echoed output instead of modifying showPipedriveData
         ob_start();
-        showPipedriveData($user_id);
+       showPipedriveData($user_id);
         $res .= ob_get_clean();
     }
     return $res;
