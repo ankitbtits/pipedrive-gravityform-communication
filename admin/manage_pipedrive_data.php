@@ -1,6 +1,7 @@
 <?php
 
 function showPipedriveData($userID){    
+    $action = 'showPipedriveData';
     if(!$userID){
         return;
     }
@@ -9,7 +10,7 @@ function showPipedriveData($userID){
         return;
     }
     $pipeDriveData = [];
-    $personData = pipedrive_api_request('GET', 'persons/'.$personID, []);
+    $personData = pipedrive_api_request('GET', 'persons/'.$personID, [], $action);
     if(!isset($personData['data'])){
         echo 'We are unable to load data for personID : '.$personID.'. Either person does not exist in the pipedrive. Or contact plugin developer.';
         return;
@@ -20,14 +21,12 @@ function showPipedriveData($userID){
     $orgData = null;
     if(isset($personData['org_id']['value'])){
         $orgID = $personData['org_id']['value'];
-        $orgData = pipedrive_api_request('GET', 'organizations/'.$orgID, []);
+        $orgData = pipedrive_api_request('GET', 'organizations/'.$orgID, [], $action);
         $pipeDriveData['organizations']= $orgData['data'];
     }
 
-    $allDeals = pipedrive_api_request('GET', 'persons/'.$personID.'/deals/', []);
+    $allDeals = pipedrive_api_request('GET', 'persons/'.$personID.'/deals/', [], $action);
     $pipeDriveData['deals'] = $allDeals['data'];
-    // $allActivites = pipedrive_api_request('GET', 'persons/'.$personID.'/activities/', []);
-    // $pipeDriveData['activities'] = $allActivites['data'];
     ?>
     <?php
         if(!is_user_profile_page()){
@@ -80,8 +79,8 @@ function showPipedriveData($userID){
         if(in_array($endPoint, ['deals','activities'])){  
             $actCount = 0;    
             foreach($apiData as $key3 => $val3){
-                $allActivites = pipedrive_api_request('GET', "deals/".$val3['id']."/activities", []);
-                $files = pipedrive_api_request('GET', "deals/".$val3['id']."/files", []);
+                $allActivites = pipedrive_api_request('GET', "deals/".$val3['id']."/activities", [], $action);
+                $files = pipedrive_api_request('GET', "deals/".$val3['id']."/files", [], $action);
                 $filesData = [];
                 if(isset($files['data'])){
                     $filesData = $files['data'];
@@ -317,28 +316,20 @@ function getRightFieldType($type, $name, $value, $options = []) {
 }
 
 function updatePipeDriveData($data){
+    $action = 'updatePipeDriveData';
     if (isset($_POST['pipedrive'])) {
-        // echo '<pre>', print_r($_POST['pipedrive']), '</pre>';
-        // die;
         $_POST['pipedrive']['persons'] = $_POST['pipedrive']['persons'];
         $apiData = $_POST['pipedrive'];
         foreach($apiData as $key => $val){
             if(in_array($key, ['deals','activities'])){
                 foreach($val as $val2){
                     $id = $val2['id'];
-                    $apiRes = pipedrive_api_request('PUT',$key.'/'.$id, $val2);
-                    if(!isset($apiRes['success'])){
-                        //insertApiErrorLog('Updating  '.$key.' for userID '.$user_id ,$key, $val2, $apiRes);
-                    }
+                    $apiRes = pipedrive_api_request('PUT',$key.'/'.$id, $val2, $action);
                 }
             }else{
                 $id = $val['id'];
                 foreach ($val as $fieldKey => $fieldValue) {
                     if (is_array($fieldValue)) {
-                        // $cleaned = array_filter($fieldValue, function ($v) {
-                        //     return $v !== '0';
-                        // });
-                        // $val[$fieldKey] = empty($cleaned) ? null : array_values($cleaned)[0];
 
                         $cleaned = array_filter($fieldValue, fn($v) => $v !== '0');
 
@@ -350,10 +341,7 @@ function updatePipeDriveData($data){
                         
                     }
                 }
-                $apiRes = pipedrive_api_request('PUT',$key.'/'.$id, $val);
-                if(!isset($apiRes['success'])){
-                   // insertApiErrorLog('Updating  '.$key.' for userID '.$user_id ,$key, $val, $apiRes);
-                }
+                $apiRes = pipedrive_api_request('PUT',$key.'/'.$id, $val, $action);
             }
         }
     }else{
@@ -362,30 +350,13 @@ function updatePipeDriveData($data){
 }
 
 function getPipedriveFileDownloadLink($fileID) {
+    $action = 'getPipedriveFileDownloadLink';
     if (!$fileID) {
         return false;
     }
-    $fileData = pipedrive_api_request('GET', "files/$fileID/download", []);
+    $fileData = pipedrive_api_request('GET', "files/$fileID/download", [], $action);
     if (isset($fileData['data']['file_url'])) {
         return $fileData['data']['file_url'];
     }
-    //insertApiErrorLog('Download url for file API did not work' ,"files/$fileID/download", $fileID, $fileData);
     return false;
 }
-
-// add_action('wp_head' , function(){
-//     $userID = 3;
-
-//     echo "1111";
-//     $personID = 1075;
-//     if(!$personID){
-//         return;
-//     }
-//     $pipeDriveData = [];
-//     $personData = pipedrive_api_request('GET', 'persons/'.$personID, []);
-
-//     echo '<pre>', var_dump($personData); echo '</pre>';
-//     die();
-
-
-// });

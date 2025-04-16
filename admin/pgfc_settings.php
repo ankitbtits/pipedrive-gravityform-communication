@@ -38,7 +38,8 @@ class PGFC_Settings_Page {
             if(!isset($_POST['pipeDriveID']) || empty($_POST['pipeDriveID'])){
                 $this->pipeDriveIDError = __('Please enter pipedrive ID to sync its stages', 'pgfc');
             }else{
-                $syncStages = pipedrive_api_request('GET', 'stages', ['pipeline_id'=>$_POST['pipeDriveID']]);
+                $action = 'Syncing stages';
+                $syncStages = pipedrive_api_request('GET', 'stages', ['pipeline_id'=>$_POST['pipeDriveID']], $action);
                 if(isset($syncStages['data'])){
                     $this->updateStages($_POST['pipeDriveID'], $syncStages['data']);
                 }else{
@@ -156,7 +157,7 @@ class PGFC_Settings_Page {
                         <th>Creat account field</th>
                         <td>
                             1. Set the field value to <b>"createAccountWP"</b> if you want an account to be created when the checkbox is selected. <br>
-                            2. Creating user accounts requires an email. The email will be taken from either <b>Pipedrive → Persons → Email</b> field or an email field with <b>"userEmail"</b> as its value. Ensure that at least one of these email fields exists in the form.
+                            2. Creating user accounts requires an email. The email will be taken from either <b>Pipedrive → Persons → Email</b> field or an email field with <b>"userEmail"</b> as its "Admin Field Label". Ensure that at least one of these email fields exists in the form.
                         </td>
                     </tr>
                     <tr>

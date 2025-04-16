@@ -188,12 +188,11 @@ function alloedProfileData(){
 
 // custom fields handler
 function pipedriveGetCustomFields($entity) {
-    $response = pipedrive_api_request('GET', "{$entity}Fields");
+    $action = 'Syncing custom fields';
+    $response = pipedrive_api_request('GET', "{$entity}Fields", [], $action);
     if (!empty($response['success']) && !empty($response['data'])) {
         return $response['data'];
-    }  else{
-        //insertApiErrorLog('Getting custom fields API failed ',"{$entity}Fields", '', $response);   
-    }
+    }  
 }
 
 function pipedriveStoreCustomFields() {

@@ -3,17 +3,19 @@ add_filter('gform_pre_render', 'prefill_and_disable_fields_globally');
 add_filter('gform_pre_validation', 'prefill_and_disable_fields_globally');
 
 function prefill_and_disable_fields_globally($form) {
+    $formTitle = $form['title'];
+    $formID = $form['id'];
+    $action = 'Populate fields for form: '.$formTitle.'('.$formID.')';
     if (!is_user_logged_in()) {
         return $form; // Do nothing if not logged in
     }
     $userID = get_current_user_id();
-    $formID = $form['id'];
     $personID = get_user_meta($userID, 'pipedrive_person_id', true);
     if(!$personID){
         return $form;
     }
     $pipeDriveData = [];
-    $personData = pipedrive_api_request('GET', 'persons/'.$personID, []);
+    $personData = pipedrive_api_request('GET', 'persons/'.$personID, [], $action);
     if(!isset($personData['data'])){
         return;
     }else{
@@ -23,7 +25,7 @@ function prefill_and_disable_fields_globally($form) {
     $orgData = null;
     if(isset($pipeDriveData['person']['org_id']['value'])){
         $orgID = $pipeDriveData['person']['org_id']['value'];
-        $orgData = pipedrive_api_request('GET', 'organizations/'.$orgID, []);
+        $orgData = pipedrive_api_request('GET', 'organizations/'.$orgID, [],  $action);
         $pipeDriveData['organization']= $orgData['data'];
     }
     $populatedFiedls = getValidPopulatdFields($formID);

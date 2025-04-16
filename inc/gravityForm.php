@@ -4,15 +4,30 @@
 
 add_action('gform_after_submission', 'handle_pipedrive_integration', 10, 2);
 function handle_pipedrive_integration($entries, $form) {
+    echo '<pre>', print_r($form), '</pre>';
+    die;
+    $formTitle = $form['title'];
+    $formID = $form['id'];
+    $action = 'Through Form: '.$formTitle.'('.$formID.')';
     $payloads = getPayLoads($entries);    
-    // echo '<pre>', print_r($entries), '</pre>';   
-    // echo '<pre>', print_r($payloads), '</pre>';  
-    // die; 
     $personId = null;
     $orgId = null;
     $dealID = null;
     $user_id = null;
     $create_account = false;
+    $userEmail = null;
+    if(isset($payloads['persons']['email'])){
+        $userEmail = $payloads['persons']['email'];
+    }
+    foreach($form['fields'] as $field){
+        $adminLabel = $field->adminLabel;
+        $fieldType = $field->type;
+        if($adminLabel == 'userEmail' && $fieldType == 'email'){
+            $fieldID = $field->id;
+            $userEmail = $entries[$fieldID];
+            break;
+        }
+    }
     foreach ($entries as $field_value) {
         if ($field_value === 'createAccountWP') {
             $create_account = true;
@@ -20,9 +35,8 @@ function handle_pipedrive_integration($entries, $form) {
         }
     }
     // Create WordPress account only if "createAccountWP" is found
-    if ($create_account && !is_user_logged_in()) {
-        $email = $payloads['persons']['email'] ?? null;
-        $user_id = createAccount($email);
+    if ($create_account && !is_user_logged_in() && $userEmail) {
+        $user_id = createAccount($userEmail);
     }
     
     // Check if user is logged in
@@ -31,31 +45,26 @@ function handle_pipedrive_integration($entries, $form) {
         $personId = get_user_meta($user_id, 'pipedrive_person_id', true);
     }
     if($personId){
-        $personData = pipedrive_api_request('GET', 'persons/'.$personId, []);
+        $personData = pipedrive_api_request('GET', 'persons/'.$personId, [], $action);
         if(isset($personData['data']['org_id']['value'])){
             $orgId = $personData['data']['org_id']['value'];
         }
     }
     // 1. Create Organization and link with person
     if (!$orgId && isset($payloads['organizations']) && !empty($payloads['organizations'])) {
-        $org = pipedrive_api_request('POST','organizations', $payloads['organizations']);     
-        if (!$org || empty($org['data']['id'])) {
-            //insertApiErrorLog('Add organization through form - '.$entries['form_id'] ,'organizations', $payloads['organizations'], $org);   
-            log_api_error('organizations', $payloads['organizations'], $org);
-        } else {
+        $org = pipedrive_api_request('POST','organizations', $payloads['organizations'], $action);     
+        if (isset($org['data']['id']) && !empty($org['data']['id'])) {
             $orgId = $org['data']['id'];
         }
     }
 
     // 1. Create Person only if it doesn't exist
-    if (!$personId) {
+    if (!$personId && isset($payloads['persons']) && !empty($payloads['persons'])) {
         if (!empty($orgId)) {
             $payloads['persons']['org_id'] = $orgId;
         }
-        $person = pipedrive_api_request('POST','persons', $payloads['persons']);
+        $person = pipedrive_api_request('POST','persons', $payloads['persons'], $action);
         if (!$person || empty($person['data']['id'])) {
-           // insertApiErrorLog('Add Person through form - '.$entries['form_id'] ,'persons', $payloads['persons'], $person);
-            log_api_error('persons', $payloads['persons'], $person);
             return; // Stop execution if person creation fails
         }
         $personId = $person['data']['id'];
@@ -68,10 +77,8 @@ function handle_pipedrive_integration($entries, $form) {
         if (empty($orgId)) {
             return;
         }
-        $updatePerson = pipedrive_api_request('PUT','persons/'.$personId, ["org_id"=> $orgId]);
+        $updatePerson = pipedrive_api_request('PUT','persons/'.$personId, ["org_id"=> $orgId], $action);
         if (!$updatePerson || empty($updatePerson['data']['id'])) {
-           // insertApiErrorLog('Add Person through form - '.$entries['form_id'] ,'persons', ["org_id"=> $orgId], $updatePerson);
-            log_api_error('persons', ["org_id"=> $orgId], $updatePerson);
             return; // Stop execution if person creation fails
         }
     }
@@ -82,12 +89,8 @@ function handle_pipedrive_integration($entries, $form) {
         if (!empty($orgId)) {
             $payloads['deals']['org_id'] = $orgId;
         }
-        $deal = pipedrive_api_request('POST','deals', $payloads['deals']);
-        
-        if (!$deal || empty($deal['data']['id'])) {
-            //insertApiErrorLog('Add deals through form - '.$entries['form_id'] ,'deals', $payloads['deals'], $deal);
-            log_api_error('deals', $payloads['deals'], $deal);
-        } else {
+        $deal = pipedrive_api_request('POST','deals', $payloads['deals'], $action);        
+        if (isset($deal['data']['id']) && !empty($deal['data']['id'])) {
             $dealID = $deal['data']['id'];
         }
     }
@@ -104,19 +107,14 @@ function handle_pipedrive_integration($entries, $form) {
             if ($dealID) {
                 $activity['org_id'] = $orgId;
             }
-            $activityResponse = pipedrive_api_request('POST','activities', $activity);
-            if (!$activityResponse || empty($activityResponse['data']['id'])) {
-                //insertApiErrorLog('Add activities through form - '.$entries['form_id'] ,'activities', $activity, $activityResponse);
-                log_api_error('activities', $activity, $activityResponse);
-            }
+            $activityResponse = pipedrive_api_request('POST','activities', $activity, $action);
         }
     }
 }
-function pipedrive_api_request($method, $endpoint, $data = []) {
+function pipedrive_api_request($method, $endpoint, $data = [], $action = false) {
     $pipeDriveApiToken = pipeDriveApiToken();
     $domain = 'https://api.pipedrive.com';
     $url = "$domain/v1/$endpoint?api_token=$pipeDriveApiToken";
-
     // Initialize cURL session
     $ch = curl_init();
 
@@ -153,18 +151,11 @@ function pipedrive_api_request($method, $endpoint, $data = []) {
 
     // Decode response
     $decodedResponse = json_decode($response, true);
-
     if (!isset($decodedResponse['success']) || $decodedResponse['success'] === false) {
-        insertApiErrorLog('', $endpoint, $data, $decodedResponse);
+        insertApiErrorLog($action, $endpoint, $data, $decodedResponse);
     }
-    
-    // echo '<pre>', print_r($decodedResponse), '<pre>';
-    // die;
     return $decodedResponse;
 }
-
-
-
 function getPayLoads($entries){
     $payLoads = [];
     if(isset($entries['form_id'])){
@@ -185,6 +176,9 @@ function getPayLoads($entries){
                     }else{
                         $entryVal = $entries[$fieldIDFloor];
                         $combine = false;
+                    }
+                    if(empty($entryVal)){
+                        continue;
                     }
                     if(isset($val2['apiLabelIndex'])){
                         $theIndex = $val2['apiLabelIndex'];
@@ -216,25 +210,8 @@ function getPayLoads($entries){
     return $payLoads;
 }
 
-
-function log_api_error($api_name, $payload, $response) {
-    error_log('log_api_error init');
-    $log_file = __DIR__ . '/errors.log';
-    $timestamp = date('Y-m-d H:i:s');
-
-    $log_data = "[$timestamp] API Error: $api_name\n";
-    $log_data .= "Payload: " . json_encode($payload, JSON_PRETTY_PRINT) . "\n";
-    $log_data .= "Response: " . json_encode($response, JSON_PRETTY_PRINT) . "\n";
-    $log_data .= "-------------------------------------------------\n";
-
-    file_put_contents($log_file, $log_data, FILE_APPEND);
-}
-
-
 function createAccount($email){
     if (!$email) {
-        // Log error if email is missing
-        log_api_error('createAccount email not found', [], []);
         return; // Stop execution if email is missing
     }
     // Use the email address as the username
@@ -249,14 +226,12 @@ function createAccount($email){
     ]);
 
     if (is_wp_error($user_id)) {
-        log_api_error($user_id->get_error_message(), [], []);
         return;
     }
     // Generate password reset key
     $reset_key = get_password_reset_key(get_user_by('ID', $user_id));
     if (!is_wp_error($reset_key)) {
         $reset_link = network_site_url("wp-login.php?action=rp&key=$reset_key&login=" . rawurlencode($username));
-
         // Email subject and message
         $subject = 'Set Your Password';
         $message = "Hello $username,\n\n";
@@ -266,38 +241,16 @@ function createAccount($email){
 
         // Send email
         wp_mail($email, $subject, $message);
-        log_api_error('account created successfully', [], []);
     }
     return $user_id;
 }
 
-add_action('wp_head', 'forTesting');
-function forTesting(){
-    // echo '<div style="width:100%; display:flex;">';
-    // echo '33333<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r(getMapping(3)) ,'</pre></div>';
-    // echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r(getSampleData_3()) ,'</pre></div>';
-    // echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r(getPayLoads(getSampleData_3())) ,'</pre></div>';
-    // echo '</div>';
-    if(isset($_GET['pipe_drive_id'])){
-        $user_id = get_current_user_id();
-        update_user_meta($user_id, 'pipedrive_person_id', $_GET['pipe_drive_id']);
-    }
-    if(isset($_GET['customField'])){
-        echo '<pre>', print_r(pipedriveGetVieldName('07aaf6652ad9c3267cf10b014b3b8ac139e69054')), '</pre>';
-    }
-    if(isset($_GET['stages'])){
-        update_option('pipedrive_stages', getSampleData());
-        echo '<pre>stages =', print_r(get_option('pipedrive_stages', true)), '</pre>';
-        die;
-    }
-    if(isset($_GET['debug'])){
-        $entries = getSampleData2();
-        $payloads = getPayLoads($entries);
-        $mapping = getMapping(3);
-        echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($entries) ,'</pre></div>';
-        echo '2222222<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($payloads) ,'</pre></div>';
-        echo '3333<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($mapping) ,'</pre></div>';
-        die;
-    }
-}
 
+// add_action('wp_head', 'forTest');
+// function forTest(){
+//     echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(getPayLoads(getSampleData())), '</pre>';
+//     // echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(getPayLoads(getSampleData2())), '</pre>';
+//     // echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(getPayLoads(getSampleData_3())), '</pre>';
+//     // echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(getPayLoads(getSampleData_4())), '</pre>';
+//     die;
+// }

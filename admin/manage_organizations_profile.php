@@ -1,5 +1,6 @@
 <?php
 function showOrganizations($userID) {
+    $action = 'showOrganization';
     if(isset($_GET['user_id']) && !empty($_GET['user_id']))
     {
         $userID = $_GET['user_id'];
@@ -22,11 +23,11 @@ function showOrganizations($userID) {
         // Search API uses "next_start" for pagination
         $params['term'] = $searchTerm;
         $params['fields'] = 'name';
-        $response = pipedrive_api_request('GET', 'organizations/search', $params);
+        $response = pipedrive_api_request('GET', 'organizations/search', $params, $action);
         $organizationsData = array_column($response['data']['items'] ?? [], 'item'); // Extract organizations
     } else {
         // Normal API uses "start" for pagination
-        $response = pipedrive_api_request('GET', 'organizations', $params);
+        $response = pipedrive_api_request('GET', 'organizations', $params, $action);
         $organizationsData = $response['data'] ?? [];
     }
 
@@ -127,6 +128,7 @@ add_action('wp_ajax_nopriv_modifyOrganization', 'modifyOrganization');
 add_action('wp_ajax_modifyOrganization', 'modifyOrganization');
 
 function modifyOrganization() {
+    $action = 'modifyOrganization';
     // Validate input
     if (!isset($_POST['org_id'], $_POST['person_id'])) {
         wp_send_json_error(['message' => 'Invalid request.']);
@@ -137,7 +139,7 @@ function modifyOrganization() {
 
     // Fetch all persons in the given organization
     $endpoint = "organizations/{$orgID}/persons";
-    $response = pipedrive_api_request('GET', $endpoint);
+    $response = pipedrive_api_request('GET', $endpoint, [], $action);
 
     if (!$response || empty($response['data'])) {
         wp_send_json_success(['status' => 'not_in_org', 'message' => 'User is not in this organization.']);
@@ -169,6 +171,7 @@ add_action('wp_ajax_nopriv_modifyPersonOrganization', 'modifyPersonOrganization'
 add_action('wp_ajax_modifyPersonOrganization', 'modifyPersonOrganization');
 
 function modifyPersonOrganization() {
+    $action = 'modifyPersonOrganization';
     // Validate input
     if (!isset($_POST['org_id'], $_POST['person_id'], $_POST['modify_action'])) {
         wp_send_json_error(['message' => 'Invalid request.']);
@@ -184,7 +187,7 @@ function modifyPersonOrganization() {
 
     // **Fetch all persons in this organization**
     $orgPersonsEndpoint = "organizations/{$orgID}/persons";
-    $orgPersonsResponse = pipedrive_api_request('GET', $orgPersonsEndpoint);
+    $orgPersonsResponse = pipedrive_api_request('GET', $orgPersonsEndpoint, [], $action);
 
     $orgPersons = $orgPersonsResponse['data'] ?? [];
 
@@ -204,7 +207,7 @@ function modifyPersonOrganization() {
 
         // **Associate person with the new organization**
         $updateData = ['org_id' => $orgID];
-        $updateResponse = pipedrive_api_request('PUT', "persons/{$personID}", $updateData);
+        $updateResponse = pipedrive_api_request('PUT', "persons/{$personID}", $updateData, $action);
 
         if (!$updateResponse || empty($updateResponse['data'])) {
             wp_send_json_error(['message' => 'Failed to add user to organization.']);
@@ -223,7 +226,7 @@ function modifyPersonOrganization() {
 
         // **Remove person from the organization (set org_id to NULL)**
         $updateData = ['org_id' => null];
-        $updateResponse = pipedrive_api_request('PUT', "persons/{$personID}", $updateData);
+        $updateResponse = pipedrive_api_request('PUT', "persons/{$personID}", $updateData, $action);
 
         if (!$updateResponse || empty($updateResponse['data'])) {
             wp_send_json_error(['message' => 'Failed to remove user from organization.']);

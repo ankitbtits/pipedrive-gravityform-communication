@@ -10,6 +10,8 @@
 // all form
 // clean all print and hardcore file
 
+// email field either person email or fix emailslug
+
 
 
 
