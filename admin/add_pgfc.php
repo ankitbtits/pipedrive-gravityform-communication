@@ -43,7 +43,7 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
                 if(!empty(getGravityForms('forms'))){
                     ?>
                         <select name="form_id" required class="gravityForms onChangeFun" id="gravityForms" data-slug="gravityFormsFields">
-                            <option value="">Select Form</option>
+                            <option value=""><?php _e('Select Form', 'pgfc');?></option>
                             <?php
                                 foreach(getGravityForms('forms') as $form){
                                     echo '<option value="'.$form['id'].'">'.$form['name'].'</option>';
@@ -65,7 +65,7 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
                                 if(!empty(getPipeDriveAPIEndPoint())){
                                     ?>
                                         <select required name="mapping[0][apiLabel]" class="pipeDriveAPISelect onChangeFun" data-slug="pipeDriveAPIAttributes" id="pipeDriveAPI">
-                                            <option value="">Select API</option>
+                                            <option value=""><?php _e('Select API', 'pgfc');?></option>
                                             <?php
                                                 foreach(getPipeDriveAPIEndPoint() as $apiName){
                                                     echo '<option value="'.$apiName['singular_end_point'] .'">'.$apiName['label'].'</option>';
@@ -102,7 +102,7 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
                 if(!empty($form)){
             ?>
                 <select required name="mapping[0][field]" id="gravityFormsFields_<?php echo $formID;?>" style="display:block;">
-                    <option value="">Select Field</option>
+                    <option value=""><?php _e('Select Field', 'pgfc');?></option>
                     <?php
                         foreach($form as $field){
                             if(!empty($field['inputs']) && is_array($field['inputs'])){
@@ -130,7 +130,7 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
             foreach(pipedriveGetVieldName() as $key => $fields){
         ?>
                 <select required name="mapping[0][apiAttribute]" class="apiAttributeSelect" id="pipeDriveAPIAttributes_<?php echo $key;?>">
-                     <option value="">Select Attribute</option>
+                     <option value=""><?php _e('Select Attribute', 'pgfc');?></option>
                      <?php
                          foreach($fields as $field){
                             $fieldKey = $field['key'];

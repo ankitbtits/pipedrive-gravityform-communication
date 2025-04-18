@@ -4,12 +4,10 @@
 
 add_action('gform_after_submission', 'handle_pipedrive_integration', 10, 2);
 function handle_pipedrive_integration($entries, $form) {
-    echo '<pre>', print_r($form), '</pre>';
-    die;
     $formTitle = $form['title'];
     $formID = $form['id'];
     $action = 'Through Form: '.$formTitle.'('.$formID.')';
-    $payloads = getPayLoads($entries);    
+    $payloads = getPayLoads($entries); 
     $personId = null;
     $orgId = null;
     $dealID = null;
@@ -52,9 +50,31 @@ function handle_pipedrive_integration($entries, $form) {
     }
     // 1. Create Organization and link with person
     if (!$orgId && isset($payloads['organizations']) && !empty($payloads['organizations'])) {
-        $org = pipedrive_api_request('POST','organizations', $payloads['organizations'], $action);     
-        if (isset($org['data']['id']) && !empty($org['data']['id'])) {
-            $orgId = $org['data']['id'];
+      
+        $searchRes = [];
+        if (isset($payloads['organizations']['name']) && !empty($payloads['organizations']['name'])) {
+            $orgName = $payloads['organizations']['name']; // Organization name
+            // Try to search for existing organization
+            error_log("orgName" . $orgName );
+            $searchRes = pipedrive_api_request('GET', 'organizations/search', [
+                'term'   => $orgName,
+                'fields' => 'name',
+                'exact_match'=>1,
+                'limit'  => 1,
+            ], $action);
+        }
+
+       
+        if (isset($searchRes['data']['items']) && isset($searchRes['data']['items'][0]) && !empty($searchRes['data']['items'][0]['item']['id'])) 
+        {
+            $orgId = $searchRes['data']['items'][0]['item']['id'];
+            //error_log("GET ORD ID" . $orgId );
+        }else{
+            $org = pipedrive_api_request('POST','organizations', $payloads['organizations'], $action);     
+            if (isset($org['data']['id']) && !empty($org['data']['id'])) {
+                $orgId = $org['data']['id'];
+               // error_log("GET POST ID" . $orgId );
+            }
         }
     }
 

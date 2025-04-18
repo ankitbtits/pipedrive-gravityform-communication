@@ -5,17 +5,17 @@ class PGFC_Admin_Tabs {
     public function __construct() {
         $this->items = [
             [
-                'label' => 'All pgfcs',
+                'label' => __('All pgfcs', 'pgfc'),
                 'page'  => 'pgfc',
                 'tab'   => ''
             ],
             [
-                'label' => 'Settings',
+                'label' => __('Settings', 'pgfc'),
                 'page'  => 'pgfc',
                 'tab'   => 'settings'
             ],
             [
-                'label' => 'API Logs',
+                'label' => __('API Logs', 'pgfc'),
                 'page'  => 'pgfc',
                 'tab'   => 'api-logs'
             ],

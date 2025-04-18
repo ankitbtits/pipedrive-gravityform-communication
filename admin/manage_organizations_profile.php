@@ -51,13 +51,13 @@ function showOrganizations($userID) {
           </form>';
 
     if (!empty($organizationsData)):
-        echo '<h3>Organizations</h3>
+        echo '<h3>' . __('Organizations', 'pgfc') . '</h3>
               <table class="adminTable adminTableFront" border="1" style="width:1000px;">
                 <thead>
                     <th style="width:25px"></th>
-                    <th style="width:25%">Name</th>
-                    <th style="width:60%">Address</th>
-                    <th style="width:15%">Action<br><small>Check if user exist in the organization or not.</small></th>
+                    <th style="width:25%">' . __('Name', 'pgfc') . '</th>
+                    <th style="width:60%">' . __('Address', 'pgfc') . '</th>
+                    <th style="width:15%">' . __('Action', 'pgfc') . '<br><small>' . __('Check if user exists in the organization or not.', 'pgfc') . '</small></th>
                 </thead>';
         $serNo = 0;
         if(isset($_GET['start']) && !empty($_GET['start'])){
@@ -94,7 +94,7 @@ function showOrganizations($userID) {
         echo '</div>';
 
     else:
-        echo "<p>No organizations found.</p>";
+        echo "<p>' . __('No organizations found.', 'pgfc') . '</p>";
     endif;
 }
 
@@ -118,7 +118,7 @@ add_action('admin_menu', 'hide_manage_organizations_menu', 999);
 
 function render_organizations_page() {
     echo '<div class="wrap">';
-    echo '<h1>Manage Organizations</h1>';
+    echo '<h1>' . __('Manage Organizations', 'pgfc') . '</h1>';
         showOrganizations(get_current_user_id()); // Show organizations table with search
     echo '</div>';
 }
@@ -142,7 +142,10 @@ function modifyOrganization() {
     $response = pipedrive_api_request('GET', $endpoint, [], $action);
 
     if (!$response || empty($response['data'])) {
-        wp_send_json_success(['status' => 'not_in_org', 'message' => 'User is not in this organization.']);
+        wp_send_json_success([
+            'status' => 'not_in_org', 
+            'message' => __('User is not in this organization.', 'pgfc')
+        ]);
     }
 
     // Check if the person is already associated with this organization
@@ -157,12 +160,12 @@ function modifyOrganization() {
     if ($personExists) {
         wp_send_json_success([
             'status'  => 'exists',
-            'message' => 'User is already in this organization.',
+            'message' => __('User is already in this organization.', 'pgfc'),
         ]);
     } else {
         wp_send_json_success([
             'status'  => 'not_in_org',
-            'message' => 'User is not in this organization.',
+            'message' => __('User is not in this organization.', 'pgfc'),
         ]);
     }
 }
@@ -174,7 +177,9 @@ function modifyPersonOrganization() {
     $action = 'modifyPersonOrganization';
     // Validate input
     if (!isset($_POST['org_id'], $_POST['person_id'], $_POST['modify_action'])) {
-        wp_send_json_error(['message' => 'Invalid request.']);
+        wp_send_json_error([
+            'message' => __('Invalid request.', 'pgfc'),
+        ]);
     }
 
     $orgID = sanitize_text_field($_POST['org_id']);
@@ -182,7 +187,9 @@ function modifyPersonOrganization() {
     $modifyAction = sanitize_text_field($_POST['modify_action']);
 
     if (!in_array($modifyAction, ['add', 'remove'])) {
-        wp_send_json_error(['message' => 'Invalid action specified.']);
+        wp_send_json_error([
+            'message' => __('Invalid action specified.', 'pgfc'),
+        ]);
     }
 
     // **Fetch all persons in this organization**
@@ -202,7 +209,9 @@ function modifyPersonOrganization() {
 
     if ($modifyAction === 'add') {
         if ($isPersonInOrg) {
-            wp_send_json_success(['message' => 'User is already in this organization.']);
+            wp_send_json_success([
+                'message' => __('User is already in this organization.', 'pgfc'),
+            ]);
         }
 
         // **Associate person with the new organization**
@@ -210,31 +219,38 @@ function modifyPersonOrganization() {
         $updateResponse = pipedrive_api_request('PUT', "persons/{$personID}", $updateData, $action);
 
         if (!$updateResponse || empty($updateResponse['data'])) {
-            wp_send_json_error(['message' => 'Failed to add user to organization.']);
+            wp_send_json_error([
+                'message' => __('Failed to add user to organization.', 'pgfc'),
+            ]);
         }
-
+        
         wp_send_json_success([
-            'message' => 'User successfully added to the organization.',
-            'org_id' => $orgID
+            'message' => __('User successfully added to the organization.', 'pgfc'),
+            'org_id' => $orgID,
         ]);
     }
 
     if ($modifyAction === 'remove') {
         if (!$isPersonInOrg) {
-            wp_send_json_success(['message' => 'User is not part of this organization.']);
+            wp_send_json_success([
+                'message' => __('User is not part of this organization.', 'pgfc'),
+            ]);
         }
-
+    
         // **Remove person from the organization (set org_id to NULL)**
         $updateData = ['org_id' => null];
         $updateResponse = pipedrive_api_request('PUT', "persons/{$personID}", $updateData, $action);
-
+    
         if (!$updateResponse || empty($updateResponse['data'])) {
-            wp_send_json_error(['message' => 'Failed to remove user from organization.']);
+            wp_send_json_error([
+                'message' => __('Failed to remove user from organization.', 'pgfc'),
+            ]);
         }
-
+    
         wp_send_json_success([
-            'message' => 'User successfully removed from the organization.',
-            'org_id' => null
+            'message' => __('User successfully removed from the organization.', 'pgfc'),
+            'org_id' => null,
         ]);
     }
+    
 }

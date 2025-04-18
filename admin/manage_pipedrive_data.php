@@ -33,10 +33,10 @@ function showPipedriveData($userID){
             echo '<form method="post">';
         }
     ?>
-    <h3>Pipedrive Information</h3>
+    <h3><?php _e('Pipedrive Information', 'pgfc');?></h3>
     <table class="form-table">
         <tr>
-            <th><label for="custom_field">Person ID</label></th>
+            <th><label for="custom_field"><?php _e('Person ID', 'pgfc');?></label></th>
             <td>
                 <?php echo $personID; ?>
             </td>

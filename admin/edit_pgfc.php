@@ -51,7 +51,7 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                 if(!empty(getGravityForms('forms'))){
                     ?>
                         <select name="form_id" required class="gravityForms onChangeFun" id="gravityForms" data-slug="gravityFormsFields">
-                            <option value="">Select Form</option>
+                            <option value=""><?php _e('Select Form', 'pgfc');?></option>
                             <?php
                                 foreach(getGravityForms('forms') as $form){
                                     echo '<option value="'.$form['id'].'"
@@ -88,7 +88,7 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                                         if(!empty($form) && (int) $formID ==  $savedFormID){
                                     ?>
                                         <select required name="mapping[<?php echo $index;?>][field]" id="gravityFormsFields_<?php echo $savedFormID;?>">
-                                            <option value="">Select Field</option>
+                                            <option value=""><?php _e('Select Field', 'pgfc');?></option>
                                             <?php
                                                 foreach($form as $field){
                                                     if(isset($field['inputs']) && !empty($field['inputs']) && is_array($field['inputs'])){
@@ -124,7 +124,7 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                                 if(!empty(getPipeDriveAPIEndPoint())){
                                     ?>
                                         <select required name="mapping[<?php echo $index;?>][apiLabel]" class="pipeDriveAPISelect onChangeFun" data-slug="pipeDriveAPIAttributes" id="pipeDriveAPI">
-                                            <option value="">Select API</option>
+                                            <option value=""><?php _e('Select API', 'pgfc');?></option>
                                             <?php
                                                 foreach(getPipeDriveAPIEndPoint() as $apiName){
                                                     echo '<option value="'.$apiName['singular_end_point'] .'"
@@ -149,7 +149,7 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                                     $fields = pipedriveGetVieldName()[$apiLabel];
                                 ?>
                                         <select required name="mapping[<?php echo $index;?>][apiAttribute]" class="apiAttributeSelect">
-                                             <option value="">Select Attribute</option>
+                                             <option value=""><?php _e('Select Attribute', 'pgfc');?></option>
                                              <?php
                                                  foreach($fields as $field){
                                                     $fieldKey = $field['key'];
@@ -195,7 +195,7 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                 if(!empty($form)){
             ?>
                 <select required name="mapping[0][field]" id="gravityFormsFields_<?php echo $formID;?>">
-                    <option value="">Select Field</option>
+                    <option value=""><?php _e('Select Field', 'pgfc');?></option>
                     <?php
                         foreach($form as $field){
                             if(!empty($field['inputs']) && is_array($field['inputs'])){
@@ -221,7 +221,7 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
             foreach(pipedriveGetVieldName() as $key => $fields){
         ?>
                 <select required name="mapping[0][apiAttribute]" class="apiAttributeSelect" id="pipeDriveAPIAttributes_<?php echo $key;?>">
-                     <option value="">Select Attribute</option>
+                     <option value=""><?php _e('Select Attribute', 'pgfc');?></option>
                      <?php
                          foreach($fields as $field){
                             $fieldKey = $field['key'];

@@ -98,7 +98,7 @@ class PGFC_Settings_Page {
                     </table>
                 </div>
                 <div class="_CISettingIn">
-                    <h3>PipeDrive Stages </h3>
+                    <h3><?php _e('PipeDrive Stages', 'pgfc');?> </h3>
                     <table>
                         <tr>
                             <td>
@@ -118,10 +118,10 @@ class PGFC_Settings_Page {
                         <?php
                             if(is_array($stages) && !empty($stages)){
                                 echo '<tr>
-                                    <th>Stage Name</th>
-                                    <th>Stage ID</th>
-                                    <th>Pipeline name</th>
-                                    <th>Pipeline ID</th>
+                                    <th>' . __('Stage Name', 'pgfc') . '</th>
+                                    <th>' . __('Stage ID', 'pgfc') . '</th>
+                                    <th>' . __('Pipeline Name', 'pgfc') . '</th>
+                                    <th>' . __('Pipeline ID', 'pgfc') . '</th>
                                 </tr>';
                                 foreach($stages as $pipeDeriveKey => $stage){
                                     foreach($stage as $val){
@@ -144,44 +144,56 @@ class PGFC_Settings_Page {
                 </div>
             </form>
             <div class="_CISettingIn">
-                <h3>General Info</h3>
+                <h3><?php _e('General Info', 'pgfc');?></h3>
                 <table>
                     <tr>
-                        <th>Edit profile Shortcode:</th>
+                        <th><?php _e('Edit profile Shortcode:', 'pgfc');?></th>
                         <td>
-                            Add <b>[edit_pipedrive_data]</b> shortcode to display the edit profile form anywhere on frontend.<br>
-                            <small>Note: Make sure the shortcode is not appending within any form tag.</small>    
+                            <?php 
+                            printf(
+                                __('Add <b>%s</b> shortcode to display the edit profile form anywhere on the frontend.<br><small>Note: Make sure the shortcode is not appending within any form tag.</small>', 'pgfc'),
+                                '[edit_pipedrive_data]'
+                            ); 
+                            ?>
                         </td>
                     </tr>
                     <tr>
-                        <th>Creat account field</th>
+                        <th><?php _e('Creat account field', 'pgfc');?></th>
                         <td>
-                            1. Set the field value to <b>"createAccountWP"</b> if you want an account to be created when the checkbox is selected. <br>
-                            2. Creating user accounts requires an email. The email will be taken from either <b>Pipedrive → Persons → Email</b> field or an email field with <b>"userEmail"</b> as its "Admin Field Label". Ensure that at least one of these email fields exists in the form.
+                            <?php 
+                                printf(
+                                    __('1. Set the field value to <b>%s</b> if you want an account to be created when the checkbox is selected. <br> 2. Creating user accounts requires an email. The email will be taken from either <b>%s</b> field or an email field with <b>%s</b> as its "Admin Field Label". Ensure that at least one of these email fields exists in the form.', 'pgfc'),
+                                    'createAccountWP',
+                                    'Pipedrive → Persons → Email',
+                                    'userEmail'
+                                ); 
+                                ?>
                         </td>
                     </tr>
                     <tr>
-                        <th>For Privacy Policy</th>
+                        <th><?php _e('For Privacy Policy', 'pgfc');?></th>
                         <td>
-                        In Gravity Forms, either the field label or value must exactly match the corresponding Pipedrive label name.
+                        <?php _e('In Gravity Forms, either the field label or value must exactly match the corresponding Pipedrive label name.', 'pgfc');?>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th><?php _e('Marketing Status', 'pgfc');?></th>
+                        <td>
+                        <?php _e('In Gravity Forms, either the label or value must match the Pipedrive label name. The option values for marketing status must exactly match those in Pipedrive.', 'pgfc');?>
                         </td>
                     </tr>
                     <tr>
-                        <th>Marketing Status</th>
+                        <th><?php _e('For Country dropdown', 'pgfc');?></th>
                         <td>
-                        In Gravity Forms, either the label or value must match the Pipedrive label name. The option values for marketing status must exactly match those in Pipedrive.
+                        <?php _e('The country names in the Gravity Forms dropdown must exactly match those in the Pipedrive country list.', 'pgfc');?>
+                            
                         </td>
                     </tr>
                     <tr>
-                        <th>For Country dropdown</th>
+                        <th><?php _e('Checkbox and Radio Fields:', 'pgfc');?></th>
                         <td>
-                            The country names in the Gravity Forms dropdown must exactly match those in the Pipedrive country list.
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Checkbox and Radio Fields:</th>
-                        <td>
-                            The option values in checkbox and radio fields in Gravity Forms must exactly match the corresponding values in Pipedrive.
+                            <?php _e('The option values in checkbox and radio fields in Gravity Forms must exactly match the corresponding values in Pipedrive.', 'pgfc');?>
                         </td>
                     </tr>
 

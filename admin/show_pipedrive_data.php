@@ -39,7 +39,7 @@ function editPipeDriveData() {
         $existing_query = $_SERVER['QUERY_STRING'] ?? ''; // Get existing query string
         $new_query = empty($existing_query) ? 'page-name=manage_organizations' : $existing_query . '&page-name=manage_organizations';
         $manage_url = esc_url('?' . $new_query);
-        $res .= '<div class="manageProfileBtnFront"><a href="' . $manage_url . '" class="button button-primary">Manage Organizations</a></div>';
+        $res .= '<div class="manageProfileBtnFront"><a href="' . $manage_url . '" class="button button-primary">' . __('Manage Organizations', 'pgfc') . '</a></div>';
         if (isset($_POST['pipedrive'])) {
             $res .= updatePipeDriveData($_POST);
         }
