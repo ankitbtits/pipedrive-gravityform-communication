@@ -1,24 +1,35 @@
 .pgfc-addpgfc {
   padding: 50px 0;
   margin: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   width: 100%;
 }
 .pgfc-addpgfc form {
   width: 100%;
   max-width: 1000px;
   background: #fff;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  -webkit-box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+          box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border-radius: 5px;
   padding: 30px;
 }
 
 .pgfc-addpgfc .pgfc_addpgfcItemCon {
   width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   margin-top: 13px;
 }
 .pgfc-addpgfc .pgfc_addpgfcItemCon .pgfc_addItem {
@@ -32,13 +43,18 @@
 }
 .pgfc-addpgfc .pgfcFormInn {
   width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   margin-bottom: 20px;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   background: #F1F4F9;
   padding: 20px;
   border: 1px solid #E2E3E8;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 .pgfc-addpgfc .pgfcFormInn:last-child {
   background: #fff;
@@ -58,13 +74,21 @@
   width: 100%;
 }
 .pgfc-addpgfc .pgfcFormInn.pgfc_itemsCon {
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 .pgfc-addpgfc .pgfcFormInn.radioButtonCon {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: baseline;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
 }
 .pgfc-addpgfc .pgfcFormInn.radioButtonCon h3 {
   font-weight: normal;
@@ -72,22 +96,32 @@
   margin: 0 0 10px;
 }
 .pgfc-addpgfc .pgfcFormInn.radioButtonCon .radioButtons {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 .pgfc-addpgfc .pgfcFormInn.radioButtonCon .radioButtons label {
   margin-right: 10px;
 }
 .pgfc-addpgfc .pgfcFormInn .pgfcItem {
   width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   margin-bottom: 6px;
-  -moz-column-gap: 10px;
-       column-gap: 10px;
+  -webkit-column-gap: 10px;
+     -moz-column-gap: 10px;
+          column-gap: 10px;
 }
 .pgfc-addpgfc .pgfcFormInn .selectWrapper {
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 .pgfc-addpgfc .pgfcFormInn .selectWrapper h3 {
   font-weight: normal;
@@ -142,7 +176,8 @@
   display: block;
   padding: 20px 30px;
   margin-top: 30px;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 .pgfc-settings ._CISettingIn h2 {
   color: #007cba;
@@ -190,9 +225,15 @@
 .removeMapping {
   background: #B4BCC6;
   padding: 0px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -221,7 +262,8 @@
 
 .manage-pipe-table {
   background: #fff;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  -webkit-box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+          box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border-radius: 5px;
   padding: 30px;
   width: 808px;
@@ -237,6 +279,7 @@
   color: #fff;
   padding: 10px 20px;
   display: block;
+  width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
   border-radius: 5px;
@@ -297,4 +340,19 @@ table.adminTableStyle1 td {
   background: #F1F4F9;
   border: 1px solid #dee2e6 !important;
   padding: 10px 10px !important;
+}
+
+.wp-admin ._backBtn {
+  width: 1400px !important;
+  text-align: right;
+}
+.wp-admin ._backBtn a.button {
+  text-decoration: none;
+  background: #0073aa;
+  color: #fff;
+  padding: 0px 20px;
+  font-size: 14px;
+}
+.wp-admin .form-wrap-right {
+  display: none;
 }/*# sourceMappingURL=admin_style.css.map */

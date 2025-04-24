@@ -319,3 +319,21 @@ table.adminTableStyle1 {
         padding: 10px 10px !important;
     }
 }
+.wp-admin{
+    ._backBtn{
+        width: 1400px !important;
+        text-align: right;
+        a.button{
+            text-decoration: none;
+            background: #0073aa;
+            color: #fff;
+            padding: 0px 20px;
+            font-size: 14px;
+            
+        }
+    }
+    .form-wrap-right{
+        display: none;
+    }
+}
+

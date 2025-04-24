@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 $pgrcID = '';
 if(!isset($_GET['pgfc_id']) || empty($_GET['pgfc_id'])){
-    echo 'No pgfc found';
+    echo __('No pgfc found', 'pgfc');
     return;
 }else{
     $pgrcID = sanitize_text_field( $_GET['pgfc_id'] );

@@ -8,6 +8,8 @@ function handle_pipedrive_integration($entries, $form) {
     $formID = $form['id'];
     $action = 'Through Form: '.$formTitle.'('.$formID.')';
     $payloads = getPayLoads($entries); 
+    // echo '<pre>',var_dump($payloads),'</pre>';
+    // die();
     $personId = null;
     $orgId = null;
     $dealID = null;
@@ -189,16 +191,26 @@ function getPayLoads($entries){
                     $fieldIDFloor = floor($fieldID);
                     $apiKey = $val2['apiAttribute'];
                     $fieldType = pipedriveGetVieldName($apiKey)['field_type'];                    
-                    $entryVal = '';
-                    $combine = true;
+                    $entryVal = '';                    
                     if(array_key_exists($fieldID, $entries)){
                         $entryVal = $entries[$fieldID];
                     }else{
                         $entryVal = $entries[$fieldIDFloor];
-                        $combine = false;
+                        //$combine = false;
                     }
                     if(empty($entryVal)){
                         continue;
+                    }
+                    $combine = false;
+                    if(isset($val2['apiLabelIndex'])){
+                        $theIndex = $val2['apiLabelIndex'];
+                        if(isset($payLoads[$endPoint][$theIndex]) && in_array($apiKey, $payLoads[$endPoint][$theIndex])){
+                            $combine = true;
+                        }
+                    }else{
+                        if(isset($payLoads[$endPoint]) && in_array($apiKey, $payLoads[$endPoint])){
+                            $combine = true;
+                        }
                     }
                     if(isset($val2['apiLabelIndex'])){
                         $theIndex = $val2['apiLabelIndex'];
@@ -208,17 +220,33 @@ function getPayLoads($entries){
                             if($fieldType == 'daterange'){
                                 $payLoads[$endPoint][$theIndex][$apiKey.'_until'] = $entryVal;
                             }else{
-                                $payLoads[$endPoint][$theIndex][$apiKey] .= ' - ' . $entryVal;
+                                $payLoads[$endPoint][$theIndex][$apiKey] .= ' ' . $entryVal;
                             }
                         }  
                     }else{
                         if (!isset($payLoads[$endPoint][$apiKey])) {
-                            $payLoads[$endPoint][$apiKey] = $entryVal;
+
+                            if($fieldType == 'set' || $fieldType == 'enum' )
+                            {
+                                $pipedriveGetData   =  pipedriveGetVieldName($apiKey); //For check Pipeline return value
+                                $options            =  $pipedriveGetData['options']; // array of all available options
+                                $matches = [];
+                                foreach ($options as $option) {
+                                    if (isset($option['label']) && in_array($option['label'], $entries, true)) {
+                                        $matches[] = $option['label'];
+                                    }
+                                }
+                                $matchesVals =  implode(', ', $matches);
+                                $payLoads[$endPoint][$apiKey] = $matchesVals;
+                            }
+                            else{
+                                $payLoads[$endPoint][$apiKey] = $entryVal;
+                            }
                         } elseif(isset($entryVal) && $combine) {
                             if($fieldType == 'daterange'){
                                 $payLoads[$endPoint][$apiKey.'_until'] = $entryVal;
                             }else{
-                                $payLoads[$endPoint][$apiKey] .= ' - ' . $entryVal;
+                                $payLoads[$endPoint][$apiKey] .= ' ' . $entryVal;
                             }
                         }  
                     }
@@ -227,6 +255,8 @@ function getPayLoads($entries){
             }
         }
     }
+
+   // die();
     return $payLoads;
 }
 
@@ -253,11 +283,14 @@ function createAccount($email){
     if (!is_wp_error($reset_key)) {
         $reset_link = network_site_url("wp-login.php?action=rp&key=$reset_key&login=" . rawurlencode($username));
         // Email subject and message
-        $subject = 'Set Your Password';
-        $message = "Hello $username,\n\n";
-        $message .= "Your account has been created. Please use the link below to set your password:\n\n";
-        $message .= "$reset_link\n\n";
-        $message .= "Thank you!";
+        $subject = __('Set Your Password', 'pgfc');
+        $message = sprintf(
+        __("Hello %s,\n\n%s\n\n%s\n\n%s", 'pgfc'),
+        $username,
+        __("Your account has been created. Please use the link below to set your password:", 'pgfc'),
+        $reset_link,
+        __("Thank you!", 'pgfc')
+        );
 
         // Send email
         wp_mail($email, $subject, $message);
@@ -268,9 +301,9 @@ function createAccount($email){
 
 // add_action('wp_head', 'forTest');
 // function forTest(){
-//     echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(getPayLoads(getSampleData())), '</pre>';
-//     // echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(getPayLoads(getSampleData2())), '</pre>';
-//     // echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(getPayLoads(getSampleData_3())), '</pre>';
-//     // echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(getPayLoads(getSampleData_4())), '</pre>';
+//     //echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(get_option( 'pipedrive_stages ')), '</pre>';
+//     echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">2222', print_r(getPayLoads(getSampleData2())), '</pre>';
+//     echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(getPayLoads(getSampleData_3())), '</pre>';
+//     echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(getPayLoads(getSampleData_4())), '</pre>';
 //     die;
 // }

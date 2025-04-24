@@ -38,20 +38,34 @@ function showOrganizations($userID) {
 
     // Display search form
     echo '<form method="GET" action="" class="frontorgmang">
-            <input type="hidden" name="page" value="manage_organizations">
-            <input type="hidden" name="page-name" value="manage_organizations">
-            '.
-            ((isset($_GET['user_id']) && !empty($_GET['user_id']))?
-            '<input type="hidden" name="user_id" value="'.$_GET['user_id'].'">'
-            :'')
-            .'
-            
-            <input type="text" name="search" value="' . esc_attr($searchTerm) . '" placeholder="Search Organizations">
-            <button type="submit">Search</button>
+            <div class="form-wrap-front">
+                <input type="hidden" name="page" value="manage_organizations">
+                <input type="hidden" name="page-name" value="manage_organizations">
+                '.
+                ((isset($_GET['user_id']) && !empty($_GET['user_id']))?
+                '<input type="hidden" name="user_id" value="'.$_GET['user_id'].'">'
+                :'')
+                .'
+
+                <input type="text" name="search" value="' . esc_attr($searchTerm) . '" placeholder="' . __('Search Organizations', 'pgfc') . '">
+                <button type="submit">' . __('Search', 'pgfc') . '</button>
+            </div>
+            <div class="form-wrap-right">
+                <div class="innerRight">
+                    <a href="'.wp_logout_url(home_url()).'" class="button front-logout">
+                          '.__('Logout', 'pgfc').'
+                    </a>  
+                </div>
+            </div>
           </form>';
 
     if (!empty($organizationsData)):
-        echo '<h3>' . __('Organizations', 'pgfc') . '</h3>
+                $profile_url = admin_url('profile.php'); // You can also use: admin_url("user-edit.php?user_id=$user_id")
+                echo '<div  class="_backBtn">
+                    <a onclick="window.history.back();" class="button" style="text-decoration:none;">← Back</a>
+                </div>';
+
+                echo '<h3>' . __('Organizations', 'pgfc') . '</h3>
               <table class="adminTable adminTableFront" border="1" style="width:1000px;">
                 <thead>
                     <th style="width:25px"></th>
@@ -75,7 +89,7 @@ function showOrganizations($userID) {
                 <td><?php echo esc_html($name); ?></td>
                 <td><?php echo esc_html($address); ?></td>
                 <td>
-                    <a href="javascript:;" class="modify-organization" data-org-id="<?php echo $orgID;?>" data-person-id="<?php echo $personID;?>" >Check status</a>
+                    <a href="javascript:;" class="modify-organization" data-org-id="<?php echo $orgID;?>" data-person-id="<?php echo $personID;?>" ><?php echo __('Check status', 'pgfc'); ?></a>
                 </td>
             </tr>
             <?php
@@ -100,9 +114,9 @@ function showOrganizations($userID) {
 
 function register_hidden_organizations_page() {
     add_menu_page(
-        'Manage Organizations',     // Page title
-        'Manage Organizations',     // Menu title (Won't be shown)
-        'read',           // Capability
+        __('Manage Organizations', 'pgfc'), // Page title
+        __('Manage Organizations', 'pgfc'), // Menu title (won't be shown)
+        'read',                     // Capability
         'manage_organizations',     // Menu slug
         'render_organizations_page',// Callback function
         'dashicons-building',       // Icon (not needed since it's hidden)

@@ -78,6 +78,18 @@
   border-radius: 5px;
 }
 
+.manageProfileBtnFront {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.manageProfileBtnFront .innerRight a {
+  border-radius: 0;
+}
+
 .manageProfileBtnFront a {
   padding: 10px 20px;
   border-radius: 50px;
@@ -107,8 +119,19 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  width: 300px;
   margin: 20px 0px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.page-template-default .frontorgmang .form-wrap-front {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 .page-template-default .frontorgmang input {
   border: 1px solid #dee2e6 !important;
@@ -118,6 +141,14 @@
   border: none;
   color: #fff;
   padding: 10px;
+}
+.page-template-default .frontorgmang .front-logout {
+  padding: 8px 16px;
+  background: #b13325;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  text-decoration: none;
 }
 .page-template-default .paginationfront a {
   border: 1px solid #B13325;
@@ -148,4 +179,81 @@
 
 .pgfc-hidden {
   border-top: solid 3px red;
+}
+
+._backBtn {
+  text-align: right;
+  cursor: pointer;
+}
+._backBtn a.button {
+  background: #b13325;
+  color: #fff !important;
+  padding: 10px 20px;
+  font-size: 14px;
+}
+._backBtn a.button:hover {
+  background: #d33322;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.pgfc-success-message p {
+  color: #ffffff;
+  background: green;
+  padding: 5px 10px;
+  text-align: center;
+}
+
+.eachDealCon {
+  width: 100%;
+  border-top: solid 1px #ccc;
+  padding-top: 30px;
+  margin-top: 30px;
+}
+.eachDealCon tr {
+  border: none !important;
+}
+.eachDealCon th {
+  text-align: left;
+  font-size: 14px;
+  padding: 10px 30px 10px 0;
+  vertical-align: top;
+  border-top: none !important;
+  width: 200px;
+}
+.eachDealCon td {
+  font-size: 14px;
+  padding: 10px 0;
+  border-top: none !important;
+}
+
+.eachActivity {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.eachActivity span.activityOrg {
+  display: inline-block;
+  background: #ccc;
+  padding: 2px 5px;
+  margin-left: 10px;
+}
+
+.activityStatus {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 5px 0 0;
+  background-color: grey;
+}
+.activityStatus.done {
+  background-color: green;
+}
+.activityStatus.notDone {
+  background-color: red;
 }/*# sourceMappingURL=style.css.map */

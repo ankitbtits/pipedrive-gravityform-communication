@@ -188,7 +188,7 @@ function alloedProfileData(){
 
 // custom fields handler
 function pipedriveGetCustomFields($entity) {
-    $action = 'Syncing custom fields';
+    $action = __('Syncing custom fields', 'pgfc');
     $response = pipedrive_api_request('GET', "{$entity}Fields", [], $action);
     if (!empty($response['success']) && !empty($response['data'])) {
         return $response['data'];
@@ -238,7 +238,7 @@ function pipedriveGetVieldName($fieldID = false) {
         }
     }
 
-    return "No field found with this key";
+    return __('No field found with this key', 'pgfc');
 }
 
 // custom fields handler
@@ -254,7 +254,7 @@ function is_user_profile_page() {
 
 function custom_login_form() {
     if (is_user_logged_in()) {
-        echo '<p>You are already logged in.</p>';
+        echo '<p>' . __('You are already logged in.', 'pgfc') . '</p>';
         return;
     }
 
@@ -263,9 +263,9 @@ function custom_login_form() {
     if (isset($_GET['login_error'])) {
         $error_code = sanitize_text_field($_GET['login_error']);
         if ($error_code === 'empty') {
-            $error_message = '<p class="login-error" style="color: red;">Please fill in both fields.</p>';
+            $error_message = '<p class="login-error" style="color: red;">' . __('Please fill in both fields.', 'pgfc') . '</p>';
         } else {
-            $error_message = '<p class="login-error" style="color: red;">Invalid username or password.</p>';
+            $error_message = '<p class="login-error" style="color: red;">' . __('Invalid username or password.', 'pgfc') . '</p>';
         }
     }
 
@@ -308,18 +308,18 @@ function custom_login_form() {
         <form method="post" action="">
             <?php echo $error_message; ?>
             <p>
-                <label for="user_login">Username or Email</label>
+                <label for="user_login"><?php echo __('Username or Email', 'pgfc'); ?></label>
                 <input type="text" name="log" id="user_login" required>
             </p>
             <p>
-                <label for="user_pass">Password</label>
+                <label for="user_pass"><?php echo __('Password', 'pgfc'); ?></label>
                 <input type="password" name="pwd" id="user_pass" required>
             </p>
             <p>
-                <a href="<?php echo wp_lostpassword_url(); ?>">Forgot Password?</a>
+                <a href="<?php echo wp_lostpassword_url(); ?>"><?php echo __('Forgot Password?', 'pgfc'); ?></a>
             </p>
             <p>
-                <input type="submit" name="wp_custom_login" value="Log In">
+                <input type="submit" name="wp_custom_login" value="<?php echo __('Log In', 'pgfc'); ?>">
             </p>
             <input type="hidden" name="redirect_to" value="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>">
         </form>

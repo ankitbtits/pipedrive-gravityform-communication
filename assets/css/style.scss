@@ -86,6 +86,15 @@
     margin: auto;
     border-radius: 5px;
 } 
+.manageProfileBtnFront {
+    display: flex;
+    justify-content: space-between;
+    .innerRight{
+        a{
+            border-radius: 0;
+        }
+    }
+}
 .manageProfileBtnFront a {
     padding: 10px 20px;
     border-radius: 50px;
@@ -113,8 +122,13 @@
 .page-template-default {
     .frontorgmang {
         display: flex;
-        width: 300px;
         margin: 20px 0px;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
+        .form-wrap-front{
+            display: flex;
+        }
         input {
             border: 1px solid #dee2e6 !important;
         }
@@ -123,6 +137,14 @@
             border: none;
             color: #fff;
             padding: 10px;
+        }
+        .front-logout{
+            padding: 8px 16px;
+            background: #b13325;
+            color: #fff;
+            border: none;
+            border-radius: 0;
+            text-decoration: none;
         }
     }
     .paginationfront a{
@@ -156,4 +178,73 @@
 .pgfc-hidden{
     //display: none!important;
     border-top: solid 3px red;
+}
+._backBtn{
+    text-align: right;
+    cursor: pointer;
+    a.button{
+        background: #b13325;
+        color: #fff !important;
+        padding: 10px 20px;
+        font-size: 14px;
+        &:hover{
+            background: #d33322;
+            transition: 0.5s;
+        }
+    }
+}
+.pgfc-success-message{
+    p{
+        color: #ffffff;
+        background: green;
+        padding: 5px 10px;
+        text-align: center;
+    }
+}
+.eachDealCon{
+    width: 100%;
+    border-top: solid 1px #ccc;
+    padding-top: 30px;
+    margin-top: 30px;
+    tr{
+        border: none!important;
+    }
+    th{
+        text-align: left;
+        font-size: 14px;
+        padding:10px 30px 10px 0;
+        vertical-align: top;
+        border-top: none !important;
+        width: 200px;
+    }
+    td{
+        font-size: 14px;
+        padding:10px 0;
+        border-top: none !important;
+    }
+}
+.eachActivity{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    span.activityOrg {
+        display: inline-block;
+        background: #ccc;
+        padding: 2px 5px;
+        margin-left: 10px;
+    }
+}
+.activityStatus{
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 5px 0 0;
+    background-color: grey;
+    &.done{
+        background-color: green;
+    }
+    &.notDone{
+        background-color: red;
+    }
 }

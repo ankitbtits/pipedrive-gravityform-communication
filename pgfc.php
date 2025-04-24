@@ -47,10 +47,11 @@ add_action('admin_enqueue_scripts', 'pgfc_pluginAdminScripts');
 function pgfc_pluginAdminScripts() {    
     wp_enqueue_media(); 
     wp_enqueue_style(PGFC_SLUG.'_admin_style', plugin_dir_url(__FILE__).'admin/css/admin_style.css', array(), PGFC_VERSION);
-    wp_enqueue_script('jquery', false, array(), true, true); // Load jQuery in the footer
+    //wp_enqueue_script('jquery', false, array(), true, true); // Load jQuery in the footer
     wp_enqueue_script(PGFC_SLUG.'_admin_js', plugin_dir_url(__FILE__).'admin/js/admin_script.js?v='.time().'', array('jquery'),PGFC_VERSION, true); 
     wp_localize_script(PGFC_SLUG.'_admin_js', 'pgfc_ajax_admin', array(
         'ajaxurl' => admin_url('admin-ajax.php'),
+        'addArrayKey'=>__('Add Array key' , 'pgfc' ),
         'nonce' => wp_create_nonce('pgfc_generate_pdf_nonce'),
     ));
 }
@@ -58,12 +59,13 @@ function pgfc_pluginAdminScripts() {
 /**
  * Never worry about cache again!
  */
-function scriptsFrontendBackend($hook) {
+function scriptsFrontendBackend() {
 	wp_enqueue_style(PGFC_SLUG.'_style', plugin_dir_url(__FILE__).'assets/css/style.css', array(), PGFC_VERSION);
-    wp_enqueue_script('jquery', false, array(), true, true); // Load jQuery in the footer
+    //wp_enqueue_script('jquery', false, array(), true, true); // Load jQuery in the footer
     wp_enqueue_script(PGFC_SLUG.'_js', plugin_dir_url(__FILE__).'assets/js/script.js', array('jquery'), PGFC_VERSION, true); 
     wp_localize_script(PGFC_SLUG.'_js', 'dynamicConten', array(
         'ajaxurl' => admin_url('admin-ajax.php'),
+        'loadingText' => __('Checking', 'pgfc'),
         'nonce' => wp_create_nonce('pgfc_generate_pdf_nonce'),
     ));
 }
@@ -87,8 +89,8 @@ if (!class_exists('pgfc_Communication')) {
         public function pgfc_add_admin_menu() {
             // Add the top-level menu item
             add_menu_page(
-                'Gravity Form Pipedrive Sync',          
-                'Gravity Form Pipedrive Sync',          
+                __('Gravity Form Pipedrive Sync', 'pgfc'),  // Page title
+                __('Gravity Form Pipedrive Sync', 'pgfc'),  // Menu title
                 'manage_options',  
                 'pgfc',      
                 array($this, 'pgfc_render_page'), 

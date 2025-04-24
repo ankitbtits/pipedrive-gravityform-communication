@@ -1,4 +1,6 @@
 const ajaxurlFront = dynamicConten.ajaxurl;
+const checkingText = dynamicConten.loadingText;
+console.log(checkingText)
 const nonce = dynamicConten.nonce;
 jQuery(document).ready(function($){
     // Function to set cookie
@@ -16,6 +18,18 @@ jQuery(document).ready(function($){
 
     // Check if a tab was previously active
     let activeTab = getCookie('activeTab');
+    console.log("checkTab:" + activeTab)
+
+
+    var $div = $('#dataTabs_organizations');
+    var $table = $div.find('table.adminTable');
+
+    if((activeTab == "organizations" && !$table.length) || activeTab == "deals"){
+        $("p.submit").hide();
+    }
+    else{
+        $("p.submit").show(); 
+    }
     if (activeTab) {
         $('.dataTabs li a').removeClass('active');
         $('.dataTabsContent').hide();
@@ -26,11 +40,16 @@ jQuery(document).ready(function($){
         $('.dataTabs li a').first().addClass('active');
     }
 
+
+
     // Handle tab clicks
     $('.dataTabs li a').on('click', function(){
+        console.log('tab changed')
         let theElm = $(this);
         let theID = theElm.data('id');
 
+        console.log("activeID" + theID);
+        
         $('.dataTabsContent').hide();
         $('#dataTabs_' + theID).show();
         $('.dataTabs li a').removeClass('active');
@@ -38,6 +57,12 @@ jQuery(document).ready(function($){
 
         // Save the active tab in cookies (expires in 24 hours)
         setCookie('activeTab', theID, 24);
+
+        if((theID == "organizations" && !$table.length) || theID == "deals"){
+            $("p.submit").hide();
+        }else{
+            $("p.submit").show(); 
+        }
     });
     $('.activityToggle').on('click', function(){
         let theElm = $(this);
@@ -64,7 +89,7 @@ jQuery(document).ready(function($){
                 person_id: personID
             },
             beforeSend: function() {
-                $("#action-buttons-" + orgID).html("Checking...");
+                $("#action-buttons-" + orgID).html( checkingText+"...");
             },
             success: function(response) {
                 var status = response.data.status;
@@ -125,4 +150,13 @@ jQuery(document).ready(function($){
             }
         });
     });
+});
+
+
+jQuery(document).ready(function($) {
+    setTimeout(function() {
+        $('.pgfc-success-message').fadeOut(500, function() {
+        $(this).remove();
+        });
+    }, 2000); // 2 seconds
 });

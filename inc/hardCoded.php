@@ -1,27 +1,47 @@
 <?php
+
+function showDealsField(){
+    return $dataField = [
+        'title'=> [
+            'fieldKey' => 'title',
+            'label' => 'Deal Name'
+        ],
+        'label' => [
+            'fieldKey' => 'label',
+            'label' => 'Deal Type'
+        ],
+        'stage_id'=>[
+            'fieldKey' => 'stage_id',
+            'label' => 'Deal Stage'
+        ]
+    ];
+}
+
+
 function getPipeDriveAPIEndPoint($atr = false){
     $pipedriveAPI = [
         [
-            'label' => 'Add a Person',
-            'end_point'=> 'persons',
-            'singular_end_point'=> 'person',
+            'label' => __('Add a Person', 'pgfc'),
+            'end_point' => 'persons',
+            'singular_end_point' => 'person',
         ],
         [
-            'label' => 'Add an organization',
-            'end_point'=> 'organizations',
-            'singular_end_point'=> 'organization',
+            'label' => __('Add an organization', 'pgfc'),
+            'end_point' => 'organizations',
+            'singular_end_point' => 'organization',
         ],
         [
-            'label' => 'Add a deal',
-            'end_point'=> 'deals',
-            'singular_end_point'=> 'deal',
+            'label' => __('Add a deal', 'pgfc'),
+            'end_point' => 'deals',
+            'singular_end_point' => 'deal',
         ],
         [
-            'label' => 'Add an activities',
-            'end_point'=> 'activities',
-            'singular_end_point'=> 'activity',
+            'label' => __('Add an activities', 'pgfc'),
+            'end_point' => 'activities',
+            'singular_end_point' => 'activity',
         ],
-    ]; 
+    ];
+    
     if($atr){
         foreach($pipedriveAPI as $val){
             if($val['singular_end_point'] == $atr || $val['label'] == $atr){

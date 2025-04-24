@@ -2,7 +2,7 @@
 // jQuery('tr[data-slug="'+pluginSlugname+'"] .update-message').hide();
 // var viewHrefVersion = jQuery("#"+pluginSlugname+"-update a").attr("href");
 // jQuery(".pgfc-view-details").attr('href' , viewHrefVersion)
-
+const addArrayText =  pgfc_ajax_admin.addArrayKey;
 function pgfctoggleCustomFun(elm){
     jQuery(elm).toggle()
 }
@@ -105,7 +105,7 @@ jQuery(document).ready(function($) {
         console.log(ifExist)
         if(isActivity){
             if(!ifExist){
-                theElm.after('<input name="' + newName + '" type="number" required class="apiActivityIndex" placeholder="Add array key" />');
+                theElm.after('<input name="' + newName + '" type="number" required class="apiActivityIndex" placeholder=" '+addArrayText+' " />');
             }
         }else{
             theElm.closest('td').find('.apiActivityIndex').remove()

@@ -65,7 +65,7 @@ function showPipedriveData($userID){
         }     
     ?>
     <div class="manage-pipe-table dataTabsContent" id="dataTabs_<?php echo $endPoint;?>"
-    <?php echo (($count != 1)?'style="display:none;"':'');?>
+    <?php echo (($count != 3)?'style="display:none;"':'');?>
     >
         <h3><?php echo $endPoint;?></h3>   
         <?php
@@ -76,88 +76,94 @@ function showPipedriveData($userID){
 
         <?php
         if(!empty($apiData)){
-        if(in_array($endPoint, ['deals','activities'])){  
-            $actCount = 0;    
-            foreach($apiData as $key3 => $val3){
-                $allActivites = pipedrive_api_request('GET', "deals/".$val3['id']."/activities", [], $action);
-                $files = pipedrive_api_request('GET', "deals/".$val3['id']."/files", [], $action);
-                $filesData = [];
-                if(isset($files['data'])){
-                    $filesData = $files['data'];
+            if(in_array($endPoint, ['deals'])){ //'activities' excluded activities because now we are fetching activities for each deal      
+                foreach($apiData as $eachDeal){
+                    echo '<div class="eachDealCon"><table>';
+                    if (isset($eachDeal['title'])) {
+                        echo "<tr><th>Name: </th><td>" .$eachDeal['title'].'</td></tr>';
+                    }
+                    if (isset($eachDeal['label'])) {
+                        $dealTypeID = $eachDeal['label']; 
+                        $dealTypeIDs = array_map('trim', explode(',', $dealTypeID));
+                        $dataDeal = pipedriveGetVieldName()['deal'];
+                        if (!empty($dataDeal)) {
+                            foreach ($dataDeal as $key => $fields) {
+                                if ($fields['key'] == "label") {
+                                    $options = $fields['options']; // array of available options
+                                    $selectedLabels = [];            
+                                    foreach ($options as $option) {
+                                        if (in_array($option['id'], $dealTypeIDs)) {
+                                            $selectedLabels[] = $option['label'];
+                                        }
+                                    }
+                                    $selectedLabelString = implode(', ', $selectedLabels);
+                                    echo "<tr><th>Deal Labels</th><td> $selectedLabelString</td></tr>";
+                                    break;        
+                                }
+                            }
+                        }
+                    }            
+                    if (isset($eachDeal['stage_id']) && isset($eachDeal['pipeline_id'])) {
+                        $pipelineID = $eachDeal['pipeline_id'];
+                        $stageID = $eachDeal['stage_id'];
+        
+                        $dataStage =  get_option( 'pipedrive_stages ');    
+                        //echo $pipelineID.'<pre>aaa'.$stageID, print_r($dataStage), '</pre>';
+                        if(isset($dataStage[$pipelineID])){
+                            $dataStage = $dataStage[$pipelineID];
+                        }
+                        if(is_array($dataStage)){
+                            foreach ($dataStage as $stage) {
+                                if($stageID == $stage['id']){
+                                    echo '<tr><th>Stage Name</th><td>'.$stage['name'].'</td></tr>';
+                                }
+                            }
+                        }
+                    }
+                    $allActivites = pipedrive_api_request('GET', "deals/".$eachDeal['id']."/activities", [], $action);
+                    $files = pipedrive_api_request('GET', "deals/".$eachDeal['id']."/files", [], $action);
+                    $filesData = [];
+                    if(isset($files['data'])){
+                        $filesData = $files['data'];
+                        $filesOutput = '';
+                        $count = 0;
+                        foreach ($filesData as $file) {
+                            $count++;
+                            $fileName = esc_html($file['file_name']);
+                            $fileID = esc_attr($file['id']);
+                            $downloadURL = getPipedriveFileDownloadLink($fileID);
+                            $filesOutput .= "$count. <a href='{$downloadURL}' target='_blank' download>{$fileName}</a><br>";
+                        }
+                        echo '<tr><th>'.__('Files', 'pgfc').'</th><td>'. $filesOutput.'</td></tr>';       
+                    }    
+                            
+                    
+                    if(isset($allActivites['data'])){
+                        $allActivites = $allActivites['data'];
+                        $actData = alloedProfileData()['activities'];
+                        $activitiesNames = '';
+                        $count = 0;
+                        foreach($allActivites as $actKey => $activity){     
+                            $count++;
+                            $actvityOrgName = $activity['org_name'];
+                            $orgNameHtml = '';
+                            if (!empty($actvityOrgName)) {
+                                $orgNameHtml = "<span class='activityOrg'>".__('Organization', 'pgfc')." : $actvityOrgName</span>";
+                            }
+                            $status = $activity['done']?'done':'notDone';
+                            $activitiesNames .= "<div class='eachActivity'> <i class='activityStatus $status'></i><span class='activityName'>{$activity['subject']}</span>
+                            $orgNameHtml                         
+                            </div><br>";                  
+                        }   
+                        echo '<tr><th>'.__('Deals Activities', 'pgfc').'</th><td>'. $activitiesNames.'</td></tr>';              
+                    }
+                    echo '</table></div>';
                 }
-                if(isset($allActivites['data'])){
-                    $allActivites = $allActivites['data'];
-                }else{
-                    $allActivites = null;
-                }
+            } 
+            else
+            {
                 echo '<table class="adminTable" border="1">';
                 foreach($data as $key2 => $data2){
-                    $key = $data2['key'];
-                    $value = $val3[$key];
-                    $keyInfo = pipedriveGetVieldName($key);
-                    $keyName = $keyInfo['name'];
-                ?>
-                    <input type="hidden" name="pipedrive[<?php echo $endPoint;?>][<?php echo $key3 + 1;?>][id]" value="<?php echo $val3['id'];?>">            
-                    <tr>
-                        <th><?php echo $keyName;?></th>
-                        <td>
-                            <?php echo formatDisplayData($keyInfo, $key, $value, $endPoint, $key3 + 1);?>
-                        </td>
-                    </tr>
-                    
-
-                    <?php
-                }   
-                if (!empty($filesData)) {
-                    echo '<tr><th>Files </th>';
-                    echo '<td><ul>';
-                    foreach ($filesData as $file) {
-                        $fileName = esc_html($file['file_name']);
-                        $fileID = esc_attr($file['id']);
-                        $downloadURL = getPipedriveFileDownloadLink($fileID);
-                        echo "<li><a href='{$downloadURL}' target='_blank' download>{$fileName}</a></li>";
-                    }
-                    echo '</ul></td></tr>';
-                } 
-                echo '</table>';   
-                if(!empty($allActivites)){
-                    $actData = alloedProfileData()['activities'];
-                    echo '
-                    <div class="activityContainer" id="activityContainer_'.$key3.'" style="display:none;">
-                    ';
-                    echo'<h3>Activities</h3>';
-                    foreach($allActivites as $actKey => $activity){
-                    $actCount++;
-                    
-                    echo '
-                    <table class="adminTable" border="1">
-                    ';
-                    foreach($actData as $key2 => $data2){
-                        $key = $data2['key'];
-                        $value = $activity[$key];
-                        $keyInfo = pipedriveGetVieldName($key);
-                        $keyName = $keyInfo['name'];
-                        $endPoint = 'activities';
-                    ?>
-                        <input type="hidden" name="pipedrive[<?php echo $endPoint;?>][<?php echo $actCount;?>][id]" value="<?php echo $val3['id'];?>">            
-                        <tr>
-                            <th><?php echo $keyName;?></th>
-                            <td>
-                                <?php echo formatDisplayData($keyInfo, $key, $value, $endPoint, $actCount);?>
-                            </td>
-                        </tr>
-                    <?php
-                    }
-                    echo '</table>';
-                    }
-                    echo '</div> <a href="javascript:;" class="activityToggle" data-id="activityContainer_'.$key3.'">Show Deals Activities</a>' ;
-
-                    
-                }  
-            }  
-        } else{
-            echo '<table class="adminTable" border="1">';
-            foreach($data as $key2 => $data2){
                 $key = $data2['key'];
                 $value = $apiData[$key];
                 $keyInfo = pipedriveGetVieldName($key);
@@ -173,9 +179,9 @@ function showPipedriveData($userID){
             </tr>
             
         <?php
+                }
+            echo '</table>';        
             }
-        echo '</table>';
-        }
         }
         ?>
 
@@ -185,7 +191,7 @@ function showPipedriveData($userID){
     endif;
     if(!is_user_profile_page()){
         echo '
-        <input type="submit" value="Update" class="button formButton" />
+        <p class="submit"><input type="submit" value="Update" class="button formButton" /></p>
         </form>
         ';
     }
@@ -317,6 +323,7 @@ function getRightFieldType($type, $name, $value, $options = []) {
 
 function updatePipeDriveData($data){
     $action = 'updatePipeDriveData';
+
     if (isset($_POST['pipedrive'])) {
         $_POST['pipedrive']['persons'] = $_POST['pipedrive']['persons'];
         $apiData = $_POST['pipedrive'];
@@ -344,6 +351,11 @@ function updatePipeDriveData($data){
                 $apiRes = pipedrive_api_request('PUT',$key.'/'.$id, $val, $action);
             }
         }
+            echo '<div class="pgfc-success-message notice notice-success">
+               <p>'.__( 'Profile updated successfully!', 'pgfc' ).'</p>
+            </div>';
+    
+
     }else{
         return;
     }
