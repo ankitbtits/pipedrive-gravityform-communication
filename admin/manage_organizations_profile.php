@@ -1,6 +1,7 @@
 <?php
 function showOrganizations($userID) {
     $action = 'showOrganization';
+    $message = __('Please search organizations.', 'pgfc');
     if(isset($_GET['user_id']) && !empty($_GET['user_id']))
     {
         $userID = $_GET['user_id'];
@@ -20,15 +21,19 @@ function showOrganizations($userID) {
     $isSearch = !empty($searchTerm);
 
     if ($isSearch) {
+        $message = __('No organizations found.', 'pgfc');
         // Search API uses "next_start" for pagination
         $params['term'] = $searchTerm;
         $params['fields'] = 'name';
         $response = pipedrive_api_request('GET', 'organizations/search', $params, $action);
         $organizationsData = array_column($response['data']['items'] ?? [], 'item'); // Extract organizations
+        
+        
     } else {
         // Normal API uses "start" for pagination
-        $response = pipedrive_api_request('GET', 'organizations', $params, $action);
-        $organizationsData = $response['data'] ?? [];
+    //     $response = pipedrive_api_request('GET', 'organizations', $params, $action);
+    //    $organizationsData = $response['data'] ?? [];
+            
     }
 
     // Get pagination data
@@ -108,7 +113,7 @@ function showOrganizations($userID) {
         echo '</div>';
 
     else:
-        echo "<p>' . __('No organizations found.', 'pgfc') . '</p>";
+        echo "<p>".$message."</p>";
     endif;
 }
 

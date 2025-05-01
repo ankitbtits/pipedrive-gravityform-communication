@@ -1,6 +1,12 @@
 <?php
 add_filter('gform_field_validation', 'pgfc_check_email_in_pipedrive_globally', 10, 4);
 function pgfc_check_email_in_pipedrive_globally($result, $value, $form, $field) {
+    if (is_user_logged_in()) {
+
+        return $result; // Return the default result (likely is_valid = true)
+
+    }
+ 
     $formID = $form['id'];
     $mapping = getMapping($formID);
     $emailFieldID = null;

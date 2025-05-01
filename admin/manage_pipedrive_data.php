@@ -1,5 +1,4 @@
 <?php
-
 function showPipedriveData($userID){    
     $action = 'showPipedriveData';
     if(!$userID){
@@ -67,6 +66,23 @@ function showPipedriveData($userID){
     <div class="manage-pipe-table dataTabsContent" id="dataTabs_<?php echo $endPoint;?>"
     <?php echo (($count != 3)?'style="display:none;"':'');?>
     >
+
+    
+        <?php
+            if (is_admin()) {
+                // Backend: admin URL with user_id
+                $manage_url = admin_url('admin.php?page=manage_organizations&user_id=' . $user->ID);
+            } else {
+                // Frontend: append to current query string
+                $existing_query = $_SERVER['QUERY_STRING'] ?? '';
+                $new_query = empty($existing_query) ? 'page-name=manage_organizations' : $existing_query . '&page-name=manage_organizations';
+                $manage_url = esc_url('?' . $new_query);
+            }
+           
+            echo '<p class="manageOrgBtn"><a href="' . esc_url($manage_url) . '" class="button button-primary">' . __('Manage Organizations', 'pgfc') . '</a></p>';
+
+        ?>
+
         <h3><?php echo $endPoint;?></h3>   
         <?php
              if(empty($apiData)){
@@ -166,7 +182,7 @@ function showPipedriveData($userID){
                 foreach($data as $key2 => $data2){
                 $key = $data2['key'];
                 $value = $apiData[$key];
-                $keyInfo = pipedriveGetVieldName($key);
+                $keyInfo = pipedriveGetVieldName($key, $endPoint);
                 $keyName = $keyInfo['name'];
         ?>    
             <input type="hidden" name="pipedrive[<?php echo $endPoint;?>][id]" value="<?php echo $apiData['id'];?>">      
@@ -223,7 +239,7 @@ function getRightFieldType($type, $name, $value, $options = []) {
                 foreach ($value as $item) {
                     $res .= '<input '.$readonly.' type="text" value="'.esc_attr($item['value']).'" name="'.esc_attr($name).'[]" /><br/>';
                 }
-                $res .= '<input '.$readonly.' type="text" name="'.esc_attr($name).'[]" placeholder="Add new value" />';
+              //  $res .= '<input '.$readonly.' type="text" name="'.esc_attr($name).'[]" placeholder="Add new value" />';
             } else {
                 // Standard text input
                 $res = '<input '.$readonly.' type="text" value="'.esc_attr($value).'" name="'.esc_attr($name).'" />';
@@ -310,7 +326,7 @@ function getRightFieldType($type, $name, $value, $options = []) {
                     $res .= "<input '.$readonly.' type='text' name='".esc_attr($name)."[]' value='$phoneValue' /><br/>";
                 }
             }
-            $res .= "<input '.$readonly.' type='text' name='".esc_attr($name)."[]' placeholder='Add new phone' />";
+           // $res .= "<input '.$readonly.' type='text' name='".esc_attr($name)."[]' placeholder='Add new phone' />";
             break;
 
         default:
@@ -372,3 +388,4 @@ function getPipedriveFileDownloadLink($fileID) {
     }
     return false;
 }
+

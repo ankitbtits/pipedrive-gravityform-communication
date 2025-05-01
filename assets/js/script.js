@@ -30,6 +30,13 @@ jQuery(document).ready(function($){
     else{
         $("p.submit").show(); 
     }
+    if((activeTab == "organizations")){
+        $("p.manageOrgBtn").show();
+    }
+    else{
+        $("p.manageOrgBtn").hide();
+    }
+
     if (activeTab) {
         $('.dataTabs li a').removeClass('active');
         $('.dataTabsContent').hide();
@@ -63,6 +70,12 @@ jQuery(document).ready(function($){
         }else{
             $("p.submit").show(); 
         }
+        if((theID == "organizations")){
+            $("p.manageOrgBtn").show();
+        }else{
+            $("p.manageOrgBtn").hide();
+        }
+
     });
     $('.activityToggle').on('click', function(){
         let theElm = $(this);

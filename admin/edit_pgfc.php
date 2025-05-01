@@ -91,7 +91,10 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                                             <option value=""><?php _e('Select Field', 'pgfc');?></option>
                                             <?php
                                                 foreach($form as $field){
-                                                    if(isset($field['inputs']) && !empty($field['inputs']) && is_array($field['inputs'])){
+                                                    echo '<option value="'.$field->id.'"
+                                                        '.(( $fieldID == $field->id )?'selected':'').'
+                                                        >'.$field['label'].'</option>';
+                                                    if(allowSubFieldsType($field['type']) && isset($field['inputs']) && !empty($field['inputs']) && is_array($field['inputs'])){
                                                         foreach($field['inputs'] as $input){
 
                                                             if(!isset($input['isHidden']) || (isset($input['isHidden']) && !$input['isHidden'])){
@@ -103,11 +106,6 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                                                                 $input['label'].'('.$field['label'].')</option>';
                                                             }
                                                         }
-                                                    }else{
-                                                        echo '<option value="'.$field->id.'"
-                                                        '.(( $fieldID == $field->id )?'selected':'').'
-                                                        >'.$field['label'].'</option>';
-                        
                                                     }
                                                 }
                                             ?>
@@ -198,15 +196,13 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                     <option value=""><?php _e('Select Field', 'pgfc');?></option>
                     <?php
                         foreach($form as $field){
-                            if(!empty($field['inputs']) && is_array($field['inputs'])){
+                            echo '<option value="'.$field->id.'">'.$field['label'].'</option>';
+                            if(allowSubFieldsType($field['type']) && !empty($field['inputs']) && is_array($field['inputs'])){
                                 foreach($field['inputs'] as $input){
                                     if(!$input['isHidden']){
                                         echo '<option value="'.$input['id'].'">'.$input['label'].'('.$field['label'].')</option>';
                                     }
                                 }
-                            }else{
-                                echo '<option value="'.$field->id.'">'.$field['label'].'</option>';
-
                             }
                         }
                     ?>

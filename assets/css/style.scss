@@ -248,3 +248,19 @@
         background-color: red;
     }
 }
+.manageOrgBtn
+{
+    a{
+        padding: 10px 20px;
+        border-radius: 50px;
+        border: 1px solid #B13325;
+        display: block;
+        text-decoration: none;
+        background: #B13325;
+        color: #fff !important;
+        width: -webkit-max-content;
+        width: -moz-max-content;
+        width: max-content;
+        margin: 20px 0px;
+    }
+}

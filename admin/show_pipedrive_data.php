@@ -6,8 +6,8 @@ function pipedriveDataShowProfile($user) {
     if (!$personID) {
         return;
     }
-    $manage_url = admin_url('admin.php?page=manage_organizations&user_id='.$user->ID);    
-    echo '<p><a href="' . esc_url($manage_url) . '" class="button button-primary">' . __('Manage Organizations', 'pgfc') . '</a></p>';  
+    // $manage_url = admin_url('admin.php?page=manage_organizations&user_id='.$user->ID);    
+    // echo '<p><a href="' . esc_url($manage_url) . '" class="button button-primary">' . __('Manage Organizations', 'pgfc') . '</a></p>';  
     echo showPipedriveData($user->ID);
 }
 add_action('show_user_profile', 'pipedriveDataShowProfile');
@@ -25,6 +25,15 @@ add_action('personal_options_update', 'updatePipedriveDataProfile');
 add_action('edit_user_profile_update', 'updatePipedriveDataProfile');
 // displaying pipedrive data on profile page
 
+// add_action('admin_notices', function () {
+//     global $pipedrive_profile_updated;
+
+//     if (!empty($pipedrive_profile_updated)) {
+//         echo '<div class="notice notice-success is-dismissible">
+//             <p>' . esc_html__('Profile updated successfully.', 'pgfc') . '</p>
+//         </div>';
+//     }
+// });
 add_filter('gettext', 'custom_profile_updated_message', 20, 3);
 function custom_profile_updated_message($translated_text, $text, $domain) {
     if (is_admin() && $text === 'Profile updated.') {
@@ -56,9 +65,7 @@ function editPipeDriveData() {
         $manage_url = esc_url('?' . $new_query);
         $res .= '<div class="manageProfileBtnFront">
         
-            <div class="form-wrap-left">
-                <a href="' . $manage_url . '" class="button button-primary">' . __('Manage Organizations', 'pgfc') . '</a>
-            </div>
+           
             <div class="form-wrap-right">
                 <div class="innerRight">
                     <a href="'.wp_logout_url(home_url()).'" class="button front-logout">

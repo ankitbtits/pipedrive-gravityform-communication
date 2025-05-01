@@ -1,21 +1,24 @@
 <?php
 
-
-
 add_action('gform_after_submission', 'handle_pipedrive_integration', 10, 2);
 function handle_pipedrive_integration($entries, $form) {
     $formTitle = $form['title'];
     $formID = $form['id'];
     $action = 'Through Form: '.$formTitle.'('.$formID.')';
     $payloads = getPayLoads($entries); 
-    // echo '<pre>',var_dump($payloads),'</pre>';
-    // die();
+//     echo '<pre>',print_r($payloads),'</pre>';
+//     echo '<pre>',print_r($entries),'</pre>';
+// die();
+
     $personId = null;
     $orgId = null;
     $dealID = null;
     $user_id = null;
     $create_account = false;
     $userEmail = null;
+    // echo '<pre style="width:45%; float:left; height:1000px; overflow:auto">2222', print_r($entries), '</pre>';
+    // echo '<pre style="width:50%; height:1000px; overflow:auto">', print_r(getPayLoads($entries)), '</pre>';
+    // die;
     if(isset($payloads['persons']['email'])){
         $userEmail = $payloads['persons']['email'];
     }
@@ -183,6 +186,8 @@ function getPayLoads($entries){
     if(isset($entries['form_id'])){
         $formId = $entries['form_id'];
         $mapping = getMapping($formId);
+
+
         foreach($mapping as $key => $val){
             $endPoint = getPipeDriveAPIEndPoint($key);
             if(is_array($val) && !empty($val)){
@@ -190,33 +195,27 @@ function getPayLoads($entries){
                     $fieldID = $val2['field'];
                     $fieldIDFloor = floor($fieldID);
                     $apiKey = $val2['apiAttribute'];
-                    $fieldType = pipedriveGetVieldName($apiKey)['field_type'];                    
-                    $entryVal = '';                    
-                    if(array_key_exists($fieldID, $entries)){
+                    $fieldType = pipedriveGetVieldName($apiKey, $endPoint)['field_type'];                    
+                    $entryVal = 'X';                    
+                    if(array_key_exists($fieldID, $entries)){                        
                         $entryVal = $entries[$fieldID];
+                    }elseif(array_key_exists($fieldIDFloor, $entries)){
+                        $entryVal = $entries[$fieldIDFloor];                       
                     }else{
-                        $entryVal = $entries[$fieldIDFloor];
-                        //$combine = false;
+                        if($fieldType == 'set' || $fieldType == 'enum'){
+                            $entryVal = extractAndJoinDecimalValues($entries, $fieldID, '||');  
+                        }else{
+                            $entryVal = extractAndJoinDecimalValues($entries, $fieldID); 
+                        }
                     }
                     if(empty($entryVal)){
                         continue;
-                    }
-                    $combine = false;
-                    if(isset($val2['apiLabelIndex'])){
-                        $theIndex = $val2['apiLabelIndex'];
-                        if(isset($payLoads[$endPoint][$theIndex]) && in_array($apiKey, $payLoads[$endPoint][$theIndex])){
-                            $combine = true;
-                        }
-                    }else{
-                        if(isset($payLoads[$endPoint]) && in_array($apiKey, $payLoads[$endPoint])){
-                            $combine = true;
-                        }
-                    }
+                    }                   
                     if(isset($val2['apiLabelIndex'])){
                         $theIndex = $val2['apiLabelIndex'];
                         if (!isset($payLoads[$endPoint][$theIndex][$apiKey])) {
                             $payLoads[$endPoint][$theIndex][$apiKey] = $entryVal;
-                        } elseif(isset($entryVal) && $combine) {
+                        } elseif(isset($entryVal)) {
                             if($fieldType == 'daterange'){
                                 $payLoads[$endPoint][$theIndex][$apiKey.'_until'] = $entryVal;
                             }else{
@@ -225,28 +224,37 @@ function getPayLoads($entries){
                         }  
                     }else{
                         if (!isset($payLoads[$endPoint][$apiKey])) {
-
-                            if($fieldType == 'set' || $fieldType == 'enum' )
-                            {
-                                $pipedriveGetData   =  pipedriveGetVieldName($apiKey); //For check Pipeline return value
+                            if($fieldType == 'set' || $fieldType == 'enum'){
+                                $pipedriveGetData   =  pipedriveGetVieldName($apiKey, $endPoint); //For check Pipeline return value
                                 $options            =  $pipedriveGetData['options']; // array of all available options
                                 $matches = [];
+                                $arrayExplod = explode('||', $entryVal);
+                                $payLoads[$endPoint][$apiKey] = $entryVal;
                                 foreach ($options as $option) {
-                                    if (isset($option['label']) && in_array($option['label'], $entries, true)) {
-                                        $matches[] = $option['label'];
+                                    if ( (isset($option['id']) && in_array($option['id'], $arrayExplod)) ||  ( isset($option['label']) && in_array($option['label'], $arrayExplod) )  ) { 
+                                            $matches[] = $option['id'];                                       
                                     }
                                 }
                                 $matchesVals =  implode(', ', $matches);
                                 $payLoads[$endPoint][$apiKey] = $matchesVals;
-                            }
-                            else{
+                            }else{
                                 $payLoads[$endPoint][$apiKey] = $entryVal;
-                            }
-                        } elseif(isset($entryVal) && $combine) {
+                            }     
+                        } elseif(isset($entryVal) && $fieldType != 'set' && $fieldType != 'enum') {
                             if($fieldType == 'daterange'){
                                 $payLoads[$endPoint][$apiKey.'_until'] = $entryVal;
+                            }elseif($fieldType == 'set' || $fieldType == 'enum'){
+                                $payLoads[$endPoint][$apiKey] .= '====';
+                                $pipedriveGetData   =  pipedriveGetVieldName($apiKey, $endPoint); //For check Pipeline return value
+                                $options            =  $pipedriveGetData['options']; // array of all available options
+                                foreach ($options as $option) {
+                                    if ( isset($option['id']) && ( $option['id'] == $entryVal ||  strtolower($option['label']) == strtolower($entryVal) )  ) {
+                                        $payLoads[$endPoint][$apiKey] .= ', ' . $option['id'];
+                                        break;
+                                    }
+                                }
                             }else{
-                                $payLoads[$endPoint][$apiKey] .= ' ' . $entryVal;
+                                $payLoads[$endPoint][$apiKey] .= ' ' . $entryVal ;
                             }
                         }  
                     }
@@ -298,12 +306,69 @@ function createAccount($email){
     return $user_id;
 }
 
+function extractAndJoinDecimalValues(&$array, $baseKey, $separator = ' ') {
+    $matches = [];
+    // Step 1: Find all keys that start with baseKey + decimal (e.g., "1.3", "1.6")
+    foreach ($array as $key => $value) {
+        if (preg_match('/^' . preg_quote($baseKey, '/') . '\.\d+$/', $key)) {
+            $matches[$key] = $value;
+        }
+    }
+    if (!empty($matches)) {
+        // Step 2: Sort keys numerically by their float value (1.3 < 1.6)
+        uksort($matches, function ($a, $b) {
+            return floatval($a) <=> floatval($b);
+        });
 
-// add_action('wp_head', 'forTest');
-// function forTest(){
-//     //echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(get_option( 'pipedrive_stages ')), '</pre>';
-//     echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">2222', print_r(getPayLoads(getSampleData2())), '</pre>';
-//     echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(getPayLoads(getSampleData_3())), '</pre>';
-//     echo '<pre style="width:48%; float:left; height 1000px; overflow:auto;">', print_r(getPayLoads(getSampleData_4())), '</pre>';
-//     die;
-// }
+        // Step 3: Collect only non-empty values
+        $values = array_filter($matches, function($val) {
+            return $val !== null && $val !== '';
+        });
+
+        // Step 4: Remove those keys from original array
+        foreach (array_keys($matches) as $key) {
+            unset($array[$key]);
+        }
+
+        // Step 5: Concatenate the values and return
+        return implode($separator, $values);
+    }
+    // Fallback: If no decimals found, return the plain key if it exists
+    if (array_key_exists($baseKey, $array)) {
+        $val = $array[$baseKey];
+        unset($array[$baseKey]);
+        return $val;
+    }
+
+    return null; // Nothing found
+}
+
+
+
+add_action('wp_head', 'updatePersonManually');
+function updatePersonManually(){
+    if(isset($_GET['pipedrive_person']) && is_user_logged_in()){
+        update_user_meta(get_current_user_id(), 'pipedrive_person_id', $_GET['pipedrive_person']);
+    }
+}
+
+
+
+add_action('wp_head', 'forTesting');
+function forTesting(){
+    // $fieldsData = pipedriveGetVieldName();
+    // echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($fieldsData) ,'</pre></div>';
+    if(isset($_GET['pipe_drive_id'])){
+        $user_id = get_current_user_id();
+        update_user_meta($user_id, 'pipedrive_person_id', $_GET['pipe_drive_id']);
+    }
+    if(isset($_GET['debug'])){
+        $entries = getSampleData2();
+        $payloads = getPayLoads($entries);
+        $mapping = getMapping(3);
+        echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($entries) ,'</pre></div>';
+        echo '2222222<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($payloads) ,'</pre></div>';
+        echo '3333<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($mapping) ,'</pre></div>';
+        die;
+    }
+}

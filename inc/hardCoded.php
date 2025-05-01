@@ -1,23 +1,5 @@
 <?php
 
-function showDealsField(){
-    return $dataField = [
-        'title'=> [
-            'fieldKey' => 'title',
-            'label' => 'Deal Name'
-        ],
-        'label' => [
-            'fieldKey' => 'label',
-            'label' => 'Deal Type'
-        ],
-        'stage_id'=>[
-            'fieldKey' => 'stage_id',
-            'label' => 'Deal Stage'
-        ]
-    ];
-}
-
-
 function getPipeDriveAPIEndPoint($atr = false){
     $pipedriveAPI = [
         [
@@ -52,6 +34,20 @@ function getPipeDriveAPIEndPoint($atr = false){
     
     return $pipedriveAPI;
 }
+function getPipeDriveAPIArray($atr){
+    $arr = [];
+    foreach(getPipeDriveAPIEndPoint() as $key => $val){
+        if($val['singular_end_point'] == $atr || $val['label'] == $atr || $val['end_point'] == $atr){
+            $arr = $val;
+        }
+    }
+    return $arr;
+}
+function allowSubFieldsType($type){
+    $arr = ['select', 'radio', 'checkbox', 'post_category', 'multiselect'];
+    return !in_array($type, $arr);
+}
+
 // function alloedProfileData($attr = false){
 //     $res = [
 //         'persons'=>[
@@ -249,6 +245,56 @@ function getSampleData_4() {
     );
 }
 
+function getSampleData02(){
+    return $data = [
+        'id' => 295,
+        'status' => 'active',
+        'form_id' => 4,
+        'ip' => '49.43.99.13',
+        'source_url' => 'https://promofirenzdev.wpenginepowered.com/finanza-3/',
+        'currency' => 'EUR',
+        'post_id' => null,
+        'date_created' => '2025-04-30 07:05:42',
+        'date_updated' => '2025-04-30 07:05:42',
+        'is_starred' => 0,
+        'is_read' => 0,
+        'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+        'payment_status' => null,
+        'payment_date' => null,
+        'payment_amount' => null,
+        'payment_method' => null,
+        'transaction_id' => null,
+        'is_fulfilled' => null,
+        'created_by' => null,
+        'transaction_type' => null,
+        'source_id' => 22701,
+        '1.2' => null,
+        '1.3' => 'dev421',
+        '1.4' => null,
+        '1.6' => 'las421',
+        '1.8' => null,
+        '3' => 'dev421@gmail.com',
+        '4' => 'Organizzazione / Azienda 421',
+        '18' => 'Seconda scelta',
+        '6' => 'Ruolo 421',
+        '7' => '00222421',
+        '8.1' => 'Indirizzo 421',
+        '8.2' => null,
+        '8.3' => 'citta421',
+        '8.4' => 'state 421',
+        '8.5' => '1245421',
+        '8.6' => 'Antigua e Barbuda',
+        '9.1' => null,
+        '12.1' => "Accetto l' informativa Privacy*",
+        '10.1' => 'subscribed',
+        '17' => 'Non consento',
+        '13' => '[FINANZA] Richiesta info sui bandi',
+        '14' => 'Finanza agevolata',
+        '16' => '21',
+    ];
+    
+}
+
 function skipPopulateFieldTypes(){
     return ['date', 'radio', 'multi_choice', 'checkbox'];
 }
@@ -256,3 +302,84 @@ function skipPopulateFieldTypes(){
 function skipPopulateFieldTypesNew(){
     return ['date', 'multi_choice'];
 }
+
+
+add_action('wp_head' , function(){
+
+    $entries = array(
+        'id' => 361,
+        'status' => 'active',
+        'form_id' => 3,
+        'ip' => '191.96.227.189',
+        'source_url' => 'https://promofirenzdev.wpenginepowered.com/nuove-imprese/',
+        'currency' => 'EUR',
+        'post_id' => '',
+        'date_created' => '2025-04-30 13:30:21',
+        'date_updated' => '2025-04-30 13:30:21',
+        'is_starred' => 0,
+        'is_read' => 0,
+        'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+        'payment_status' => '',
+        'payment_date' => '',
+        'payment_amount' => '',
+        'payment_method' => '',
+        'transaction_id' => '',
+        'is_fulfilled' => '',
+        'created_by' => '',
+        'transaction_type' => '',
+        'source_id' => 22699,
+        '1' => '2010-10-17',
+        '3.2' => '',
+        '3.3' => 'tester111t',
+        '3.4' => '',
+        '3.6' => 'tester121221',
+        '3.8' => '',
+        '4' => 'tester900',
+        '5' => 'test900011@gmail.com',
+        '6' => 'face200',
+        '7' => '2010-10-15',
+        '8' => 'Aspirante Imprenditore',
+        '9.1' => '',
+        '9.2' => 'Agroalimentare',
+        '9.3' => '',
+        '9.4' => '',
+        '9.5' => '',
+        '9.6' => 'Gioielleria',
+        '9.7' => '',
+        '9.8' => '',
+        '9.9' => '',
+        '9.11' => '',
+        '9.12' => '',
+        '9.13' => '',
+        '9.14' => '',
+        '9.15' => '',
+        '9.16' => '',
+        '9.17' => '',
+        '9.18' => '',
+        '9.19' => '',
+        '9.21' => '',
+        '10' => 'testerasdasd',
+        '11.1' => 'createAccountWP',
+        '14.1' => 'Consento',
+        '12.1' => 'Subscribed',
+        '12.2' => '',
+        '19' => 'Consento',
+        '15' => '[SNI] Richiesta consulenza',
+        '16' => 'Nuove imprese',
+        '17' => 'Nuove Imprese',
+        '18' => '20',
+    );
+    
+//   $pipedriveGetData =   pipedriveGetVieldName('07aaf6652ad9c3267cf10b014b3b8ac139e69054' , 'persons');
+//   $options            =  $pipedriveGetData['options'];
+
+
+
+//   $entryvalue =  "Agroalimentare, Abbigliamento, calzature e accessori moda, bigiotteria,Pelletteria e accessori in pelle";
+
+
+//  $entryVal = extractAndJoinDecimalValues($entries, 14, '||');  
+  
+   //echo '<pre>aaaaaaaaaa'.print_r($pipedriveGetData , true ).'</pre>';
+
+});

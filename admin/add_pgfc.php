@@ -105,15 +105,13 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
                     <option value=""><?php _e('Select Field', 'pgfc');?></option>
                     <?php
                         foreach($form as $field){
-                            if(!empty($field['inputs']) && is_array($field['inputs'])){
+                            echo '<option value="'.$field->id.'">'.$field['label'].'</option>';
+                            if(allowSubFieldsType($field['type']) && !empty($field['inputs']) && is_array($field['inputs'])){
                                 foreach($field['inputs'] as $input){
                                     if(!$input['isHidden']){
                                         echo '<option value="'.$input['id'].'">'.$input['label'].'('.$field['label'].')</option>';
                                     }
                                 }
-                            }else{
-                                echo '<option value="'.$field->id.'">'.$field['label'].'</option>';
-
                             }
                         }
                     ?>

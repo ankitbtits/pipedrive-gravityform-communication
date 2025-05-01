@@ -19,12 +19,9 @@
 .dataTabs ul {
   padding: 0px;
   list-style: none;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-column-gap: 20px;
-     -moz-column-gap: 20px;
-          column-gap: 20px;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
   text-transform: capitalize;
   padding: 20px 0px;
 }
@@ -79,12 +76,8 @@
 }
 
 .manageProfileBtnFront {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
 }
 .manageProfileBtnFront .innerRight a {
   border-radius: 0;
@@ -98,7 +91,6 @@
   text-decoration: none;
   background: #B13325;
   color: #fff !important;
-  width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
   margin: 20px 0px;
@@ -116,21 +108,13 @@
 }
 
 .page-template-default .frontorgmang {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   margin: 20px 0px;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   width: 100%;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 .page-template-default .frontorgmang .form-wrap-front {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 .page-template-default .frontorgmang input {
@@ -170,7 +154,6 @@
   color: #fff;
   padding: 5px 15px;
   display: block;
-  width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
   border-radius: 37px;
@@ -193,7 +176,6 @@
 }
 ._backBtn a.button:hover {
   background: #d33322;
-  -webkit-transition: 0.5s;
   transition: 0.5s;
 }
 
@@ -229,12 +211,8 @@
 
 .eachActivity {
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 .eachActivity span.activityOrg {
   display: inline-block;
@@ -256,4 +234,17 @@
 }
 .activityStatus.notDone {
   background-color: red;
+}
+
+.manageOrgBtn a {
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 1px solid #B13325;
+  display: block;
+  text-decoration: none;
+  background: #B13325;
+  color: #fff !important;
+  width: -moz-max-content;
+  width: max-content;
+  margin: 20px 0px;
 }/*# sourceMappingURL=style.css.map */

@@ -21,6 +21,7 @@ function pgfc_register_custom_pgfc_post_type() {
         'has_archive'        => true,
         'hierarchical'       => false,
         'menu_position'      => null,
+        'can_export' => true,
         'supports'           => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'),
     );
     register_post_type('pgfc', $args);
@@ -206,7 +207,7 @@ function pipedriveStoreCustomFields() {
     update_option('pipedrive_custom_fields_last_updated', current_time('mysql'));
 }
 
-function pipedriveGetVieldName($fieldID = false) {
+function pipedriveGetVieldName($fieldID = false, $endPoint = false) {
     $fieldsData = get_option('pipedrive_custom_fields');
 
     if (!$fieldsData) {
@@ -214,30 +215,29 @@ function pipedriveGetVieldName($fieldID = false) {
         pipedriveStoreCustomFields();
         $fieldsData = get_option('pipedrive_custom_fields');
     }
-    if(!$fieldID){
+    if(!$fieldID || (!$endPoint && getPipeDriveAPIArray($endPoint)['singular_end_point'])){
         return $fieldsData;
     }
+    
+    $endPoint = getPipeDriveAPIArray($endPoint)['singular_end_point'];
     // Search in all entities
-    foreach ($fieldsData as $entityFields) {
-        foreach ($entityFields as $field) {
+    if(isset($fieldsData[$endPoint])){
+        foreach ($fieldsData[$endPoint] as $key => $field) {
             if ($field['key'] === $fieldID) {
                 return $field;
             }
         }
     }
-
-    // If field is not found, refresh fields and try again
+    
     pipedriveStoreCustomFields();
     $fieldsData = get_option('pipedrive_custom_fields');
-
-    foreach ($fieldsData as $entityFields) {
-        foreach ($entityFields as $field) {
+    if(isset($fieldsData[$endPoint])){
+        foreach ($fieldsData[$endPoint] as $key => $field) {
             if ($field['key'] === $fieldID) {
                 return $field;
             }
         }
     }
-
     return __('No field found with this key', 'pgfc');
 }
 

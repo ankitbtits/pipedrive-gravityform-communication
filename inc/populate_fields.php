@@ -22,6 +22,8 @@ function prefill_and_disable_fields_globally($form) {
         $pipeDriveData['person'] = $personData['data'];
     }
 
+    echo '<pre>', print_r( $pipeDriveData , true ); echo '</pre>';
+
     $orgData = null;
     if(isset($pipeDriveData['person']['org_id']['value'])){
         $orgID = $pipeDriveData['person']['org_id']['value'];
@@ -36,12 +38,16 @@ function prefill_and_disable_fields_globally($form) {
             foreach ($data as $fieldID => $pipeDriveKey) {
                 if (isset($field->inputs) && is_array($field->inputs)) {
                     $pipeVal = $pipeDriveData[$endpoint][$pipeDriveKey] ?? '';
+
+                  
                     if (!empty($pipeVal)) {
                         if (is_array($pipeVal)) {
                             $pipeVal = $pipeVal[0]['value'] ?? '';
                         }
                         $selectedValues = array_map('trim', preg_split('/[,|-]/', $pipeVal));
+
                         if ($field->type === 'checkbox' || $field->type === 'radio') { //Gravity field type checked
+                          //  echo '<pre> '.$field->type.'', print_r( $pipeVal , true ); echo '</pre>';
                             foreach ($field->choices as &$choice) {
                                 // Match based on label (text), not just value
                                 if (in_array($choice['text'], $selectedValues) || in_array($choice['value'], $selectedValues)) {
@@ -120,21 +126,23 @@ function prefill_and_disable_fields_globally($form) {
                         $fieldID2  = floor(  $field->id ); //Case when field id not found in pipedrive
                         if (  ($field->type=="multi_choice" || $field->type=="checkbox"))
                         {
-                            $pipedriveGetData =  pipedriveGetVieldName($pipeDriveKey); //For check Pipeline return value
+                            
+                            $pipedriveGetData =  pipedriveGetVieldName($pipeDriveKey, $endpoint); //For check Pipeline return value
                             $pipeVal          =  $pipeDriveData[$endpoint][$pipeDriveKey] ?? '';
                             if($pipedriveGetData['field_type'] == 'set' || $pipedriveGetData['field_type'] == 'enum' )
                             {
                                 $options = $pipedriveGetData['options']; // array of all available options
                                 $selectedIds = array_map('trim', explode(',', $pipeVal)); // convert to array
+                              //  echo '<pre> '.$field->type.'', print_r( $selectedIds , true ); echo '</pre>';
                                 $selectedLabels = [];
                                 foreach ($options as $option) {
                                     if (in_array($option['id'], $selectedIds)) {
-                                        $selectedLabels[] = $option['label'];
+                                        $selectedLabels[] = $option['id'];
                                     }
                                 }
                                 if(isset($field->choices)){
                                     foreach ($field->choices as &$choiceVal) {
-                                        if (in_array($choiceVal['text'], $selectedLabels) || in_array($choiceVal['value'], $selectedLabels)) {
+                                        if (in_array($choiceVal['id'], $selectedLabels) || in_array($choiceVal['value'], $selectedLabels)) {
                                             $choiceVal['isSelected'] = true;
                                             $field->cssClass .= ' pgfc-readonly';
                                         }
@@ -149,7 +157,7 @@ function prefill_and_disable_fields_globally($form) {
                 }    
                 else {
                     if (  $field->id == $fieldID  && !in_array($field->id, $doneFields)) {
-                        $pipedriveGetData =  pipedriveGetVieldName($pipeDriveKey); //For check Pipeline return value
+                        $pipedriveGetData =  pipedriveGetVieldName($pipeDriveKey, $endpoint); //For check Pipeline return value
                         $pipeVal          =  $pipeDriveData[$endpoint][$pipeDriveKey] ?? '';
                         if(isset( $pipedriveGetData['field_type'] ) && $pipedriveGetData['field_type'] == 'set' && $field->type === 'radio'){
                             $options = $pipedriveGetData['options']; // array of all available options
