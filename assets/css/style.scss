@@ -88,8 +88,10 @@
 } 
 .manageProfileBtnFront {
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     .innerRight{
+            text-align: right;
+            display: inline-block;
         a{
             border-radius: 0;
         }
@@ -105,6 +107,8 @@
     color: #fff !important;
     width: max-content;
     margin: 20px 0px;
+    position: relative;
+    bottom: 30px;
 }
 .adminTableFront.table {
     td {
@@ -128,6 +132,12 @@
         align-items: center;
         .form-wrap-front{
             display: flex;
+        }
+        .form-wrap-right{
+            .innerRight{
+                position: relative;
+                bottom: 30px;
+            }
         }
         input {
             border: 1px solid #dee2e6 !important;
@@ -180,17 +190,19 @@
     border-top: solid 3px red;
 }
 ._backBtn{
-    text-align: right;
+    text-align: left;
     cursor: pointer;
+    color: #b13325;
+    font-weight: 500;
     a.button{
-        background: #b13325;
-        color: #fff !important;
-        padding: 10px 20px;
-        font-size: 14px;
-        &:hover{
-            background: #d33322;
-            transition: 0.5s;
-        }
+        // background: #b13325;
+        // color: #fff !important;
+        // padding: 10px 20px;
+        // font-size: 14px;
+        // &:hover{
+        //     background: #d33322;
+        //     transition: 0.5s;
+        // }
     }
 }
 .pgfc-success-message{

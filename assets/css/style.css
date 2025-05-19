@@ -77,7 +77,11 @@
 
 .manageProfileBtnFront {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
+}
+.manageProfileBtnFront .innerRight {
+  text-align: right;
+  display: inline-block;
 }
 .manageProfileBtnFront .innerRight a {
   border-radius: 0;
@@ -94,6 +98,8 @@
   width: -moz-max-content;
   width: max-content;
   margin: 20px 0px;
+  position: relative;
+  bottom: 30px;
 }
 
 .adminTableFront.table td {
@@ -116,6 +122,10 @@
 }
 .page-template-default .frontorgmang .form-wrap-front {
   display: flex;
+}
+.page-template-default .frontorgmang .form-wrap-right .innerRight {
+  position: relative;
+  bottom: 30px;
 }
 .page-template-default .frontorgmang input {
   border: 1px solid #dee2e6 !important;
@@ -165,20 +175,11 @@
 }
 
 ._backBtn {
-  text-align: right;
+  text-align: left;
   cursor: pointer;
+  color: #b13325;
+  font-weight: 500;
 }
-._backBtn a.button {
-  background: #b13325;
-  color: #fff !important;
-  padding: 10px 20px;
-  font-size: 14px;
-}
-._backBtn a.button:hover {
-  background: #d33322;
-  transition: 0.5s;
-}
-
 .pgfc-success-message p {
   color: #ffffff;
   background: green;

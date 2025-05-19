@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 $pgrcID = '';
 if(!isset($_GET['pgfc_id']) || empty($_GET['pgfc_id'])){
-    echo __('No pgfc found', 'pgfc');
+    echo __('No pgfc found', PGFC_TEXT_DOMAIN);
     return;
 }else{
     $pgrcID = sanitize_text_field( $_GET['pgfc_id'] );
@@ -31,12 +31,12 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
             ]
         ));
         if ($pgfcID) {
-            echo '<div class="updated"><p>' . esc_html__('Pipedrive communication created successfully!', 'pgfc') . '</p></div>';
+            echo '<div class="updated"><p>' . esc_html__('Pipedrive communication created successfully!', PGFC_TEXT_DOMAIN) . '</p></div>';
         } else {
-            echo '<div class="error"><p>' . esc_html__('Error creating the pipedrive communication.', 'pgfc') . '</p></div>';
+            echo '<div class="error"><p>' . esc_html__('Error creating the pipedrive communication.', PGFC_TEXT_DOMAIN) . '</p></div>';
         }
     }elseif(isset($_POST['_wpnonce_add_pgfc'])){
-        echo '<div class="error"><p>' . esc_html__('Security check failed.', 'pgfc') . '</p></div>';
+        echo '<div class="error"><p>' . esc_html__('Security check failed.', PGFC_TEXT_DOMAIN) . '</p></div>';
     }       
 }
 $formID = get_post_meta($pgrcID, 'form_id', true);
@@ -51,7 +51,7 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                 if(!empty(getGravityForms('forms'))){
                     ?>
                         <select name="form_id" required class="gravityForms onChangeFun" id="gravityForms" data-slug="gravityFormsFields">
-                            <option value=""><?php _e('Select Form', 'pgfc');?></option>
+                            <option value=""><?php _e('Select Form', PGFC_TEXT_DOMAIN);?></option>
                             <?php
                                 foreach(getGravityForms('forms') as $form){
                                     echo '<option value="'.$form['id'].'"
@@ -88,7 +88,7 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                                         if(!empty($form) && (int) $formID ==  $savedFormID){
                                     ?>
                                         <select required name="mapping[<?php echo $index;?>][field]" id="gravityFormsFields_<?php echo $savedFormID;?>">
-                                            <option value=""><?php _e('Select Field', 'pgfc');?></option>
+                                            <option value=""><?php _e('Select Field', PGFC_TEXT_DOMAIN);?></option>
                                             <?php
                                                 foreach($form as $field){
                                                     echo '<option value="'.$field->id.'"
@@ -122,7 +122,7 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                                 if(!empty(getPipeDriveAPIEndPoint())){
                                     ?>
                                         <select required name="mapping[<?php echo $index;?>][apiLabel]" class="pipeDriveAPISelect onChangeFun" data-slug="pipeDriveAPIAttributes" id="pipeDriveAPI">
-                                            <option value=""><?php _e('Select API', 'pgfc');?></option>
+                                            <option value=""><?php _e('Select API', PGFC_TEXT_DOMAIN);?></option>
                                             <?php
                                                 foreach(getPipeDriveAPIEndPoint() as $apiName){
                                                     echo '<option value="'.$apiName['singular_end_point'] .'"
@@ -147,7 +147,7 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                                     $fields = pipedriveGetVieldName()[$apiLabel];
                                 ?>
                                         <select required name="mapping[<?php echo $index;?>][apiAttribute]" class="apiAttributeSelect">
-                                             <option value=""><?php _e('Select Attribute', 'pgfc');?></option>
+                                             <option value=""><?php _e('Select Attribute', PGFC_TEXT_DOMAIN);?></option>
                                              <?php
                                                  foreach($fields as $field){
                                                     $fieldKey = $field['key'];
@@ -173,16 +173,16 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                 //echo '<pre>', print_r(getGravityForms('fields')[4]), '</pre>';
             ?>
             <div class="pgfc_addpgfcItemCon">
-                <a href="javascript:;" class="pgfc_addItem"><?php esc_html_e('Add Item/Service', 'pgfc'); ?></a>
+                <a href="javascript:;" class="pgfc_addItem"><?php esc_html_e('Add Item/Service', PGFC_TEXT_DOMAIN); ?></a>
                 <a href="javascript:;" class="pgfc_removepgfcItem"                 
                 style="
                 <?php if(count($mapping) <= 1){echo 'display:none';}?>                
-                "><?php esc_html_e('Remove Item/Service', 'pgfc'); ?></a>
+                "><?php esc_html_e('Remove Item/Service', PGFC_TEXT_DOMAIN); ?></a>
             </div>
         </div>
 
         <div class="pgfcFormInn">
-            <input type="submit" value="<?php esc_attr_e('Publish', 'pgfc'); ?>" name="create_communication" class="button is-primary">
+            <input type="submit" value="<?php esc_attr_e('Publish', PGFC_TEXT_DOMAIN); ?>" name="create_communication" class="button is-primary">
         </div>
     </form>
 </div>
@@ -193,7 +193,7 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                 if(!empty($form)){
             ?>
                 <select required name="mapping[0][field]" id="gravityFormsFields_<?php echo $formID;?>">
-                    <option value=""><?php _e('Select Field', 'pgfc');?></option>
+                    <option value=""><?php _e('Select Field', PGFC_TEXT_DOMAIN);?></option>
                     <?php
                         foreach($form as $field){
                             echo '<option value="'.$field->id.'">'.$field['label'].'</option>';
@@ -217,7 +217,7 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
             foreach(pipedriveGetVieldName() as $key => $fields){
         ?>
                 <select required name="mapping[0][apiAttribute]" class="apiAttributeSelect" id="pipeDriveAPIAttributes_<?php echo $key;?>">
-                     <option value=""><?php _e('Select Attribute', 'pgfc');?></option>
+                     <option value=""><?php _e('Select Attribute', PGFC_TEXT_DOMAIN);?></option>
                      <?php
                          foreach($fields as $field){
                             $fieldKey = $field['key'];

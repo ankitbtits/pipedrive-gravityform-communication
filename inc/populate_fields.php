@@ -1,6 +1,6 @@
 <?php
-add_filter('gform_pre_render', 'prefill_and_disable_fields_globally');
-add_filter('gform_pre_validation', 'prefill_and_disable_fields_globally');
+ add_filter('gform_pre_render', 'prefill_and_disable_fields_globally');
+ add_filter('gform_pre_validation', 'prefill_and_disable_fields_globally');
 
 function prefill_and_disable_fields_globally($form) {
     $formTitle = $form['title'];
@@ -20,9 +20,9 @@ function prefill_and_disable_fields_globally($form) {
         return;
     }else{
         $pipeDriveData['person'] = $personData['data'];
-    }
+    }    
 
-    echo '<pre>', print_r( $pipeDriveData , true ); echo '</pre>';
+
 
     $orgData = null;
     if(isset($pipeDriveData['person']['org_id']['value'])){
@@ -31,180 +31,173 @@ function prefill_and_disable_fields_globally($form) {
         $pipeDriveData['organization']= $orgData['data'];
     }
     $populatedFiedls = getValidPopulatdFields($formID);
+    $gravityFormField = getValidFieldGravityForm($form['fields'] , $populatedFiedls); 
+
+    $formFields = [];
+    foreach ($gravityFormField as $endpoint => $gravityfields) {
+        foreach ($gravityfields as $field_id => $data) {
+            $pipeDriveKey      = $data['pipedrive_key']; 
+            $field              = $data['fields'];
+            $pipeVal = $pipeDriveData[$endpoint][$pipeDriveKey] ?? '';  
+            //$field->id = $field_id;     
+            if($field->visibility == 'visible'){
+             //  echo $field->label.' = '.$field->type.'<pre>'.print_r( $pipeVal , true).'</pre>';
+            }     
+            if (!empty($pipeVal)) {
+                $fieldFormated = assignDefaultValueByType($field, $pipeVal, ['endPoint'=>$endpoint, 'pipeFieldKey'=>$pipeDriveKey ], $pipeDriveData[$endpoint]);
+                if($fieldFormated){
+                    $formFields[] = $fieldFormated;
+                }
+                continue;
+            }
+        }
+    }
+    $form['fields'] = mergeArraysByIdAndPosition($form['fields'], $formFields);
+
+
+    return $form;
+}
+function mergeArraysByIdAndPosition($arr1, $arr2) {
+    $idsToReplace = array_column($arr2, 'id');
+
+    // Create a mapping of IDs to their respective positions in $arr1
+    $positionMap = [];
+    foreach ($arr1 as $index => $item) {
+        $positionMap[$item['id']] = $index;
+    }
+
+    // Iterate over $arr2 and place in the same position or at the end
+    foreach ($arr2 as $item) {
+        $id = $item['id'];
+        if (isset($positionMap[$id])) {
+            // Replace in the original position
+            $arr1[$positionMap[$id]] = $item;
+        } else {
+            // If the ID doesn't exist in the original array, add it at the end
+            $arr1[] = $item;
+        }
+    }
+
+    return $arr1;
+}
+function assignDefaultValueByType($field, $value, $pipeArr = [], $pipeData = false) {
+    $fieldType = $field->type;
     $doneFields = [];
-    foreach ($form['fields'] as &$field) {   
-        foreach ($populatedFiedls as $endpoint => $data) {
-            $arrKey = 0;   
-            foreach ($data as $fieldID => $pipeDriveKey) {
-                if (isset($field->inputs) && is_array($field->inputs)) {
-                    $pipeVal = $pipeDriveData[$endpoint][$pipeDriveKey] ?? '';
+    switch ($fieldType) {
+        case 'name':
+            $nameParts = explode(' ', $value, 2);
+            $firstName = $nameParts[0];
+            $lastName = implode(' ', array_slice($nameParts, 1));
+            $arrayCom = array($firstName , $lastName);
+            $counts = 0;
+            foreach ($field->inputs as $indexss=> &$input) {
+                if (isset($input['autocompleteAttribute']) && (!isset($input['isHidden']) || $input['isHidden'] != 1 ) && !in_array($input['id'], $doneFields)) {
+                    $input['defaultValue'] = $arrayCom[$counts];
+                    $field->cssClass .= ' pgfc-readonly';
+                    $doneFields[] = $input['id'];
+                    $counts++;
+                }
+             }
+            break;
 
-                  
-                    if (!empty($pipeVal)) {
-                        if (is_array($pipeVal)) {
-                            $pipeVal = $pipeVal[0]['value'] ?? '';
-                        }
-                        $selectedValues = array_map('trim', preg_split('/[,|-]/', $pipeVal));
+        case 'address':
+            foreach ($field->inputs as &$input) {
+                if (isset($input['pipedrive_key']) && isset($pipeData[$input['pipedrive_key']])) {        
+                    $input['defaultValue'] = esc_attr(trim($pipeData[$input['pipedrive_key']]));
+                    $field->cssClass .= ' pgfc-readonly';  
+                }
+            }
+            break;
+        case 'select':
+        case 'radio':
+        case 'checkbox':
+        case 'multi_choice':
+            if(isset($pipeArr['endPoint']) && isset($pipeArr['pipeFieldKey'])){
+                $fieldOption = pipedriveGetVieldName($pipeArr['pipeFieldKey'], $pipeArr['endPoint']);  
+            }else{
+                break;
+            }
+            foreach ($field->choices as &$choice) {
+                $selectedData = [];
+                if(isset($pipeArr['endPoint']) && isset($pipeArr['pipeFieldKey'])){
+                    if(isset($fieldOption['options'])){
+                        $selectedData = getSelectedData($fieldOption['options'], $value);  
+                    }                
+                }
 
-                        if ($field->type === 'checkbox' || $field->type === 'radio') { //Gravity field type checked
-                          //  echo '<pre> '.$field->type.'', print_r( $pipeVal , true ); echo '</pre>';
-                            foreach ($field->choices as &$choice) {
-                                // Match based on label (text), not just value
-                                if (in_array($choice['text'], $selectedValues) || in_array($choice['value'], $selectedValues)) {
-                                    $choice['isSelected'] = true;
-                                    $field->cssClass .= ' pgfc-readonly';
-                                }
+                $choiceTwo = $choice['value'];
+                if (in_array($choiceTwo, $selectedData) || array_key_exists($choiceTwo, $selectedData)) {
+                    $choice['isSelected'] = true;
+                    $field->cssClass .= ' pgfc-readonly';
+                }                
+            }
+            unset($fieldOption);
+            unset($choiceTwo);
+            unset($choice);
+            break;
+
+        default:
+            if(is_array($value) && !empty($value)){
+                if(isset($value[0]))
+                {
+                    $value = $value[0];
+                }
+                if(isset($value['value'])){
+                    $value = $value['value'];
+                }
+                $field->defaultValue = esc_attr(trim($value));
+                $field->cssClass .= ' pgfc-readonly';
+            }else{
+                $field->defaultValue = esc_attr(trim($value));
+                $field->cssClass .= ' pgfc-readonly';
+            }
+            break;
+    }
+
+    // Make read-only (optional UI hint)
+    $field->cssClass .= ' pgfc-readonly';
+
+    return $field;
+}
+function getSelectedData($options, $val){
+    if(is_string($val)){
+        $val = explode(',', $val);
+    }
+    $arr = [];
+    foreach($options as $optVal){
+        if((isset($optVal['id']) && in_array($optVal['id'], $val)) || isset($optVal['label']) && in_array($optVal['label'], $val)){
+            $arr[$optVal['id']] = $optVal['label'];
+        }
+    }
+    return $arr;
+}
+function isDecimal($number) {
+    return is_numeric($number) && floor($number) != $number;
+}
+function getValidFieldGravityForm($formField, $populatedFiedls){
+    foreach ($formField as $field) {
+        foreach ($populatedFiedls as $endPoint=> $group) {
+            foreach ($group as $field_id => $field_key) {                
+                if (((int)$field->id === (int)$field_id) ||
+                (int)$field->id === floor($field_id)
+                ) {
+                    if (isDecimal($field_id) && isset($field->inputs)) {
+                        foreach ($field->inputs as &$subInput) {
+                            if (isset($subInput['id']) && $subInput['id'] == $field_id) {
+                                $subInput['pipedrive_key'] = $field_key;
                             }
                         }
-                        // Optional: still handle defaultValue for text-based fields
-                        if($field->type == 'text') //Gravity field type checked
-                        {
-                            foreach ($field->inputs as &$input) {
-                                $valuePart = $selectedValues[$arrKey] ?? $pipeVal;
-                                if ($input['id'] == $fieldID && !in_array($input['id'], $doneFields)) {
-                        
-                                    $input['defaultValue'] = esc_attr(trim($valuePart));
-                                    $field->cssClass .= ' pgfc-readonly';
-                             
-                                    $doneFields[] = $input['id'];
-                                    $arrKey++;
-                                }
-                            }
-                        }
-                        if($field->type == 'address') //Gravity field type checked
-                        {
-                            foreach ($field->inputs as &$input) {
-                                $valuePart = $selectedValues[$arrKey] ?? $pipeVal;
-                                if ($input['id'] == $fieldID && !in_array($input['id'], $doneFields)) {
-                        
-                                    $input['defaultValue'] = esc_attr(trim($valuePart));
-                                    $field->cssClass .= ' pgfc-readonly';
-                             
-                                    $doneFields[] = $input['id'];
-                                    $arrKey++;
-                                }
-                            }
-                        }
-                        if($field->type == "date") //Gravity field type checked
-                        {
-                            foreach ($field->inputs as &$input) 
-                            {
-                                $inputID = $input['id'];
-                                if(isset($data[$inputID]) &&  !in_array($input['id'], $doneFields) ){
-                                    $fieldID = $data[$inputID];
-                                    $pipeValDate = $pipeDriveData[$endpoint][  $fieldID ] ?? ''; //2025-05-14 custom date coming
-                                    if (!empty($pipeValDate)) {
-                                        [$year, $month, $day] = explode('-', $pipeValDate);
-                                        if (str_ends_with($inputID, '.1')) {
-                                            $input['defaultValue'] = $month;
-                                        } elseif (str_ends_with($inputID, '.2')) {
-                                            $input['defaultValue'] = $day;
-                                        } elseif (str_ends_with($inputID, '.3')) {
-                                            $input['defaultValue'] = $year;
-                                        }
-                                        $doneFields[] = $input['id'];
-                                        $arrKey++;
-                                    }
-                                }
-                            }
-                        }
-                        if($field->type== "name" ) //Gravity field type checked
-                        {
-                            foreach ($field->inputs as &$input) {
-                                $valuePart = $selectedValues[$arrKey] ?? $pipeVal;
-                                
-                                if ( isset($data[$input['id']]) && $input['id'] == $fieldID &&  !in_array($input['id'], $doneFields) ) {
-                        
-                                    $input['defaultValue'] = esc_attr(trim($valuePart));
-                                    $field->cssClass .= ' pgfc-readonly';
-                             
-                                    $doneFields[] = $input['id'];
-                                    $arrKey++;
-                                }
-                            }
-                        }
-                        $fieldID2  = floor(  $field->id ); //Case when field id not found in pipedrive
-                        if (  ($field->type=="multi_choice" || $field->type=="checkbox"))
-                        {
-                            
-                            $pipedriveGetData =  pipedriveGetVieldName($pipeDriveKey, $endpoint); //For check Pipeline return value
-                            $pipeVal          =  $pipeDriveData[$endpoint][$pipeDriveKey] ?? '';
-                            if($pipedriveGetData['field_type'] == 'set' || $pipedriveGetData['field_type'] == 'enum' )
-                            {
-                                $options = $pipedriveGetData['options']; // array of all available options
-                                $selectedIds = array_map('trim', explode(',', $pipeVal)); // convert to array
-                              //  echo '<pre> '.$field->type.'', print_r( $selectedIds , true ); echo '</pre>';
-                                $selectedLabels = [];
-                                foreach ($options as $option) {
-                                    if (in_array($option['id'], $selectedIds)) {
-                                        $selectedLabels[] = $option['id'];
-                                    }
-                                }
-                                if(isset($field->choices)){
-                                    foreach ($field->choices as &$choiceVal) {
-                                        if (in_array($choiceVal['id'], $selectedLabels) || in_array($choiceVal['value'], $selectedLabels)) {
-                                            $choiceVal['isSelected'] = true;
-                                            $field->cssClass .= ' pgfc-readonly';
-                                        }
-                                    }
-                                    unset($choiceVal); // good practice after reference loop
-                                }  
-                                $doneFields[] = $pipedriveGetData['id'];
-                                $doneFields[] = $field->id;
-                            }
-                       }
+                        unset($subInput); // Best practice to avoid accidental reference modification
                     }
-                }    
-                else {
-                    if (  $field->id == $fieldID  && !in_array($field->id, $doneFields)) {
-                        $pipedriveGetData =  pipedriveGetVieldName($pipeDriveKey, $endpoint); //For check Pipeline return value
-                        $pipeVal          =  $pipeDriveData[$endpoint][$pipeDriveKey] ?? '';
-                        if(isset( $pipedriveGetData['field_type'] ) && $pipedriveGetData['field_type'] == 'set' && $field->type === 'radio'){
-                            $options = $pipedriveGetData['options']; // array of all available options
-                            $selectedIds = array_map('trim', explode(',', $pipeVal)); // convert to array
-                            $selectedLabels = [];
-                            foreach ($options as $option) {
-                                if (in_array($option['id'], $selectedIds)) {
-                                    $selectedLabels[] = $option['label'];
-                                }
-                            }
-                            if (!empty($selectedLabels) && isset($selectedLabels[0])) {
-                                $firstLabelVal = $selectedLabels[0]; // e.g. 'Ambiente'
-                                $pipeVal = $firstLabelVal; // set the matched value //STRING 
-                            }
-                        }
-                        if(isset( $pipedriveGetData['field_type'] ) && $pipedriveGetData['field_type'] == 'enum' && $field->type === 'radio'){
-                            $options = $pipedriveGetData['options']; // array of all available options
-                            $selectedIds = array_map('trim', explode(',', $pipeVal)); // convert to array
-                            $selectedLabels = [];
-                            foreach ($options as $option) {
-                                if (in_array($option['id'], $selectedIds)) {
-                                    $selectedLabels[] = $option['label'];
-                                }
-                            }
-                            if (!empty($selectedLabels) && isset($selectedLabels[0])) {
-                                $firstLabelVal = $selectedLabels[0]; // e.g. 'Ambiente'
-                                $pipeVal = $firstLabelVal; // set the matched value //STRING 
-                            }
-                        }
-                        if (is_array($pipeVal)) {
-                            $pipeVal = $pipeVal[0]['value'] ?? '';
-                        }
-                        if (!empty($pipeVal)) {
-                            $field->defaultValue = esc_attr( trim( $pipeVal));    
-                            $field->cssClass .= ' pgfc-readonly';
-                        } 
-                        $doneFields[] = $field->id;
-                    }
+                    $filtered_fields[$endPoint][$field->id] = [
+                        'pipedrive_key'=>$field_key,
+                        'fields'=>$field
+                    ];
                 }
             }
         }
     }
-
-   // echo '<pre style="width:50%; float:left;">', print_r($populatedFiedls), '</pre>';
-    //echo '<pre style="width:50%; float:left;">', print_r($pipeDriveData), '</pre>';
-
-    return $form;
+    return $filtered_fields;
 }
 function getValidPopulatdFields($formId){
     $finalArray = [];
@@ -316,21 +309,26 @@ function formatPipedriveDateForGravityForm($gf_format, $pipedrive_date) {
     }
 }
 
+
 add_action('wp_head' , function(){
     echo '<style>
-.pgfc-readonly input[type="radio"] {
-  pointer-events: none;
-  opacity: 1; /* Keep it visible */
-  cursor: not-allowed;
-  accent-color: lightgray; /* Modern browsers support this */
-}
+        .pgfc-readonly input[type="radio"] {
+        pointer-events: none;
+        opacity: 1; /* Keep it visible */
+        cursor: not-allowed;
+        accent-color: lightgray; /* Modern browsers support this */
+        }
+        .pgfc-readonly input[type=url] , .pgfc-readonly input[type=tel]{
+                background: #e9ecef;
+        }
+        .pgfc-readonly input[type="radio"]:checked ,  .pgfc-readonly input[type="checkbox"]:checked, pgfc-readonly input[type="checkbox"]{
+            accent-color: lightgray;
+        }
 
-.pgfc-readonly input[type="radio"]:checked {
-  accent-color: lightgray;
-}
-
-.pgfc-readonly label {
-  color: #888;
-}
+        .pgfc-readonly label {
+            color: #888;
+        }
     </style>';
 });
+
+

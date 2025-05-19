@@ -38,7 +38,7 @@ function pgfc_check_email_in_pipedrive_globally($result, $value, $form, $field) 
         ], $action);
         if (isset($response['data']['items']) && count($response['data']['items']) > 0) {
             $result['is_valid'] = false;
-            $result['message'] = __('A user already exists with this email. Please login instead.', 'pgfc');
+            $result['message'] = __('A user already exists with this email. Please login instead.', PGFC_TEXT_DOMAIN);
             return $result;
         }
     }

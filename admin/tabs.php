@@ -5,18 +5,18 @@ class PGFC_Admin_Tabs {
     public function __construct() {
         $this->items = [
             [
-                'label' => __('All pgfcs', 'pgfc'),
-                'page'  => 'pgfc',
+                'label' => __('All Mappings', PGFC_TEXT_DOMAIN),
+                'page'  => PGFC_MENU_SLUG,
                 'tab'   => ''
             ],
             [
-                'label' => __('Settings', 'pgfc'),
-                'page'  => 'pgfc',
+                'label' => __('Settings', PGFC_TEXT_DOMAIN),
+                'page'  => PGFC_MENU_SLUG,
                 'tab'   => 'settings'
             ],
             [
-                'label' => __('API Logs', 'pgfc'),
-                'page'  => 'pgfc',
+                'label' => __('API Logs', PGFC_TEXT_DOMAIN),
+                'page'  => PGFC_MENU_SLUG,
                 'tab'   => 'api-logs'
             ],
         ];

@@ -22,28 +22,28 @@ class PGFC_Settings_Page {
                 ? sanitize_text_field($_POST['pgfc_option']['pipeDriveApiToken'])
                 : '';
             update_option('pipeDriveApiToken', $pipeDriveApiToken);
-            echo '<div class="updated"><p>' . esc_html__('Field saved successfully!', 'pgfc') . '</p></div>';
+            echo '<div class="updated"><p>' . esc_html__('Field saved successfully!', PGFC_TEXT_DOMAIN) . '</p></div>';
         }elseif(
             isset($_POST['pgfc_resyncCustomFields']) &&
             isset($_POST['_wpnonce_pgfc_settings']) &&
             wp_verify_nonce(sanitize_text_field($_POST['_wpnonce_pgfc_settings']), 'pgfc-settings-nonce')
         ){
             pipedriveStoreCustomFields();
-            echo '<div class="updated"><p>' . esc_html__('Custom fields from pipedrive are synced successfully!', 'pgfc') . '</p></div>';
+            echo '<div class="updated"><p>' . esc_html__('Custom fields from pipedrive are synced successfully!', PGFC_TEXT_DOMAIN) . '</p></div>';
         }elseif(
             isset($_POST['pgfc_syncStages']) &&
             isset($_POST['_wpnonce_pgfc_settings']) &&
             wp_verify_nonce(sanitize_text_field($_POST['_wpnonce_pgfc_settings']), 'pgfc-settings-nonce')
         ){
             if(!isset($_POST['pipeDriveID']) || empty($_POST['pipeDriveID'])){
-                $this->pipeDriveIDError = __('Please enter pipedrive ID to sync its stages', 'pgfc');
+                $this->pipeDriveIDError = __('Please enter pipedrive ID to sync its stages', PGFC_TEXT_DOMAIN);
             }else{
                 $action = 'Syncing stages';
                 $syncStages = pipedrive_api_request('GET', 'stages', ['pipeline_id'=>$_POST['pipeDriveID']], $action);
                 if(isset($syncStages['data'])){
                     $this->updateStages($_POST['pipeDriveID'], $syncStages['data']);
                 }else{
-                    $this->pipeDriveIDError = __('Stages could not be synced. Please check API Logs for the error.', 'pgfc');
+                    $this->pipeDriveIDError = __('Stages could not be synced. Please check API Logs for the error.', PGFC_TEXT_DOMAIN);
                 }
             }
         }
@@ -70,27 +70,27 @@ class PGFC_Settings_Page {
         ?>
         <div class="wrap pgfc-settings">
             <form action="#" method="post" autocomplete="off">
-                <h1 class="wp-heading-inline"><?php esc_html_e('Gravity Form Pipedrive Sync', 'pgfc'); ?></h1>
+                <h1 class="wp-heading-inline"><?php esc_html_e('Gravity Form Pipedrive Sync', PGFC_TEXT_DOMAIN); ?></h1>
                 <div class="_CISettingIn">
                     <?php wp_nonce_field('pgfc-settings-nonce', '_wpnonce_pgfc_settings'); ?>
                     <table>
                         <tr>
-                            <th><?php esc_html_e('Pipedrive API Token:', 'pgfc'); ?></th>
+                            <th><?php esc_html_e('Pipedrive API Token:', PGFC_TEXT_DOMAIN); ?></th>
                             <td><input type="text" name="pgfc_option[pipeDriveApiToken]" value="<?php echo esc_html($this->pipeDriveApiToken); ?>" class="regular-text" /></td>
                         </tr>
                         <tr>
                             <th></th>
-                            <td><input name="pgfc_submit" class="button button-primary" type="submit" value="<?php esc_html_e('Save', 'pgfc'); ?>" /></td>
+                            <td><input name="pgfc_submit" class="button button-primary" type="submit" value="<?php esc_html_e('Save', PGFC_TEXT_DOMAIN); ?>" /></td>
                         </tr>              
                         <tr>
-                            <th><?php esc_html_e('Resync pipedrive all the custom fields:', 'pgfc'); ?></th>
+                            <th><?php esc_html_e('Resync pipedrive all the custom fields:', PGFC_TEXT_DOMAIN); ?></th>
                             <td>
-                                <input name="pgfc_resyncCustomFields" class="button button-primary" type="submit" value="<?php esc_html_e('Resync fields', 'pgfc'); ?>" /><br>
+                                <input name="pgfc_resyncCustomFields" class="button button-primary" type="submit" value="<?php esc_html_e('Resync fields', PGFC_TEXT_DOMAIN); ?>" /><br>
                                 <?php
                                     if(!empty($this->pipedrive_custom_fields_last_updated)){
-                                        echo '<small>'.__('Fields were last synced on:', 'pgfc').' '.$this->pipedrive_custom_fields_last_updated.'</small>';
+                                        echo '<small>'.__('Fields were last synced on:', PGFC_TEXT_DOMAIN).' '.$this->pipedrive_custom_fields_last_updated.'</small>';
                                     }else{
-                                        echo '<small>'.__('Fields have not been synced yet.', 'pgfc').'</small>';
+                                        echo '<small>'.__('Fields have not been synced yet.', PGFC_TEXT_DOMAIN).'</small>';
                                     }
                                 ?>
                             </td>
@@ -98,7 +98,7 @@ class PGFC_Settings_Page {
                     </table>
                 </div>
                 <div class="_CISettingIn">
-                    <h3><?php _e('PipeDrive Stages', 'pgfc');?> </h3>
+                    <h3><?php _e('PipeDrive Stages', PGFC_TEXT_DOMAIN);?> </h3>
                     <table>
                         <tr>
                             <td>
@@ -110,7 +110,7 @@ class PGFC_Settings_Page {
                                     ?>
                                     <input name="pipeDriveID" type="number" class="regular-text" placeholder="Enter Pipedrive ID" />
                                 </span>
-                                <input name="pgfc_syncStages" class="button button-primary" type="submit" value="<?php esc_html_e('Sync stages', 'pgfc'); ?>" />
+                                <input name="pgfc_syncStages" class="button button-primary" type="submit" value="<?php esc_html_e('Sync stages', PGFC_TEXT_DOMAIN); ?>" />
                             </td>
                         </tr>
                     </table>
@@ -118,10 +118,10 @@ class PGFC_Settings_Page {
                         <?php
                             if(is_array($stages) && !empty($stages)){
                                 echo '<tr>
-                                    <th>' . __('Stage Name', 'pgfc') . '</th>
-                                    <th>' . __('Stage ID', 'pgfc') . '</th>
-                                    <th>' . __('Pipeline Name', 'pgfc') . '</th>
-                                    <th>' . __('Pipeline ID', 'pgfc') . '</th>
+                                    <th>' . __('Stage Name', PGFC_TEXT_DOMAIN) . '</th>
+                                    <th>' . __('Stage ID', PGFC_TEXT_DOMAIN) . '</th>
+                                    <th>' . __('Pipeline Name', PGFC_TEXT_DOMAIN) . '</th>
+                                    <th>' . __('Pipeline ID', PGFC_TEXT_DOMAIN) . '</th>
                                 </tr>';
                                 foreach($stages as $pipeDeriveKey => $stage){
                                     foreach($stage as $val){
@@ -144,25 +144,14 @@ class PGFC_Settings_Page {
                 </div>
             </form>
             <div class="_CISettingIn">
-                <h3><?php _e('General Info', 'pgfc');?></h3>
+                <h3><?php _e('General Info', PGFC_TEXT_DOMAIN);?></h3>
                 <table>
                     <tr>
-                        <th><?php _e('Edit profile Shortcode:', 'pgfc');?></th>
-                        <td>
-                            <?php 
-                            printf(
-                                __('Add <b>%s</b> shortcode to display the edit profile form anywhere on the frontend.<br><small>Note: Make sure the shortcode is not appending within any form tag.</small>', 'pgfc'),
-                                '[edit_pipedrive_data]'
-                            ); 
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th><?php _e('Creat account field', 'pgfc');?></th>
+                        <th><?php _e('Creat account field', PGFC_TEXT_DOMAIN);?></th>
                         <td>
                             <?php 
                                 printf(
-                                    __('1. Set the field value to <b>%s</b> if you want an account to be created when the checkbox is selected. <br> 2. Creating user accounts requires an email. The email will be taken from either <b>%s</b> field or an email field with <b>%s</b> as its "Admin Field Label". Ensure that at least one of these email fields exists in the form.', 'pgfc'),
+                                    __('1. Set the field value to <b>%s</b> if you want an account to be created when the checkbox is selected. <br> 2. Creating user accounts requires an email. The email will be taken from either <b>%s</b> field or an email field with <b>%s</b> as its "Admin Field Label". Ensure that at least one of these email fields exists in the form.', PGFC_TEXT_DOMAIN),
                                     'createAccountWP',
                                     'Pipedrive → Persons → Email',
                                     'userEmail'
@@ -171,29 +160,40 @@ class PGFC_Settings_Page {
                         </td>
                     </tr>
                     <tr>
-                        <th><?php _e('For Privacy Policy', 'pgfc');?></th>
+                        <th><?php _e('For Privacy Policy', PGFC_TEXT_DOMAIN);?></th>
                         <td>
-                        <?php _e('In Gravity Forms, either the field label or value must exactly match the corresponding Pipedrive label name.', 'pgfc');?>
+                        <?php _e('In Gravity Forms, either the field label or value must exactly match the corresponding Pipedrive label name.', PGFC_TEXT_DOMAIN);?>
                         </td>
                     </tr>
 
                     <tr>
-                        <th><?php _e('Marketing Status', 'pgfc');?></th>
+                        <th><?php _e('Marketing Status', PGFC_TEXT_DOMAIN);?></th>
                         <td>
-                        <?php _e('In Gravity Forms, either the label or value must match the Pipedrive label name. The option values for marketing status must exactly match those in Pipedrive.', 'pgfc');?>
+                        <?php _e('In Gravity Forms, either the label or value must match the Pipedrive label name. The option values for marketing status must exactly match those in Pipedrive.', PGFC_TEXT_DOMAIN);?>
                         </td>
                     </tr>
                     <tr>
-                        <th><?php _e('For Country dropdown', 'pgfc');?></th>
+                        <th><?php _e('For Country dropdown', PGFC_TEXT_DOMAIN);?></th>
                         <td>
-                        <?php _e('The country names in the Gravity Forms dropdown must exactly match those in the Pipedrive country list.', 'pgfc');?>
+                        <?php _e('The country names in the Gravity Forms dropdown must exactly match those in the Pipedrive country list.', PGFC_TEXT_DOMAIN);?>
                             
                         </td>
                     </tr>
                     <tr>
-                        <th><?php _e('Checkbox and Radio Fields:', 'pgfc');?></th>
+                        <th><?php _e('Checkbox and Radio Fields:', PGFC_TEXT_DOMAIN);?></th>
                         <td>
-                            <?php _e('The option values in checkbox and radio fields in Gravity Forms must exactly match the corresponding values in Pipedrive.', 'pgfc');?>
+                            <?php _e('The option values in checkbox and radio fields in Gravity Forms must exactly match the corresponding values in Pipedrive.', PGFC_TEXT_DOMAIN);?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php _e('Edit profile Shortcode:', PGFC_TEXT_DOMAIN);?></th>
+                        <td>
+                            <?php 
+                            printf(
+                                __('Add <b>%s</b> shortcode to display the edit profile form anywhere on the frontend.<br><small>Note: Make sure the shortcode is not appending within any form tag.</small>', PGFC_TEXT_DOMAIN),
+                                '[edit_pipedrive_data]'
+                            ); 
+                            ?>
                         </td>
                     </tr>
 

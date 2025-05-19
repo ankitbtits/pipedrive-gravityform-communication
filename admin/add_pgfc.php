@@ -25,12 +25,12 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
             ]
         ));
         if ($pgfcID) {
-            echo '<div class="updated"><p>' . esc_html__('Pipedrive communication created successfully!', 'pgfc') . '</p></div>';
+            echo '<div class="updated"><p>' . esc_html__('Pipedrive communication created successfully!', PGFC_TEXT_DOMAIN) . '</p></div>';
         } else {
-            echo '<div class="error"><p>' . esc_html__('Error creating the pipedrive communication.', 'pgfc') . '</p></div>';
+            echo '<div class="error"><p>' . esc_html__('Error creating the pipedrive communication.', PGFC_TEXT_DOMAIN) . '</p></div>';
         }
     }elseif(isset($_POST['_wpnonce_add_pgfc'])){
-        echo '<div class="error"><p>' . esc_html__('Security check failed.', 'pgfc') . '</p></div>';
+        echo '<div class="error"><p>' . esc_html__('Security check failed.', PGFC_TEXT_DOMAIN) . '</p></div>';
     }       
 }
 ?>
@@ -43,7 +43,7 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
                 if(!empty(getGravityForms('forms'))){
                     ?>
                         <select name="form_id" required class="gravityForms onChangeFun" id="gravityForms" data-slug="gravityFormsFields">
-                            <option value=""><?php _e('Select Form', 'pgfc');?></option>
+                            <option value=""><?php _e('Select Form', PGFC_TEXT_DOMAIN);?></option>
                             <?php
                                 foreach(getGravityForms('forms') as $form){
                                     echo '<option value="'.$form['id'].'">'.$form['name'].'</option>';
@@ -59,13 +59,13 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
             <table>
                 <tbody>
                     <tr class="pgfcItem">
-                        <td class="gravityFormsFields"><?php _e('Please select the form to display it\'s fields','pgfc');?></td>
+                        <td class="gravityFormsFields"><?php _e('Please select the form to display it\'s fields',PGFC_TEXT_DOMAIN);?></td>
                         <td>
                             <?php
                                 if(!empty(getPipeDriveAPIEndPoint())){
                                     ?>
                                         <select required name="mapping[0][apiLabel]" class="pipeDriveAPISelect onChangeFun" data-slug="pipeDriveAPIAttributes" id="pipeDriveAPI">
-                                            <option value=""><?php _e('Select API', 'pgfc');?></option>
+                                            <option value=""><?php _e('Select API', PGFC_TEXT_DOMAIN);?></option>
                                             <?php
                                                 foreach(getPipeDriveAPIEndPoint() as $apiName){
                                                     echo '<option value="'.$apiName['singular_end_point'] .'">'.$apiName['label'].'</option>';
@@ -84,13 +84,13 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
                 </tbody>
             </table>
             <div class="pgfc_addpgfcItemCon">
-                <a href="javascript:;" class="pgfc_addItem"><?php esc_html_e('Add Item/Service', 'pgfc'); ?></a>
-                <a href="javascript:;" class="pgfc_removepgfcItem" style="display:none"><?php esc_html_e('Remove Item/Service', 'pgfc'); ?></a>
+                <a href="javascript:;" class="pgfc_addItem"><?php esc_html_e('Add Item/Service', PGFC_TEXT_DOMAIN); ?></a>
+                <a href="javascript:;" class="pgfc_removepgfcItem" style="display:none"><?php esc_html_e('Remove Item/Service', PGFC_TEXT_DOMAIN); ?></a>
             </div>
         </div>
 
         <div class="pgfcFormInn">
-            <input type="submit" value="<?php esc_attr_e('Publish', 'pgfc'); ?>" name="create_communication" class="button is-primary">
+            <input type="submit" value="<?php esc_attr_e('Publish', PGFC_TEXT_DOMAIN); ?>" name="create_communication" class="button is-primary">
         </div>
     </form>
 </div>
@@ -102,7 +102,7 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
                 if(!empty($form)){
             ?>
                 <select required name="mapping[0][field]" id="gravityFormsFields_<?php echo $formID;?>" style="display:block;">
-                    <option value=""><?php _e('Select Field', 'pgfc');?></option>
+                    <option value=""><?php _e('Select Field', PGFC_TEXT_DOMAIN);?></option>
                     <?php
                         foreach($form as $field){
                             echo '<option value="'.$field->id.'">'.$field['label'].'</option>';
@@ -119,7 +119,7 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
 
             <?php
                 }else{
-                    _e('Selected form does not have any field. Please change form or add fields.', 'pgfc');
+                    _e('Selected form does not have any field. Please change form or add fields.', PGFC_TEXT_DOMAIN);
                 }
             }
         }
@@ -128,7 +128,7 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
             foreach(pipedriveGetVieldName() as $key => $fields){
         ?>
                 <select required name="mapping[0][apiAttribute]" class="apiAttributeSelect" id="pipeDriveAPIAttributes_<?php echo $key;?>">
-                     <option value=""><?php _e('Select Attribute', 'pgfc');?></option>
+                     <option value=""><?php _e('Select Attribute', PGFC_TEXT_DOMAIN);?></option>
                      <?php
                          foreach($fields as $field){
                             $fieldKey = $field['key'];

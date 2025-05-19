@@ -67,11 +67,11 @@ if (!class_exists('pgfcs_Error_Log_Table')) {
                 $cols['cb'] = '<input type="checkbox" />';                
             }
             $cols = array_merge($cols, array(
-                'action'              => esc_html__('Action', 'pgfc'),
-                'api_end_point'     => esc_html__('API end point', 'pgfc'),   
-                'payload'              => esc_html__('Payload', 'pgfc'),             
-                'response'              => esc_html__('Response', 'pgfc'), 
-                'timestamp'              => esc_html__('Time', 'pgfc'),            
+                'action'              => esc_html__('Action', PGFC_TEXT_DOMAIN),
+                'api_end_point'     => esc_html__('API end point', PGFC_TEXT_DOMAIN),   
+                'payload'              => esc_html__('Payload', PGFC_TEXT_DOMAIN),             
+                'response'              => esc_html__('Response', PGFC_TEXT_DOMAIN), 
+                'timestamp'              => esc_html__('Time', PGFC_TEXT_DOMAIN),            
             ));
             return $cols;
         }
@@ -103,10 +103,10 @@ if (!class_exists('pgfcs_Error_Log_Table')) {
                     foreach ($pgfcs_to_delete as $pgfcID) {                       
                         wp_delete_post( $pgfcID, true );
                     }
-                    echo '<div class="updated"><p>' . esc_html__('pgfcs deleted successfully!', 'pgfc') . '</p></div>';
+                    echo '<div class="updated"><p>' . esc_html__('pgfcs deleted successfully!', PGFC_TEXT_DOMAIN) . '</p></div>';
                 }
             } elseif (isset($_POST['_wpnonce_bulk_pgfc'])) {
-                echo '<div class="error"><p>' . esc_html__('Security check failed.', 'pgfc') . '</p></div>';
+                echo '<div class="error"><p>' . esc_html__('Security check failed.', PGFC_TEXT_DOMAIN) . '</p></div>';
             }
         }
 
@@ -134,15 +134,15 @@ function pgfc_display_pgfcs_Error_Log_Table() {
             $tabs = new PGFC_Admin_Tabs();
             echo $tabs->render();
     }   ?>
-    <h1 class="wp-heading-inline"><?php esc_html_e('Gravity Form Pipedrive Sync', 'pgfc');?></h1>   
+    <h1 class="wp-heading-inline"><?php esc_html_e('Gravity Form Pipedrive Sync', PGFC_TEXT_DOMAIN);?></h1>   
 
     <form method="post">
         <div class="rightButton" style="float:right;">
             <button type="submit" name="pgfc_export_all" class="button button-primary">
-                <?php esc_html_e('Export All Logs', 'pgfc'); ?>
+                <?php esc_html_e('Export All Logs', PGFC_TEXT_DOMAIN); ?>
             </button>
             <button type="submit" name="pgfc_delete_all" class="button button-danger" onclick="return confirm('Are you sure you want to delete all logs? This action cannot be undone.');">
-                <?php esc_html_e('Delete All Logs', 'pgfc'); ?>
+                <?php esc_html_e('Delete All Logs', PGFC_TEXT_DOMAIN); ?>
             </button>
         </div>
         <?php      
@@ -208,7 +208,7 @@ function pgfc_delete_all_logs() {
         wp_delete_post($pgfcID, true);
     }
 
-    echo '<div class="updated"><p>' . esc_html__('All logs deleted successfully!', 'pgfc') . '</p></div>';
+    echo '<div class="updated"><p>' . esc_html__('All logs deleted successfully!', PGFC_TEXT_DOMAIN) . '</p></div>';
 }
 
 

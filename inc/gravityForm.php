@@ -6,9 +6,6 @@ function handle_pipedrive_integration($entries, $form) {
     $formID = $form['id'];
     $action = 'Through Form: '.$formTitle.'('.$formID.')';
     $payloads = getPayLoads($entries); 
-//     echo '<pre>',print_r($payloads),'</pre>';
-//     echo '<pre>',print_r($entries),'</pre>';
-// die();
 
     $personId = null;
     $orgId = null;
@@ -16,9 +13,7 @@ function handle_pipedrive_integration($entries, $form) {
     $user_id = null;
     $create_account = false;
     $userEmail = null;
-    // echo '<pre style="width:45%; float:left; height:1000px; overflow:auto">2222', print_r($entries), '</pre>';
-    // echo '<pre style="width:50%; height:1000px; overflow:auto">', print_r(getPayLoads($entries)), '</pre>';
-    // die;
+
     if(isset($payloads['persons']['email'])){
         $userEmail = $payloads['persons']['email'];
     }
@@ -291,13 +286,13 @@ function createAccount($email){
     if (!is_wp_error($reset_key)) {
         $reset_link = network_site_url("wp-login.php?action=rp&key=$reset_key&login=" . rawurlencode($username));
         // Email subject and message
-        $subject = __('Set Your Password', 'pgfc');
+        $subject = __('Set Your Password', PGFC_TEXT_DOMAIN);
         $message = sprintf(
-        __("Hello %s,\n\n%s\n\n%s\n\n%s", 'pgfc'),
+        __("Hello %s,\n\n%s\n\n%s\n\n%s", PGFC_TEXT_DOMAIN),
         $username,
-        __("Your account has been created. Please use the link below to set your password:", 'pgfc'),
+        __("Your account has been created. Please use the link below to set your password:", PGFC_TEXT_DOMAIN),
         $reset_link,
-        __("Thank you!", 'pgfc')
+        __("Thank you!", PGFC_TEXT_DOMAIN)
         );
 
         // Send email
@@ -353,22 +348,3 @@ function updatePersonManually(){
 }
 
 
-
-add_action('wp_head', 'forTesting');
-function forTesting(){
-    // $fieldsData = pipedriveGetVieldName();
-    // echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($fieldsData) ,'</pre></div>';
-    if(isset($_GET['pipe_drive_id'])){
-        $user_id = get_current_user_id();
-        update_user_meta($user_id, 'pipedrive_person_id', $_GET['pipe_drive_id']);
-    }
-    if(isset($_GET['debug'])){
-        $entries = getSampleData2();
-        $payloads = getPayLoads($entries);
-        $mapping = getMapping(3);
-        echo '<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($entries) ,'</pre></div>';
-        echo '2222222<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($payloads) ,'</pre></div>';
-        echo '3333<div style="font-size:12px; width:50%; float:left;     overflow: hidden;"><pre>',print_r($mapping) ,'</pre></div>';
-        die;
-    }
-}

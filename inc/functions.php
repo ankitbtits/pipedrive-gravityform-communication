@@ -5,9 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function pgfc_register_custom_pgfc_post_type() {
     $labels = array(
-        'name'               => __('pgfcs', 'pgfc'),
-        'singular_name'      => __('pgfc', 'pgfc'),
-        'menu_name'          => __('pgfcs', 'pgfc'),
+        'name'               => __('pgfcs', PGFC_TEXT_DOMAIN),
+        'singular_name'      => __('pgfc', PGFC_TEXT_DOMAIN),
+        'menu_name'          => __('pgfcs', PGFC_TEXT_DOMAIN),
     );
     $args = array(
         'labels'             => $labels,
@@ -16,7 +16,7 @@ function pgfc_register_custom_pgfc_post_type() {
         'show_ui'            => true,
         'show_in_menu'       => false, // Set to true if you want to show in the menu
         'query_var'          => true,
-        'rewrite'            => array('slug' => 'pgfc'),
+        'rewrite'            => array('slug' => 'pgfc' ),
         'capability_type'    => 'post',
         'has_archive'        => true,
         'hierarchical'       => false,
@@ -189,7 +189,7 @@ function alloedProfileData(){
 
 // custom fields handler
 function pipedriveGetCustomFields($entity) {
-    $action = __('Syncing custom fields', 'pgfc');
+    $action = __('Syncing custom fields', PGFC_TEXT_DOMAIN);
     $response = pipedrive_api_request('GET', "{$entity}Fields", [], $action);
     if (!empty($response['success']) && !empty($response['data'])) {
         return $response['data'];
@@ -206,7 +206,9 @@ function pipedriveStoreCustomFields() {
     update_option('pipedrive_custom_fields', $fieldsData);
     update_option('pipedrive_custom_fields_last_updated', current_time('mysql'));
 }
-
+// add_action('wp_head', function(){
+//     echo '<pre>', print_r(pipedriveGetVieldName()['deal']), '</pre>';
+// });
 function pipedriveGetVieldName($fieldID = false, $endPoint = false) {
     $fieldsData = get_option('pipedrive_custom_fields');
 
@@ -238,7 +240,7 @@ function pipedriveGetVieldName($fieldID = false, $endPoint = false) {
             }
         }
     }
-    return __('No field found with this key', 'pgfc');
+    return __('No field found with this key', PGFC_TEXT_DOMAIN);
 }
 
 // custom fields handler
@@ -254,7 +256,7 @@ function is_user_profile_page() {
 
 function custom_login_form() {
     if (is_user_logged_in()) {
-        echo '<p>' . __('You are already logged in.', 'pgfc') . '</p>';
+        echo '<p>' . __('You are already logged in.', PGFC_TEXT_DOMAIN) . '</p>';
         return;
     }
 
@@ -263,9 +265,9 @@ function custom_login_form() {
     if (isset($_GET['login_error'])) {
         $error_code = sanitize_text_field($_GET['login_error']);
         if ($error_code === 'empty') {
-            $error_message = '<p class="login-error" style="color: red;">' . __('Please fill in both fields.', 'pgfc') . '</p>';
+            $error_message = '<p class="login-error" style="color: red;">' . __('Please fill in both fields.', PGFC_TEXT_DOMAIN) . '</p>';
         } else {
-            $error_message = '<p class="login-error" style="color: red;">' . __('Invalid username or password.', 'pgfc') . '</p>';
+            $error_message = '<p class="login-error" style="color: red;">' . __('Invalid username or password.', PGFC_TEXT_DOMAIN) . '</p>';
         }
     }
 
@@ -308,18 +310,18 @@ function custom_login_form() {
         <form method="post" action="">
             <?php echo $error_message; ?>
             <p>
-                <label for="user_login"><?php echo __('Username or Email', 'pgfc'); ?></label>
+                <label for="user_login"><?php echo __('Username or Email', PGFC_TEXT_DOMAIN); ?></label>
                 <input type="text" name="log" id="user_login" required>
             </p>
             <p>
-                <label for="user_pass"><?php echo __('Password', 'pgfc'); ?></label>
+                <label for="user_pass"><?php echo __('Password', PGFC_TEXT_DOMAIN); ?></label>
                 <input type="password" name="pwd" id="user_pass" required>
             </p>
             <p>
-                <a href="<?php echo wp_lostpassword_url(); ?>"><?php echo __('Forgot Password?', 'pgfc'); ?></a>
+                <a href="<?php echo wp_lostpassword_url(); ?>"><?php echo __('Forgot Password?', PGFC_TEXT_DOMAIN); ?></a>
             </p>
             <p>
-                <input type="submit" name="wp_custom_login" value="<?php echo __('Log In', 'pgfc'); ?>">
+                <input type="submit" name="wp_custom_login" value="<?php echo __('Log In', PGFC_TEXT_DOMAIN); ?>">
             </p>
             <input type="hidden" name="redirect_to" value="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>">
         </form>
@@ -329,46 +331,17 @@ function custom_login_form() {
 }
 
 
-//create rewrite rule for manage-organizations
-// function pgfc_add_rewrite_rule() {
-//     add_rewrite_rule('^manage-organizations/?$', 'index.php?pgfc_manage_organizations=1', 'top');
-// }
-// add_action('init', 'pgfc_add_rewrite_rule');
+add_filter('logout_redirect', 'custom_logout_redirect', 10, 3);
 
-// /**
-//  * Add custom query var to handle page request.
-//  */
-// function pgfc_add_query_vars($query_vars) {
-//     $query_vars[] = 'pgfc_manage_organizations';
-//     return $query_vars;
-// }
-// add_filter('query_vars', 'pgfc_add_query_vars');
+function custom_logout_redirect($redirect_to, $requested_redirect_to, $user) {
+    // Check if a user was logged in
+    if (isset($user->roles) && is_array($user->roles)) {
+        // Check if the user is NOT an administrator
+        if (!in_array('administrator', $user->roles)) {
+            return site_url().'/area-riservata/';
+        }
+    }
 
-// /**
-//  * Display content for the custom page.
-//  */
-// function pgfc_display_custom_page() {
-//     if (get_query_var('pgfc_manage_organizations') == 1) {
-//         status_header(200);
-//         include plugin_dir_path(__FILE__) . 'manage_organizations.php';
-//         exit;
-//     }
-// }
-// add_action('template_redirect', 'pgfc_display_custom_page');
-
-// /**
-//  * Flush rewrite rules upon plugin activation.
-//  */
-// function pgfc_flush_rewrite_rules() {
-//     pgfc_add_rewrite_rule();
-//     flush_rewrite_rules();
-// }
-// register_activation_hook(__FILE__, 'pgfc_flush_rewrite_rules');
-
-// /**
-//  * Flush rewrite rules upon plugin deactivation.
-//  */
-// function myplugin_remove_rewrite_rules() {
-//     flush_rewrite_rules();
-// }
-// register_deactivation_hook(__FILE__, 'myplugin_remove_rewrite_rules');
+    // Default behavior (admin or not logged-in user)
+    return $redirect_to;
+}

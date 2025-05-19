@@ -6,8 +6,6 @@ function pipedriveDataShowProfile($user) {
     if (!$personID) {
         return;
     }
-    // $manage_url = admin_url('admin.php?page=manage_organizations&user_id='.$user->ID);    
-    // echo '<p><a href="' . esc_url($manage_url) . '" class="button button-primary">' . __('Manage Organizations', 'pgfc') . '</a></p>';  
     echo showPipedriveData($user->ID);
 }
 add_action('show_user_profile', 'pipedriveDataShowProfile');
@@ -25,30 +23,19 @@ add_action('personal_options_update', 'updatePipedriveDataProfile');
 add_action('edit_user_profile_update', 'updatePipedriveDataProfile');
 // displaying pipedrive data on profile page
 
-// add_action('admin_notices', function () {
-//     global $pipedrive_profile_updated;
-
-//     if (!empty($pipedrive_profile_updated)) {
-//         echo '<div class="notice notice-success is-dismissible">
-//             <p>' . esc_html__('Profile updated successfully.', 'pgfc') . '</p>
-//         </div>';
-//     }
-// });
 add_filter('gettext', 'custom_profile_updated_message', 20, 3);
 function custom_profile_updated_message($translated_text, $text, $domain) {
     if (is_admin() && $text === 'Profile updated.') {
         // You can also add a check to make sure you're on the profile page:
         if (isset($_GET['user_id']) || strpos($_SERVER['REQUEST_URI'], 'profile.php') !== false) {
-            $translated_text = __('Profile updated successfully', 'pgfc');
+            $translated_text = __('Profile updated successfully', PGFC_TEXT_DOMAIN);
         }
     }
     return $translated_text;
 }
 
 
-
 add_shortcode('edit_pipedrive_data', 'editPipeDriveData');
-
 function editPipeDriveData() {
     if (!is_user_logged_in()) {
         return custom_login_form();
@@ -69,7 +56,7 @@ function editPipeDriveData() {
             <div class="form-wrap-right">
                 <div class="innerRight">
                     <a href="'.wp_logout_url(home_url()).'" class="button front-logout">
-                        '.__('Logout', 'pgfc').'
+                        '.__('Logout', PGFC_TEXT_DOMAIN).'
                     </a>  
                 </div>
             </div>

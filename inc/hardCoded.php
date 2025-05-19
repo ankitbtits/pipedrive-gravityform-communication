@@ -3,22 +3,22 @@
 function getPipeDriveAPIEndPoint($atr = false){
     $pipedriveAPI = [
         [
-            'label' => __('Add a Person', 'pgfc'),
+            'label' => __('Add a Person', PGFC_TEXT_DOMAIN),
             'end_point' => 'persons',
             'singular_end_point' => 'person',
         ],
         [
-            'label' => __('Add an organization', 'pgfc'),
+            'label' => __('Add an organization', PGFC_TEXT_DOMAIN),
             'end_point' => 'organizations',
             'singular_end_point' => 'organization',
         ],
         [
-            'label' => __('Add a deal', 'pgfc'),
+            'label' => __('Add a deal', PGFC_TEXT_DOMAIN),
             'end_point' => 'deals',
             'singular_end_point' => 'deal',
         ],
         [
-            'label' => __('Add an activities', 'pgfc'),
+            'label' => __('Add an activities', PGFC_TEXT_DOMAIN),
             'end_point' => 'activities',
             'singular_end_point' => 'activity',
         ],
@@ -47,64 +47,6 @@ function allowSubFieldsType($type){
     $arr = ['select', 'radio', 'checkbox', 'post_category', 'multiselect'];
     return !in_array($type, $arr);
 }
-
-// function alloedProfileData($attr = false){
-//     $res = [
-//         'persons'=>[
-//             [
-//                 'key' => 'name',
-//                 'action' => 'edit',
-//             ],
-//             [
-//                 'key' => 'email',
-//                 'action' => 'edit',
-//             ],
-//             [
-//                 'key' => 'phone',
-//                 'action' => 'edit',
-//             ],
-           
-//             [
-//                 'key' => 'marketing_status',
-//                 'action' => 'edit',
-//             ],
-//             [
-//                 'key' => 'ec9fda99f1140b87d4c68162f19e726a61c12033',
-//                 'action' => 'edit',
-//             ],
-//             [
-//                 'key' => '1857792581662799944dcb3f2eadc7b78e477120',
-//                 'action' => 'edit',
-//             ],
-//             [
-//                 'key' => 'd71b88d861c0644607d4a070a78daa90951fd7f4',
-//                 'action' => 'edit',
-//             ]
-//         ],
-//         'organizations'=>[
-//             [
-//                 'key' => 'name',
-//                 'action' => 'edit',
-//             ]
-//         ],
-//         'deals'=>[
-//             [
-//                 'key' => 'title',
-//                 'action' => 'edit',
-//             ]
-//         ],
-//         'activities'=>[
-//             [
-//                 'key' => 'subject',
-//                 'action' => 'edit',
-//             ]
-//         ]
-//     ];
-//     if($attr){
-//         $res = $res[$attr];
-//     }
-//     return $res;
-// }
 function getSampleData() {
     return [
         'id' => 6,
@@ -303,83 +245,6 @@ function skipPopulateFieldTypesNew(){
     return ['date', 'multi_choice'];
 }
 
-
-add_action('wp_head' , function(){
-
-    $entries = array(
-        'id' => 361,
-        'status' => 'active',
-        'form_id' => 3,
-        'ip' => '191.96.227.189',
-        'source_url' => 'https://promofirenzdev.wpenginepowered.com/nuove-imprese/',
-        'currency' => 'EUR',
-        'post_id' => '',
-        'date_created' => '2025-04-30 13:30:21',
-        'date_updated' => '2025-04-30 13:30:21',
-        'is_starred' => 0,
-        'is_read' => 0,
-        'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
-        'payment_status' => '',
-        'payment_date' => '',
-        'payment_amount' => '',
-        'payment_method' => '',
-        'transaction_id' => '',
-        'is_fulfilled' => '',
-        'created_by' => '',
-        'transaction_type' => '',
-        'source_id' => 22699,
-        '1' => '2010-10-17',
-        '3.2' => '',
-        '3.3' => 'tester111t',
-        '3.4' => '',
-        '3.6' => 'tester121221',
-        '3.8' => '',
-        '4' => 'tester900',
-        '5' => 'test900011@gmail.com',
-        '6' => 'face200',
-        '7' => '2010-10-15',
-        '8' => 'Aspirante Imprenditore',
-        '9.1' => '',
-        '9.2' => 'Agroalimentare',
-        '9.3' => '',
-        '9.4' => '',
-        '9.5' => '',
-        '9.6' => 'Gioielleria',
-        '9.7' => '',
-        '9.8' => '',
-        '9.9' => '',
-        '9.11' => '',
-        '9.12' => '',
-        '9.13' => '',
-        '9.14' => '',
-        '9.15' => '',
-        '9.16' => '',
-        '9.17' => '',
-        '9.18' => '',
-        '9.19' => '',
-        '9.21' => '',
-        '10' => 'testerasdasd',
-        '11.1' => 'createAccountWP',
-        '14.1' => 'Consento',
-        '12.1' => 'Subscribed',
-        '12.2' => '',
-        '19' => 'Consento',
-        '15' => '[SNI] Richiesta consulenza',
-        '16' => 'Nuove imprese',
-        '17' => 'Nuove Imprese',
-        '18' => '20',
-    );
-    
-//   $pipedriveGetData =   pipedriveGetVieldName('07aaf6652ad9c3267cf10b014b3b8ac139e69054' , 'persons');
-//   $options            =  $pipedriveGetData['options'];
-
-
-
-//   $entryvalue =  "Agroalimentare, Abbigliamento, calzature e accessori moda, bigiotteria,Pelletteria e accessori in pelle";
-
-
-//  $entryVal = extractAndJoinDecimalValues($entries, 14, '||');  
-  
-   //echo '<pre>aaaaaaaaaa'.print_r($pipedriveGetData , true ).'</pre>';
-
-});
+function getDefaultPipeLineId(){
+    return 3;
+}

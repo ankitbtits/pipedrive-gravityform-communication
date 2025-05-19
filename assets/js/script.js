@@ -173,3 +173,10 @@ jQuery(document).ready(function($) {
         });
     }, 2000); // 2 seconds
 });
+jQuery(document).ready(function($) {
+    $('.pgfc-readonly').each(function() {
+        $(this).find('input[type="checkbox"], input[type="radio"], input[type="url"], input[type="text"], textarea, select').each(function() {
+            $(this).prop('disabled', true);
+        });
+    });
+});

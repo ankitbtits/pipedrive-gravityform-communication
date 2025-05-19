@@ -32,10 +32,10 @@ function showPipedriveData($userID){
             echo '<form method="post">';
         }
     ?>
-    <h3><?php _e('Pipedrive Information', 'pgfc');?></h3>
+    <h3><?php _e('Pipedrive Information', PGFC_TEXT_DOMAIN);?></h3>
     <table class="form-table">
         <tr>
-            <th><label for="custom_field"><?php _e('Person ID', 'pgfc');?></label></th>
+            <th><label for="custom_field"><?php _e('Person ID', PGFC_TEXT_DOMAIN);?></label></th>
             <td>
                 <?php echo $personID; ?>
             </td>
@@ -48,13 +48,23 @@ function showPipedriveData($userID){
 
     echo '<div class="dataTabs"><ul>';
     $count = 0;
+
+    // Translate the endpoint name to a user-friendly label - Jany
+    $endPointLabels = [
+        'deals' => __('Deals', PGFC_TEXT_DOMAIN),
+        'organizations' => __('Organizations', PGFC_TEXT_DOMAIN),
+        'persons' => __('Persons', PGFC_TEXT_DOMAIN),
+        'activities' => __('Activities', PGFC_TEXT_DOMAIN),
+    ];
+
     foreach($alloweData as $endPoint => $data){
         $count++;
         echo '<li><a href="javascript:;" data-id="'.$endPoint.'" class="
         '.(($count == 1)?'active':'').'
-        ">'.$endPoint.'</a></li>';
+        ">' . ($endPointLabels[$endPoint] ?? esc_html($endPoint)) . '</a></li>'; //  Jany
     }   
     echo '</ul></div>';
+
     $count = 0;
     foreach($alloweData as $endPoint => $data):
         $count++;
@@ -79,14 +89,15 @@ function showPipedriveData($userID){
                 $manage_url = esc_url('?' . $new_query);
             }
            
-            echo '<p class="manageOrgBtn"><a href="' . esc_url($manage_url) . '" class="button button-primary">' . __('Manage Organizations', 'pgfc') . '</a></p>';
+            echo '<p class="manageOrgBtn"><a href="' . esc_url($manage_url) . '" class="button button-primary">' . __('Manage Organizations', PGFC_TEXT_DOMAIN) . '</a></p>';
 
+            // Display the endpoint nice name
+            echo '<h3>' . ($endPointLabels[$endPoint] ?? esc_html($endPoint)) . '</h3>'; //  Jany
         ?>
 
-        <h3><?php echo $endPoint;?></h3>   
         <?php
              if(empty($apiData)){
-                _e('Could not find any '.$endPoint.' for this user.');
+                _e('Could not find any '.$endPoint.' for this user.', PGFC_TEXT_DOMAIN);
              }
         ?>
 
@@ -96,7 +107,7 @@ function showPipedriveData($userID){
                 foreach($apiData as $eachDeal){
                     echo '<div class="eachDealCon"><table>';
                     if (isset($eachDeal['title'])) {
-                        echo "<tr><th>Name: </th><td>" .$eachDeal['title'].'</td></tr>';
+                        echo "<tr><th>".__('Reference', PGFC_TEXT_DOMAIN )."</th><td>" .$eachDeal['title'].'</td></tr>';
                     }
                     if (isset($eachDeal['label'])) {
                         $dealTypeID = $eachDeal['label']; 
@@ -113,7 +124,7 @@ function showPipedriveData($userID){
                                         }
                                     }
                                     $selectedLabelString = implode(', ', $selectedLabels);
-                                    echo "<tr><th>Deal Labels</th><td> $selectedLabelString</td></tr>";
+                                    echo "<tr><th>".__('Deal Labels', PGFC_TEXT_DOMAIN )."</th><td> $selectedLabelString</td></tr>";
                                     break;        
                                 }
                             }
@@ -131,7 +142,7 @@ function showPipedriveData($userID){
                         if(is_array($dataStage)){
                             foreach ($dataStage as $stage) {
                                 if($stageID == $stage['id']){
-                                    echo '<tr><th>Stage Name</th><td>'.$stage['name'].'</td></tr>';
+                                    echo '<tr><th>'.__('Stage Name', PGFC_TEXT_DOMAIN).'</th><td>'.$stage['name'].'</td></tr>';
                                 }
                             }
                         }
@@ -150,7 +161,7 @@ function showPipedriveData($userID){
                             $downloadURL = getPipedriveFileDownloadLink($fileID);
                             $filesOutput .= "$count. <a href='{$downloadURL}' target='_blank' download>{$fileName}</a><br>";
                         }
-                        echo '<tr><th>'.__('Files', 'pgfc').'</th><td>'. $filesOutput.'</td></tr>';       
+                        echo '<tr><th>'.__('Files', PGFC_TEXT_DOMAIN).'</th><td>'. $filesOutput.'</td></tr>';       
                     }    
                             
                     
@@ -164,14 +175,14 @@ function showPipedriveData($userID){
                             $actvityOrgName = $activity['org_name'];
                             $orgNameHtml = '';
                             if (!empty($actvityOrgName)) {
-                                $orgNameHtml = "<span class='activityOrg'>".__('Organization', 'pgfc')." : $actvityOrgName</span>";
+                                $orgNameHtml = "<span class='activityOrg'>".__('Organization', PGFC_TEXT_DOMAIN)." : $actvityOrgName</span>";
                             }
                             $status = $activity['done']?'done':'notDone';
                             $activitiesNames .= "<div class='eachActivity'> <i class='activityStatus $status'></i><span class='activityName'>{$activity['subject']}</span>
                             $orgNameHtml                         
                             </div><br>";                  
                         }   
-                        echo '<tr><th>'.__('Deals Activities', 'pgfc').'</th><td>'. $activitiesNames.'</td></tr>';              
+                        echo '<tr><th>'.__('Deals Activities', PGFC_TEXT_DOMAIN).'</th><td>'. $activitiesNames.'</td></tr>';              
                     }
                     echo '</table></div>';
                 }
@@ -184,11 +195,20 @@ function showPipedriveData($userID){
                 $value = $apiData[$key];
                 $keyInfo = pipedriveGetVieldName($key, $endPoint);
                 $keyName = $keyInfo['name'];
-        ?>    
+
+                // Add translation for custom fields
+                $translations = [
+                    'Name' => __('Name', PGFC_TEXT_DOMAIN),
+                    'Email' => __('Email', PGFC_TEXT_DOMAIN),
+                    'Phone' => __('Phone', PGFC_TEXT_DOMAIN),
+                    'Owner' => __('Owner', PGFC_TEXT_DOMAIN),
+                ];
+                $translatedKeyName = $translations[$keyName] ?? $keyName;
+            ?>    
             <input type="hidden" name="pipedrive[<?php echo $endPoint;?>][id]" value="<?php echo $apiData['id'];?>">      
                     
             <tr>
-                <th><?php echo $keyName;?></th>
+                <th><?php echo $translatedKeyName; // Jany ?></th>
                 <td>
                     <?php echo formatDisplayData($keyInfo, $key, $value, $endPoint);?>
                 </td>
@@ -207,7 +227,7 @@ function showPipedriveData($userID){
     endif;
     if(!is_user_profile_page()){
         echo '
-        <p class="submit"><input type="submit" value="Update" class="button formButton" /></p>
+        <p class="submit"><input type="submit" value="'.__('Update', PGFC_TEXT_DOMAIN).'" class="button formButton" /></p>
         </form>
         ';
     }
@@ -274,7 +294,7 @@ function getRightFieldType($type, $name, $value, $options = []) {
                 }
                 $res .= '</select>';
             } else {
-                $res = 'Options not provided';
+                $res = __('Options not provided', PGFC_TEXT_DOMAIN);  // Jany
             }
             break;
 
@@ -293,7 +313,7 @@ function getRightFieldType($type, $name, $value, $options = []) {
                     <br/>";
                 }
             } else {
-                $res = 'Options not provided';
+                $res = __('Options not provided', PGFC_TEXT_DOMAIN);  // Jany
             }
             break;
 
@@ -310,7 +330,7 @@ function getRightFieldType($type, $name, $value, $options = []) {
                 }
                 $res .= '</select>';
             } else {
-                $res = 'Options not provided';
+                $res = __('Options not provided', PGFC_TEXT_DOMAIN); // Jany
             }
             break;
 
@@ -368,7 +388,7 @@ function updatePipeDriveData($data){
             }
         }
             echo '<div class="pgfc-success-message notice notice-success">
-               <p>'.__( 'Profile updated successfully!', 'pgfc' ).'</p>
+               <p>'.__( 'Profile updated successfully!', PGFC_TEXT_DOMAIN ).'</p>
             </div>';
     
 

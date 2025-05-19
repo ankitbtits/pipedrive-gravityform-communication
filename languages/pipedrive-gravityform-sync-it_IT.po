@@ -1,0 +1,583 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Pipedrive / Gravity Form Sync\n"
+"POT-Creation-Date: 2025-05-16 14:32+0200\n"
+"PO-Revision-Date: 2025-05-16 14:32+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: pipedrive-gravityform-sync.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: admin/add_pgfc.php:28 admin/edit_pgfc.php:34
+msgid "Pipedrive communication created successfully!"
+msgstr ""
+
+#: admin/add_pgfc.php:30 admin/edit_pgfc.php:36
+msgid "Error creating the pipedrive communication."
+msgstr ""
+
+#: admin/add_pgfc.php:33 admin/all_pgfc_entries.php:133 admin/api_logs.php:109
+#: admin/edit_pgfc.php:39
+msgid "Security check failed."
+msgstr ""
+
+#: admin/add_pgfc.php:46 admin/edit_pgfc.php:54
+msgid "Select Form"
+msgstr ""
+
+#: admin/add_pgfc.php:62
+msgid "Please select the form to display it's fields"
+msgstr ""
+
+#: admin/add_pgfc.php:68 admin/edit_pgfc.php:125
+msgid "Select API"
+msgstr ""
+
+#: admin/add_pgfc.php:87 admin/edit_pgfc.php:176
+msgid "Add Item/Service"
+msgstr ""
+
+#: admin/add_pgfc.php:88 admin/edit_pgfc.php:180
+msgid "Remove Item/Service"
+msgstr ""
+
+#: admin/add_pgfc.php:93 admin/edit_pgfc.php:185
+msgid "Publish"
+msgstr ""
+
+#: admin/add_pgfc.php:105 admin/edit_pgfc.php:91 admin/edit_pgfc.php:196
+msgid "Select Field"
+msgstr ""
+
+#: admin/add_pgfc.php:122
+msgid ""
+"Selected form does not have any field. Please change form or add fields."
+msgstr ""
+
+#: admin/add_pgfc.php:131 admin/edit_pgfc.php:150 admin/edit_pgfc.php:220
+msgid "Select Attribute"
+msgstr ""
+
+#: admin/all_pgfc_entries.php:82
+msgid "Edit"
+msgstr ""
+
+#: admin/all_pgfc_entries.php:93
+msgid "Gravity Form"
+msgstr ""
+
+#: admin/all_pgfc_entries.php:94
+msgid "Linked APIs"
+msgstr ""
+
+#: admin/all_pgfc_entries.php:95
+msgid "Published Date"
+msgstr ""
+
+#: admin/all_pgfc_entries.php:98 admin/api_logs.php:70
+#: admin/manage_organizations_profile.php:79
+msgid "Action"
+msgstr "Azione"
+
+#: admin/all_pgfc_entries.php:130 admin/api_logs.php:106
+msgid "pgfcs deleted successfully!"
+msgstr ""
+
+#: admin/all_pgfc_entries.php:154 admin/api_logs.php:137
+#: admin/pgfc_settings.php:73 pipedrive-gravityform-sync.php:104
+msgid "Gravity Form Pipedrive Sync"
+msgstr ""
+
+#: admin/all_pgfc_entries.php:161
+msgid "Add New Mapping"
+msgstr "Aggiungi Mappatura"
+
+#: admin/api_logs.php:71
+msgid "API end point"
+msgstr ""
+
+#: admin/api_logs.php:72
+msgid "Payload"
+msgstr ""
+
+#: admin/api_logs.php:73
+msgid "Response"
+msgstr ""
+
+#: admin/api_logs.php:74
+msgid "Time"
+msgstr ""
+
+#: admin/api_logs.php:142
+msgid "Export All Logs"
+msgstr ""
+
+#: admin/api_logs.php:145
+msgid "Delete All Logs"
+msgstr ""
+
+#: admin/api_logs.php:211
+msgid "All logs deleted successfully!"
+msgstr ""
+
+#: admin/edit_pgfc.php:7
+msgid "No pgfc found"
+msgstr ""
+
+#: admin/manage_organizations_profile.php:4
+msgid "Please search organizations."
+msgstr "Cerca Aziende."
+
+#: admin/manage_organizations_profile.php:24
+msgid "No organizations found."
+msgstr "Nessuna Azienda trovata."
+
+#: admin/manage_organizations_profile.php:55
+msgid "Search Organizations"
+msgstr "Cerca Aziende"
+
+#: admin/manage_organizations_profile.php:56
+msgid "Search"
+msgstr "Cerca"
+
+#: admin/manage_organizations_profile.php:61 admin/show_pipedrive_data.php:59
+msgid "Logout"
+msgstr ""
+
+#: admin/manage_organizations_profile.php:70
+msgid "Back"
+msgstr "Indietro"
+
+#: admin/manage_organizations_profile.php:73 admin/manage_pipedrive_data.php:55
+msgid "Organizations"
+msgstr "Dati Aziendali"
+
+#: admin/manage_organizations_profile.php:77
+#: admin/manage_pipedrive_data.php:201
+msgid "Name"
+msgstr "Nome"
+
+#: admin/manage_organizations_profile.php:78
+msgid "Address"
+msgstr "Indirizzo"
+
+#: admin/manage_organizations_profile.php:79
+msgid "Check if user exists in the organization or not."
+msgstr "Controlla se utente sia associato ad Azienda."
+
+#: admin/manage_organizations_profile.php:97
+msgid "Check status"
+msgstr "Controlla Stato"
+
+#: admin/manage_organizations_profile.php:122
+#: admin/manage_organizations_profile.php:123
+#: admin/manage_organizations_profile.php:140
+#: admin/manage_pipedrive_data.php:92
+msgid "Manage Organizations"
+msgstr "Gestisci Dati Aziendali"
+
+#: admin/manage_organizations_profile.php:166
+#: admin/manage_organizations_profile.php:187
+msgid "User is not in this organization."
+msgstr "L'utente non è associato a questa Azienda."
+
+#: admin/manage_organizations_profile.php:182
+#: admin/manage_organizations_profile.php:232
+msgid "User is already in this organization."
+msgstr "L'utente è già associato a questa Azienda."
+
+#: admin/manage_organizations_profile.php:200
+msgid "Invalid request."
+msgstr "Richiesta non valida. Contatta il Supporto."
+
+#: admin/manage_organizations_profile.php:210
+msgid "Invalid action specified."
+msgstr "Azione non permessa. Contatta il Supporto."
+
+#: admin/manage_organizations_profile.php:242
+msgid "Failed to add user to organization."
+msgstr "Errore nell'associazione dell'utente all'Azienda."
+
+#: admin/manage_organizations_profile.php:247
+msgid "User successfully added to the organization."
+msgstr "Utente aggiunto all'Azienda."
+
+#: admin/manage_organizations_profile.php:255
+msgid "User is not part of this organization."
+msgstr "L'utente non è associato a questa Azienda."
+
+#: admin/manage_organizations_profile.php:265
+msgid "Failed to remove user from organization."
+msgstr "Errore nel rimuovere l'utente da questa Azienda."
+
+#: admin/manage_organizations_profile.php:270
+msgid "User successfully removed from the organization."
+msgstr "Utente rimosso dall'Azienda."
+
+#: admin/manage_pipedrive_data.php:35
+msgid "Pipedrive Information"
+msgstr "Informazioni"
+
+#: admin/manage_pipedrive_data.php:38
+msgid "Person ID"
+msgstr "ID Persona"
+
+#: admin/manage_pipedrive_data.php:54
+msgid "Deals"
+msgstr "Richieste"
+
+#: admin/manage_pipedrive_data.php:56
+msgid "Persons"
+msgstr "Dati Personali"
+
+#: admin/manage_pipedrive_data.php:57
+msgid "Activities"
+msgstr "Attività"
+
+#: admin/manage_pipedrive_data.php:100
+msgid "Could not find any "
+msgstr "Nessun dato trovato "
+
+#: admin/manage_pipedrive_data.php:110
+msgid "Reference"
+msgstr "Referenza"
+
+#: admin/manage_pipedrive_data.php:127
+msgid "Deal Labels"
+msgstr "Tipo Richiesta"
+
+#: admin/manage_pipedrive_data.php:145 admin/pgfc_settings.php:121
+msgid "Stage Name"
+msgstr "Stato"
+
+#: admin/manage_pipedrive_data.php:164
+msgid "Files"
+msgstr "File"
+
+#: admin/manage_pipedrive_data.php:178
+msgid "Organization"
+msgstr "Dati Aziendali"
+
+#: admin/manage_pipedrive_data.php:185
+msgid "Deals Activities"
+msgstr "Attività"
+
+#: admin/manage_pipedrive_data.php:202
+msgid "Email"
+msgstr ""
+
+#: admin/manage_pipedrive_data.php:203
+msgid "Phone"
+msgstr "Telefono"
+
+#: admin/manage_pipedrive_data.php:204
+msgid "Owner"
+msgstr "Referente"
+
+#: admin/manage_pipedrive_data.php:230
+msgid "Update"
+msgstr "Aggiorna"
+
+#: admin/manage_pipedrive_data.php:297 admin/manage_pipedrive_data.php:316
+#: admin/manage_pipedrive_data.php:333
+msgid "Options not provided"
+msgstr "Non Disponibile"
+
+#: admin/manage_pipedrive_data.php:391
+msgid "Profile updated successfully!"
+msgstr "Dati aggiornati con successo!"
+
+#: admin/pgfc_settings.php:25
+msgid "Field saved successfully!"
+msgstr "Campo salvato con successo!"
+
+#: admin/pgfc_settings.php:32
+msgid "Custom fields from pipedrive are synced successfully!"
+msgstr ""
+
+#: admin/pgfc_settings.php:39
+msgid "Please enter pipedrive ID to sync its stages"
+msgstr ""
+
+#: admin/pgfc_settings.php:46
+msgid "Stages could not be synced. Please check API Logs for the error."
+msgstr ""
+
+#: admin/pgfc_settings.php:78
+msgid "Pipedrive API Token:"
+msgstr ""
+
+#: admin/pgfc_settings.php:83
+msgid "Save"
+msgstr "Salva"
+
+#: admin/pgfc_settings.php:86
+msgid "Resync pipedrive all the custom fields:"
+msgstr ""
+
+#: admin/pgfc_settings.php:88
+msgid "Resync fields"
+msgstr ""
+
+#: admin/pgfc_settings.php:91
+msgid "Fields were last synced on:"
+msgstr ""
+
+#: admin/pgfc_settings.php:93
+msgid "Fields have not been synced yet."
+msgstr ""
+
+#: admin/pgfc_settings.php:101
+msgid "PipeDrive Stages"
+msgstr ""
+
+#: admin/pgfc_settings.php:113
+msgid "Sync stages"
+msgstr ""
+
+#: admin/pgfc_settings.php:122
+msgid "Stage ID"
+msgstr ""
+
+#: admin/pgfc_settings.php:123
+msgid "Pipeline Name"
+msgstr ""
+
+#: admin/pgfc_settings.php:124
+msgid "Pipeline ID"
+msgstr ""
+
+#: admin/pgfc_settings.php:147
+msgid "General Info"
+msgstr ""
+
+#: admin/pgfc_settings.php:150
+msgid "Creat account field"
+msgstr ""
+
+#: admin/pgfc_settings.php:154
+#, php-format
+msgid ""
+"1. Set the field value to <b>%s</b> if you want an account to be created "
+"when the checkbox is selected. <br> 2. Creating user accounts requires an "
+"email. The email will be taken from either <b>%s</b> field or an email field "
+"with <b>%s</b> as its \"Admin Field Label\". Ensure that at least one of "
+"these email fields exists in the form."
+msgstr ""
+
+#: admin/pgfc_settings.php:163
+msgid "For Privacy Policy"
+msgstr ""
+
+#: admin/pgfc_settings.php:165
+msgid ""
+"In Gravity Forms, either the field label or value must exactly match the "
+"corresponding Pipedrive label name."
+msgstr ""
+
+#: admin/pgfc_settings.php:170
+msgid "Marketing Status"
+msgstr ""
+
+#: admin/pgfc_settings.php:172
+msgid ""
+"In Gravity Forms, either the label or value must match the Pipedrive label "
+"name. The option values for marketing status must exactly match those in "
+"Pipedrive."
+msgstr ""
+
+#: admin/pgfc_settings.php:176
+msgid "For Country dropdown"
+msgstr ""
+
+#: admin/pgfc_settings.php:178
+msgid ""
+"The country names in the Gravity Forms dropdown must exactly match those in "
+"the Pipedrive country list."
+msgstr ""
+
+#: admin/pgfc_settings.php:183
+msgid "Checkbox and Radio Fields:"
+msgstr ""
+
+#: admin/pgfc_settings.php:185
+msgid ""
+"The option values in checkbox and radio fields in Gravity Forms must exactly "
+"match the corresponding values in Pipedrive."
+msgstr ""
+
+#: admin/pgfc_settings.php:189
+msgid "Edit profile Shortcode:"
+msgstr ""
+
+#: admin/pgfc_settings.php:193
+#, php-format
+msgid ""
+"Add <b>%s</b> shortcode to display the edit profile form anywhere on the "
+"frontend.<br><small>Note: Make sure the shortcode is not appending within "
+"any form tag.</small>"
+msgstr ""
+
+#: admin/show_pipedrive_data.php:31
+msgid "Profile updated successfully"
+msgstr ""
+
+#: admin/tabs.php:8
+msgid "All Mappings"
+msgstr ""
+
+#: admin/tabs.php:13
+msgid "Settings"
+msgstr ""
+
+#: admin/tabs.php:18
+msgid "API Logs"
+msgstr ""
+
+#: inc/functions.php:8 inc/functions.php:10
+msgid "pgfcs"
+msgstr ""
+
+#: inc/functions.php:9
+msgid "pgfc"
+msgstr ""
+
+#: inc/functions.php:192
+msgid "Syncing custom fields"
+msgstr ""
+
+#: inc/functions.php:243
+msgid "No field found with this key"
+msgstr ""
+
+#: inc/functions.php:259
+msgid "You are already logged in."
+msgstr "Login già effettuato."
+
+#: inc/functions.php:268
+msgid "Please fill in both fields."
+msgstr "Per favore compila entrambi i campi."
+
+#: inc/functions.php:270
+msgid "Invalid username or password."
+msgstr "Email o Password errata."
+
+#: inc/functions.php:313
+msgid "Username or Email"
+msgstr "Email"
+
+#: inc/functions.php:317
+msgid "Password"
+msgstr ""
+
+#: inc/functions.php:321
+msgid "Forgot Password?"
+msgstr "Password dimenticata?"
+
+#: inc/functions.php:324
+msgid "Log In"
+msgstr ""
+
+#: inc/gravityForm.php:289
+msgid "Set Your Password"
+msgstr "Imposta la tua Password"
+
+#: inc/gravityForm.php:291
+#, php-format
+msgid ""
+"Hello %s,\n"
+"\n"
+"%s\n"
+"\n"
+"%s\n"
+"\n"
+"%s"
+msgstr ""
+"Salve %s,\n"
+"\n"
+"%s\n"
+"\n"
+"%s\n"
+"\n"
+"%s"
+
+#: inc/gravityForm.php:293
+msgid ""
+"Your account has been created. Please use the link below to set your "
+"password:"
+msgstr ""
+"Il tuo account è stato creato! Per favore usa il link qui sotto per "
+"impostare la tua password:"
+
+#: inc/gravityForm.php:295
+msgid "Thank you!"
+msgstr "Grazie!"
+
+#: inc/hardCoded.php:6
+msgid "Add a Person"
+msgstr "Aggiungi una Persona"
+
+#: inc/hardCoded.php:11
+msgid "Add an organization"
+msgstr "Aggiungi un'Azienda"
+
+#: inc/hardCoded.php:16
+msgid "Add a deal"
+msgstr "Aggiungi un Affare"
+
+#: inc/hardCoded.php:21
+msgid "Add an activities"
+msgstr "Aggiungi un'Attività"
+
+#: inc/pipeDriveUserCheck.php:41
+msgid "A user already exists with this email. Please login instead."
+msgstr "Esiste già un utente con questa email. Per favore fai prima il login."
+
+#: pipedrive-gravityform-sync.php:52
+msgid ""
+"Gravity Form Pipedrive Sync plugin requires Gravity form plugin to be "
+"install."
+msgstr ""
+
+#: pipedrive-gravityform-sync.php:66
+msgid "Add Array key"
+msgstr ""
+
+#: pipedrive-gravityform-sync.php:80
+msgid "Checking"
+msgstr "Controllo"
+
+#: pipedrive-gravityform-sync.php:105
+msgid "Pipedrive Sync"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Pipedrive / Gravity Form Sync"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"The Gravity Form Pipedrive Sync Plugin provides an intuitive solution to "
+"manage communication between gravity forms and pipedrive APIs"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Shambix"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://www.shambix.com/"
+msgstr ""

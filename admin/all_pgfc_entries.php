@@ -79,7 +79,7 @@ if (!class_exists('pgfcs_List_Table')) {
                     'published_date'             => $pgfc_createddate,
                 );
                 if (is_admin() && current_user_can('manage_options')) {
-                    $data[count($data) - 1]['actions'] = '<a href="' . esc_url($new_url) . '">' . __('Edit', 'pgfc') . '</a>';
+                    $data[count($data) - 1]['actions'] = '<a href="' . esc_url($new_url) . '">' . __('Edit', PGFC_TEXT_DOMAIN) . '</a>';
                 }
             }
             return $data;
@@ -90,12 +90,12 @@ if (!class_exists('pgfcs_List_Table')) {
                 $cols['cb'] = '<input type="checkbox" />';                
             }
             $cols = array_merge($cols, array(
-                'form_title'              => esc_html__('Gravity Form', 'pgfc'),
-                'linked_api'     => esc_html__('Linked APIs', 'pgfc'),   
-                'published_date'              => esc_html__('Published Date', 'pgfc'),             
+                'form_title'              => esc_html__('Gravity Form', PGFC_TEXT_DOMAIN),
+                'linked_api'     => esc_html__('Linked APIs', PGFC_TEXT_DOMAIN),   
+                'published_date'              => esc_html__('Published Date', PGFC_TEXT_DOMAIN),             
             ));
             if (is_admin() && current_user_can('manage_options')) {
-                $cols['actions'] = esc_html__('Action', 'pgfc');
+                $cols['actions'] = esc_html__('Action', PGFC_TEXT_DOMAIN);
             }
             return $cols;
         }
@@ -127,10 +127,10 @@ if (!class_exists('pgfcs_List_Table')) {
                     foreach ($pgfcs_to_delete as $pgfcID) {                       
                         wp_delete_post( $pgfcID, true );
                     }
-                    echo '<div class="updated"><p>' . esc_html__('pgfcs deleted successfully!', 'pgfc') . '</p></div>';
+                    echo '<div class="updated"><p>' . esc_html__('pgfcs deleted successfully!', PGFC_TEXT_DOMAIN) . '</p></div>';
                 }
             } elseif (isset($_POST['_wpnonce_bulk_pgfc'])) {
-                echo '<div class="error"><p>' . esc_html__('Security check failed.', 'pgfc') . '</p></div>';
+                echo '<div class="error"><p>' . esc_html__('Security check failed.', PGFC_TEXT_DOMAIN) . '</p></div>';
             }
         }
 
@@ -151,14 +151,14 @@ function pgfc_display_pgfcs_list_table() {
             $tabs = new PGFC_Admin_Tabs();
             echo $tabs->render();
     }   ?>
-    <h1 class="wp-heading-inline"><?php esc_html_e('Gravity Form Pipedrive Sync', 'pgfc');?></h1>
+    <h1 class="wp-heading-inline"><?php esc_html_e('Gravity Form Pipedrive Sync', PGFC_TEXT_DOMAIN);?></h1>
     <?php 
         if(isset($_GET['pgfc_id']) && !empty($_GET['pgfc_id'])):
             require_once'edit_pgfc.php';
         else:        
     ?>   
         <?php if (is_admin() && current_user_can('manage_options')) { ?>
-            <button onclick="pgfctoggleCustomFun('.pgfc_toggleNewpgfc')" class="page-title-action"><?php esc_html_e('Add New pgfc', 'pgfc');?></button>
+            <button onclick="pgfctoggleCustomFun('.pgfc_toggleNewpgfc')" class="page-title-action"><?php esc_html_e('Add New Mapping', PGFC_TEXT_DOMAIN);?></button>
             <div class="pgfc_toggleNewpgfc" style="display:none;">
                 <?php 
                     require_once'add_pgfc.php'; 
