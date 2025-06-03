@@ -2,7 +2,15 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
-
+add_filter('the_content', 'pgfcShortcodesinject');
+function pgfcShortcodesinject($content){
+    $current_page_id     = get_the_ID();
+    $login_page          = get_option('login_page', '');
+    if ($login_page ==  $current_page_id ) {
+        $content  .= do_shortcode("[edit_pipedrive_data]");
+    }
+    return $content;
+}
 function pgfc_register_custom_pgfc_post_type() {
     $labels = array(
         'name'               => __('pgfcs', PGFC_TEXT_DOMAIN),
@@ -323,25 +331,31 @@ function custom_login_form() {
             <p>
                 <input type="submit" name="wp_custom_login" value="<?php echo __('Log In', PGFC_TEXT_DOMAIN); ?>">
             </p>
-            <input type="hidden" name="redirect_to" value="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>">
+            <?php
+                $redirectURL = $_SERVER['REQUEST_URI'];
+                if(isset($_GET['redirect_to'])){
+                    $redirectURL = $_GET['redirect_to'];
+                }
+            ?>
+            <input type="hidden" name="redirect_to" value="<?php echo esc_url($redirectURL); ?>">
         </form>
     </div>
     <?php
     return ob_get_clean();
 }
 
+function redirect_subscriber_after_login( $redirect_to, $request, $user ) {
+    if ( isset( $user->roles ) && is_array( $user->roles ) ) {
+        if ( in_array( 'subscriber', $user->roles ) ) {
+            if ( empty( $redirect_to ) || strpos( $redirect_to, admin_url() ) === 0 ) {
 
-add_filter('logout_redirect', 'custom_logout_redirect', 10, 3);
-
-function custom_logout_redirect($redirect_to, $requested_redirect_to, $user) {
-    // Check if a user was logged in
-    if (isset($user->roles) && is_array($user->roles)) {
-        // Check if the user is NOT an administrator
-        if (!in_array('administrator', $user->roles)) {
-            return site_url().'/area-riservata/';
+                $loginPage = get_option('login_page');
+                return get_the_permalink($loginPage ); 
+            }
         }
     }
-
-    // Default behavior (admin or not logged-in user)
     return $redirect_to;
 }
+add_filter( 'login_redirect', 'redirect_subscriber_after_login', 10, 3 );
+
+

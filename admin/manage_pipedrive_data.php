@@ -81,7 +81,7 @@ function showPipedriveData($userID){
         <?php
             if (is_admin()) {
                 // Backend: admin URL with user_id
-                $manage_url = admin_url('admin.php?page=manage_organizations&user_id=' . $user->ID);
+                $manage_url = admin_url('admin.php?page=manage_organizations&user_id=' . $userID);
             } else {
                 // Frontend: append to current query string
                 $existing_query = $_SERVER['QUERY_STRING'] ?? '';
@@ -167,7 +167,6 @@ function showPipedriveData($userID){
                     
                     if(isset($allActivites['data'])){
                         $allActivites = $allActivites['data'];
-                        $actData = alloedProfileData()['activities'];
                         $activitiesNames = '';
                         $count = 0;
                         foreach($allActivites as $actKey => $activity){     

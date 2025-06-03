@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Pipedrive / Gravity Form Sync\n"
-"POT-Creation-Date: 2025-05-16 14:32+0200\n"
+"POT-Creation-Date: 2025-05-27 15:49+0200\n"
 "PO-Revision-Date: 2025-05-16 13:39+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -88,7 +88,7 @@ msgid "Published Date"
 msgstr ""
 
 #: admin/all_pgfc_entries.php:98 admin/api_logs.php:70
-#: admin/manage_organizations_profile.php:79
+#: admin/manage_organizations_profile.php:82
 msgid "Action"
 msgstr ""
 
@@ -97,7 +97,7 @@ msgid "pgfcs deleted successfully!"
 msgstr ""
 
 #: admin/all_pgfc_entries.php:154 admin/api_logs.php:137
-#: admin/pgfc_settings.php:73 pipedrive-gravityform-sync.php:104
+#: admin/pgfc_settings.php:86 pipedrive-gravityform-sync.php:115
 msgid "Gravity Form Pipedrive Sync"
 msgstr ""
 
@@ -145,85 +145,85 @@ msgstr ""
 msgid "No organizations found."
 msgstr ""
 
-#: admin/manage_organizations_profile.php:55
-msgid "Search Organizations"
-msgstr ""
-
-#: admin/manage_organizations_profile.php:56
-msgid "Search"
-msgstr ""
-
-#: admin/manage_organizations_profile.php:61 admin/show_pipedrive_data.php:59
-msgid "Logout"
-msgstr ""
-
-#: admin/manage_organizations_profile.php:70
+#: admin/manage_organizations_profile.php:49
 msgid "Back"
 msgstr ""
 
-#: admin/manage_organizations_profile.php:73 admin/manage_pipedrive_data.php:55
+#: admin/manage_organizations_profile.php:62
+msgid "Search Organizations"
+msgstr ""
+
+#: admin/manage_organizations_profile.php:63
+msgid "Search"
+msgstr ""
+
+#: admin/manage_organizations_profile.php:68 admin/show_pipedrive_data.php:59
+msgid "Logout"
+msgstr ""
+
+#: admin/manage_organizations_profile.php:76 admin/manage_pipedrive_data.php:55
 msgid "Organizations"
 msgstr ""
 
-#: admin/manage_organizations_profile.php:77
+#: admin/manage_organizations_profile.php:80
 #: admin/manage_pipedrive_data.php:201
 msgid "Name"
 msgstr ""
 
-#: admin/manage_organizations_profile.php:78
+#: admin/manage_organizations_profile.php:81
 msgid "Address"
 msgstr ""
 
-#: admin/manage_organizations_profile.php:79
+#: admin/manage_organizations_profile.php:82
 msgid "Check if user exists in the organization or not."
 msgstr ""
 
-#: admin/manage_organizations_profile.php:97
+#: admin/manage_organizations_profile.php:100
 msgid "Check status"
 msgstr ""
 
-#: admin/manage_organizations_profile.php:122
-#: admin/manage_organizations_profile.php:123
-#: admin/manage_organizations_profile.php:140
+#: admin/manage_organizations_profile.php:125
+#: admin/manage_organizations_profile.php:126
+#: admin/manage_organizations_profile.php:143
 #: admin/manage_pipedrive_data.php:92
 msgid "Manage Organizations"
 msgstr ""
 
-#: admin/manage_organizations_profile.php:166
-#: admin/manage_organizations_profile.php:187
+#: admin/manage_organizations_profile.php:169
+#: admin/manage_organizations_profile.php:190
 msgid "User is not in this organization."
 msgstr ""
 
-#: admin/manage_organizations_profile.php:182
-#: admin/manage_organizations_profile.php:232
+#: admin/manage_organizations_profile.php:185
+#: admin/manage_organizations_profile.php:235
 msgid "User is already in this organization."
 msgstr ""
 
-#: admin/manage_organizations_profile.php:200
+#: admin/manage_organizations_profile.php:203
 msgid "Invalid request."
 msgstr ""
 
-#: admin/manage_organizations_profile.php:210
+#: admin/manage_organizations_profile.php:213
 msgid "Invalid action specified."
 msgstr ""
 
-#: admin/manage_organizations_profile.php:242
+#: admin/manage_organizations_profile.php:245
 msgid "Failed to add user to organization."
 msgstr ""
 
-#: admin/manage_organizations_profile.php:247
+#: admin/manage_organizations_profile.php:250
 msgid "User successfully added to the organization."
 msgstr ""
 
-#: admin/manage_organizations_profile.php:255
+#: admin/manage_organizations_profile.php:258
 msgid "User is not part of this organization."
 msgstr ""
 
-#: admin/manage_organizations_profile.php:265
+#: admin/manage_organizations_profile.php:268
 msgid "Failed to remove user from organization."
 msgstr ""
 
-#: admin/manage_organizations_profile.php:270
+#: admin/manage_organizations_profile.php:273
 msgid "User successfully removed from the organization."
 msgstr ""
 
@@ -259,7 +259,7 @@ msgstr ""
 msgid "Deal Labels"
 msgstr ""
 
-#: admin/manage_pipedrive_data.php:145 admin/pgfc_settings.php:121
+#: admin/manage_pipedrive_data.php:145 admin/pgfc_settings.php:163
 msgid "Stage Name"
 msgstr ""
 
@@ -300,135 +300,157 @@ msgstr ""
 msgid "Profile updated successfully!"
 msgstr ""
 
-#: admin/pgfc_settings.php:25
+#: admin/pgfc_settings.php:36
 msgid "Field saved successfully!"
 msgstr ""
 
-#: admin/pgfc_settings.php:32
+#: admin/pgfc_settings.php:43
 msgid "Custom fields from pipedrive are synced successfully!"
 msgstr ""
 
-#: admin/pgfc_settings.php:39
+#: admin/pgfc_settings.php:50
 msgid "Please enter pipedrive ID to sync its stages"
 msgstr ""
 
-#: admin/pgfc_settings.php:46
+#: admin/pgfc_settings.php:57
 msgid "Stages could not be synced. Please check API Logs for the error."
 msgstr ""
 
-#: admin/pgfc_settings.php:78
+#: admin/pgfc_settings.php:91
 msgid "Pipedrive API Token:"
 msgstr ""
 
-#: admin/pgfc_settings.php:83
+#: admin/pgfc_settings.php:97
+msgid "Contact Support Page:"
+msgstr ""
+
+#: admin/pgfc_settings.php:104 admin/pgfc_settings.php:117
+msgid "-- Select a page --"
+msgstr ""
+
+#: admin/pgfc_settings.php:111
+msgid "Dashboard Page:"
+msgstr ""
+
+#: admin/pgfc_settings.php:125
 msgid "Save"
 msgstr ""
 
-#: admin/pgfc_settings.php:86
+#: admin/pgfc_settings.php:128
 msgid "Resync pipedrive all the custom fields:"
 msgstr ""
 
-#: admin/pgfc_settings.php:88
+#: admin/pgfc_settings.php:130
 msgid "Resync fields"
 msgstr ""
 
-#: admin/pgfc_settings.php:91
+#: admin/pgfc_settings.php:133
 msgid "Fields were last synced on:"
 msgstr ""
 
-#: admin/pgfc_settings.php:93
+#: admin/pgfc_settings.php:135
 msgid "Fields have not been synced yet."
 msgstr ""
 
-#: admin/pgfc_settings.php:101
+#: admin/pgfc_settings.php:143
 msgid "PipeDrive Stages"
 msgstr ""
 
-#: admin/pgfc_settings.php:113
+#: admin/pgfc_settings.php:155
 msgid "Sync stages"
 msgstr ""
 
-#: admin/pgfc_settings.php:122
+#: admin/pgfc_settings.php:164
 msgid "Stage ID"
 msgstr ""
 
-#: admin/pgfc_settings.php:123
+#: admin/pgfc_settings.php:165
 msgid "Pipeline Name"
 msgstr ""
 
-#: admin/pgfc_settings.php:124
+#: admin/pgfc_settings.php:166
 msgid "Pipeline ID"
 msgstr ""
 
-#: admin/pgfc_settings.php:147
+#: admin/pgfc_settings.php:189
 msgid "General Info"
 msgstr ""
 
-#: admin/pgfc_settings.php:150
+#: admin/pgfc_settings.php:192
 msgid "Creat account field"
 msgstr ""
 
-#: admin/pgfc_settings.php:154
+#: admin/pgfc_settings.php:196
 #, php-format
 msgid ""
 "1. Set the field value to <b>%s</b> if you want an account to be created "
 "when the checkbox is selected. <br> 2. Creating user accounts requires an "
 "email. The email will be taken from either <b>%s</b> field or an email field "
-"with <b>%s</b> as its \"Admin Field Label\". Ensure that at least one of "
-"these email fields exists in the form."
+"with <b>%s</b> as its \"Field Class\". Ensure that at least one of these "
+"email fields exists in the form."
 msgstr ""
 
-#: admin/pgfc_settings.php:163
+#: admin/pgfc_settings.php:206
 msgid "For Privacy Policy"
 msgstr ""
 
-#: admin/pgfc_settings.php:165
+#: admin/pgfc_settings.php:208
 msgid ""
 "In Gravity Forms, either the field label or value must exactly match the "
 "corresponding Pipedrive label name."
 msgstr ""
 
-#: admin/pgfc_settings.php:170
+#: admin/pgfc_settings.php:213
 msgid "Marketing Status"
 msgstr ""
 
-#: admin/pgfc_settings.php:172
+#: admin/pgfc_settings.php:215
 msgid ""
 "In Gravity Forms, either the label or value must match the Pipedrive label "
 "name. The option values for marketing status must exactly match those in "
 "Pipedrive."
 msgstr ""
 
-#: admin/pgfc_settings.php:176
+#: admin/pgfc_settings.php:219
 msgid "For Country dropdown"
 msgstr ""
 
-#: admin/pgfc_settings.php:178
+#: admin/pgfc_settings.php:221
 msgid ""
 "The country names in the Gravity Forms dropdown must exactly match those in "
 "the Pipedrive country list."
 msgstr ""
 
-#: admin/pgfc_settings.php:183
+#: admin/pgfc_settings.php:226
 msgid "Checkbox and Radio Fields:"
 msgstr ""
 
-#: admin/pgfc_settings.php:185
+#: admin/pgfc_settings.php:228
 msgid ""
 "The option values in checkbox and radio fields in Gravity Forms must exactly "
 "match the corresponding values in Pipedrive."
 msgstr ""
 
-#: admin/pgfc_settings.php:189
+#: admin/pgfc_settings.php:232
 msgid "Edit profile Shortcode:"
 msgstr ""
 
-#: admin/pgfc_settings.php:193
+#: admin/pgfc_settings.php:236
 #, php-format
 msgid ""
 "Add <b>%s</b> shortcode to display the edit profile form anywhere on the "
 "frontend.<br><small>Note: Make sure the shortcode is not appending within "
 "any form tag.</small>"
+msgstr ""
+
+#: admin/pgfc_settings.php:243
+msgid "Organization Fields Note:"
+msgstr ""
+
+#: admin/pgfc_settings.php:246
+msgid ""
+"To display organization options to the user, please ensure that the "
+"organization field has the class \"organizationName\"."
 msgstr ""
 
 #: admin/show_pipedrive_data.php:31
@@ -447,55 +469,55 @@ msgstr ""
 msgid "API Logs"
 msgstr ""
 
-#: inc/functions.php:8 inc/functions.php:10
+#: inc/functions.php:16 inc/functions.php:18
 msgid "pgfcs"
 msgstr ""
 
-#: inc/functions.php:9
+#: inc/functions.php:17
 msgid "pgfc"
 msgstr ""
 
-#: inc/functions.php:192
+#: inc/functions.php:200
 msgid "Syncing custom fields"
 msgstr ""
 
-#: inc/functions.php:243
+#: inc/functions.php:251
 msgid "No field found with this key"
 msgstr ""
 
-#: inc/functions.php:259
+#: inc/functions.php:267
 msgid "You are already logged in."
 msgstr ""
 
-#: inc/functions.php:268
+#: inc/functions.php:276
 msgid "Please fill in both fields."
 msgstr ""
 
-#: inc/functions.php:270
+#: inc/functions.php:278
 msgid "Invalid username or password."
 msgstr ""
 
-#: inc/functions.php:313
+#: inc/functions.php:321
 msgid "Username or Email"
 msgstr ""
 
-#: inc/functions.php:317
+#: inc/functions.php:325
 msgid "Password"
 msgstr ""
 
-#: inc/functions.php:321
+#: inc/functions.php:329
 msgid "Forgot Password?"
 msgstr ""
 
-#: inc/functions.php:324
+#: inc/functions.php:332
 msgid "Log In"
 msgstr ""
 
-#: inc/gravityForm.php:289
+#: inc/gravityForm.php:275
 msgid "Set Your Password"
 msgstr ""
 
-#: inc/gravityForm.php:291
+#: inc/gravityForm.php:277
 #, php-format
 msgid ""
 "Hello %s,\n"
@@ -507,13 +529,13 @@ msgid ""
 "%s"
 msgstr ""
 
-#: inc/gravityForm.php:293
+#: inc/gravityForm.php:279
 msgid ""
 "Your account has been created. Please use the link below to set your "
 "password:"
 msgstr ""
 
-#: inc/gravityForm.php:295
+#: inc/gravityForm.php:281
 msgid "Thank you!"
 msgstr ""
 
@@ -533,8 +555,40 @@ msgstr ""
 msgid "Add an activities"
 msgstr ""
 
-#: inc/pipeDriveUserCheck.php:41
-msgid "A user already exists with this email. Please login instead."
+#: inc/hardCoded.php:250
+msgid "Checking"
+msgstr ""
+
+#: inc/hardCoded.php:251
+msgid "Searching"
+msgstr ""
+
+#: inc/hardCoded.php:252
+msgid "A new organization with this name will be created."
+msgstr ""
+
+#: inc/pipeDriveUserCheck.php:63
+msgid "contact support"
+msgstr ""
+
+#: inc/pipeDriveUserCheck.php:66
+#, php-format
+msgid ""
+"We have detected more than one user with this email. Please %s to resolve "
+"this issue first."
+msgstr ""
+
+#: inc/pipeDriveUserCheck.php:75
+msgid "log in"
+msgstr ""
+
+#: inc/pipeDriveUserCheck.php:78
+#, php-format
+msgid "Please %s first."
+msgstr ""
+
+#: inc/pipeDriveUserCheck.php:92
+msgid "Checking Email Exist PipeDrive More than one"
 msgstr ""
 
 #: pipedrive-gravityform-sync.php:52
@@ -547,11 +601,7 @@ msgstr ""
 msgid "Add Array key"
 msgstr ""
 
-#: pipedrive-gravityform-sync.php:80
-msgid "Checking"
-msgstr ""
-
-#: pipedrive-gravityform-sync.php:105
+#: pipedrive-gravityform-sync.php:116
 msgid "Pipedrive Sync"
 msgstr ""
 

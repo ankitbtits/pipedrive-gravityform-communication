@@ -7,7 +7,9 @@ function prefill_and_disable_fields_globally($form) {
     $formID = $form['id'];
     $action = 'Populate fields for form: '.$formTitle.'('.$formID.')';
     if (!is_user_logged_in()) {
+        $form = assignOrganizationField($formID , $form);
         return $form; // Do nothing if not logged in
+        //return $form; // Do nothing if not logged in
     }
     $userID = get_current_user_id();
     $personID = get_user_meta($userID, 'pipedrive_person_id', true);
@@ -38,10 +40,8 @@ function prefill_and_disable_fields_globally($form) {
         foreach ($gravityfields as $field_id => $data) {
             $pipeDriveKey      = $data['pipedrive_key']; 
             $field              = $data['fields'];
-            $pipeVal = $pipeDriveData[$endpoint][$pipeDriveKey] ?? '';  
-            //$field->id = $field_id;     
+            $pipeVal = $pipeDriveData[$endpoint][$pipeDriveKey] ?? '';     
             if($field->visibility == 'visible'){
-             //  echo $field->label.' = '.$field->type.'<pre>'.print_r( $pipeVal , true).'</pre>';
             }     
             if (!empty($pipeVal)) {
                 $fieldFormated = assignDefaultValueByType($field, $pipeVal, ['endPoint'=>$endpoint, 'pipeFieldKey'=>$pipeDriveKey ], $pipeDriveData[$endpoint]);
@@ -57,6 +57,23 @@ function prefill_and_disable_fields_globally($form) {
 
     return $form;
 }
+function assignOrganizationField($formID , $form){
+    $populatedFiedls = getValidPopulatdFields($formID);
+    $gravityFormField = getValidFieldGravityForm($form['fields'] , $populatedFiedls); 
+    $formFields = [];
+    foreach ($gravityFormField as $endpoint => $gravityfields) {
+        foreach ($gravityfields as $field_id => $data) {
+            $pipeDriveKey       = $data['pipedrive_key']; 
+            $field              = $data['fields'];
+            $field->cssClass .= " ".$endpoint.'Field';    
+            continue;
+        }
+    }
+    $form['fields'] = mergeArraysByIdAndPosition($form['fields'], $formFields);
+    return $form;
+}
+
+
 function mergeArraysByIdAndPosition($arr1, $arr2) {
     $idsToReplace = array_column($arr2, 'id');
 
@@ -93,7 +110,7 @@ function assignDefaultValueByType($field, $value, $pipeArr = [], $pipeData = fal
             foreach ($field->inputs as $indexss=> &$input) {
                 if (isset($input['autocompleteAttribute']) && (!isset($input['isHidden']) || $input['isHidden'] != 1 ) && !in_array($input['id'], $doneFields)) {
                     $input['defaultValue'] = $arrayCom[$counts];
-                    $field->cssClass .= ' pgfc-readonly';
+                    $field->cssClass .= ' pgfc-readonly '.$pipeArr['endPoint'].'Field';
                     $doneFields[] = $input['id'];
                     $counts++;
                 }
@@ -104,7 +121,7 @@ function assignDefaultValueByType($field, $value, $pipeArr = [], $pipeData = fal
             foreach ($field->inputs as &$input) {
                 if (isset($input['pipedrive_key']) && isset($pipeData[$input['pipedrive_key']])) {        
                     $input['defaultValue'] = esc_attr(trim($pipeData[$input['pipedrive_key']]));
-                    $field->cssClass .= ' pgfc-readonly';  
+                    $field->cssClass .= ' pgfc-readonly '.$pipeArr['endPoint'].'Field';
                 }
             }
             break;
@@ -128,7 +145,7 @@ function assignDefaultValueByType($field, $value, $pipeArr = [], $pipeData = fal
                 $choiceTwo = $choice['value'];
                 if (in_array($choiceTwo, $selectedData) || array_key_exists($choiceTwo, $selectedData)) {
                     $choice['isSelected'] = true;
-                    $field->cssClass .= ' pgfc-readonly';
+                    $field->cssClass .= ' pgfc-readonly '.$pipeArr['endPoint'].'Field';
                 }                
             }
             unset($fieldOption);
@@ -146,16 +163,16 @@ function assignDefaultValueByType($field, $value, $pipeArr = [], $pipeData = fal
                     $value = $value['value'];
                 }
                 $field->defaultValue = esc_attr(trim($value));
-                $field->cssClass .= ' pgfc-readonly';
+                $field->cssClass .= ' pgfc-readonly '.$pipeArr['endPoint'].'Field';
             }else{
                 $field->defaultValue = esc_attr(trim($value));
-                $field->cssClass .= ' pgfc-readonly';
+                $field->cssClass .= ' pgfc-readonly '.$pipeArr['endPoint'].'Field';
             }
             break;
     }
 
     // Make read-only (optional UI hint)
-    $field->cssClass .= ' pgfc-readonly';
+    $field->cssClass .= ' pgfc-readonly '.$pipeArr['endPoint'].'Field';
 
     return $field;
 }
@@ -227,7 +244,7 @@ function make_pgfcFieldsReadonly($content, $field, $value, $lead_id, $form_id) {
 
         // Handle <select> fields
         if ($field->type === 'select') {
-            $content = preg_replace('/(<select[^>]*)(>)/i', '$1 disabled$2', $content);
+            $content = preg_replace('/(<select[^>]*)(>)/i', '$1 readonly$2', $content);
 
             // Preserve selected value
             preg_match('/name=[\'"]([^\'"]+)[\'"]/', $content, $nameMatch);
@@ -242,7 +259,7 @@ function make_pgfcFieldsReadonly($content, $field, $value, $lead_id, $form_id) {
         // Handle radio and checkbox fields
         if ($field->type === 'radio' || $field->type === 'checkbox') {
             // Disable the inputs
-            $content = preg_replace('/(<input[^>]*type=["\']?(radio|checkbox)["\']?[^>]*)(>)/i', '$1 disabled$3', $content);
+            $content = preg_replace('/(<input[^>]*type=["\']?(radio|checkbox)["\']?[^>]*)(>)/i', '$1 readonly$3', $content);
 
             // Add hidden inputs for checked values
             preg_match_all('/<input[^>]*checked[^>]*name=["\']?([^"\']+)["\']?[^>]*value=["\']?([^"\']+)["\']?/i', $content, $matches, PREG_SET_ORDER);
@@ -313,22 +330,23 @@ function formatPipedriveDateForGravityForm($gf_format, $pipedrive_date) {
 add_action('wp_head' , function(){
     echo '<style>
         .pgfc-readonly input[type="radio"] {
-        pointer-events: none;
-        opacity: 1; /* Keep it visible */
-        cursor: not-allowed;
-        accent-color: lightgray; /* Modern browsers support this */
+            pointer-events: none;
+            opacity: 1; /* Keep it visible */
+            cursor: not-allowed;
+            accent-color: #8a8a8a; /* Modern browsers support this */
         }
         .pgfc-readonly input[type=url] , .pgfc-readonly input[type=tel]{
-                background: #e9ecef;
+            background: #e9ecef;
         }
         .pgfc-readonly input[type="radio"]:checked ,  .pgfc-readonly input[type="checkbox"]:checked, pgfc-readonly input[type="checkbox"]{
-            accent-color: lightgray;
+            accent-color: #8a8a8a;
         }
-
+        .pgfc-readonly select{
+            pointer-events: none;
+        }
         .pgfc-readonly label {
             color: #888;
         }
     </style>';
 });
-
 

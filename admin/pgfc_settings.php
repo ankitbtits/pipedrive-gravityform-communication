@@ -6,10 +6,15 @@ class PGFC_Settings_Page {
     private $pipeDriveApiToken;
     public $pipeDriveIDError = false;
     public $stagesKey;
+    public $contact_support_page;
+    public $login_page;
+    public $pipedrive_custom_fields_last_updated;
+    
     public function __construct() {
         $this->stagesKey = 'pipedrive_stages';
         $this->handle_form_submission();
         $this->load_saved_options();
+   
     }
 
     private function handle_form_submission() {
@@ -21,7 +26,17 @@ class PGFC_Settings_Page {
             $pipeDriveApiToken = isset($_POST['pgfc_option']['pipeDriveApiToken'])
                 ? sanitize_text_field($_POST['pgfc_option']['pipeDriveApiToken'])
                 : '';
+            $contact_support_page   = isset($_POST['pgfc_option']['contact_support_page'])? sanitize_text_field($_POST['pgfc_option']['contact_support_page']): '';
+            $login_page             = isset($_POST['pgfc_option']['login_page'])? sanitize_text_field($_POST['pgfc_option']['login_page']): '';
+
+           // echo '<pre>'.print_r( $_POST['pgfc_option'] , true).'</pre>';
             update_option('pipeDriveApiToken', $pipeDriveApiToken);
+            update_option('contact_support_page', $contact_support_page);
+            update_option('login_page', $login_page);
+
+
+
+
             echo '<div class="updated"><p>' . esc_html__('Field saved successfully!', PGFC_TEXT_DOMAIN) . '</p></div>';
         }elseif(
             isset($_POST['pgfc_resyncCustomFields']) &&
@@ -60,6 +75,8 @@ class PGFC_Settings_Page {
     }
     private function load_saved_options() {
         $this->pipeDriveApiToken = get_option('pipeDriveApiToken', '');
+        $this->contact_support_page = get_option('contact_support_page', '');
+        $this->login_page = get_option('login_page', '');
         $this->pipedrive_custom_fields_last_updated = get_option('pipedrive_custom_fields_last_updated', '');
     }
 
@@ -78,10 +95,39 @@ class PGFC_Settings_Page {
                             <th><?php esc_html_e('Pipedrive API Token:', PGFC_TEXT_DOMAIN); ?></th>
                             <td><input type="text" name="pgfc_option[pipeDriveApiToken]" value="<?php echo esc_html($this->pipeDriveApiToken); ?>" class="regular-text" /></td>
                         </tr>
+             
+                        
+                        <tr>
+                            <th><?php esc_html_e('Contact Support Page:', PGFC_TEXT_DOMAIN); ?></th>
+                            <td>
+                                <?php
+                                    // echo '<pre>****'.print_r($this->contact_support_page , true).'</pre>';
+                                    wp_dropdown_pages(array(
+                                        'name'              => 'pgfc_option[contact_support_page]',
+                                        'selected'          => isset($this->contact_support_page) ? $this->contact_support_page : '',
+                                        'show_option_none'  => __('-- Select a page --', PGFC_TEXT_DOMAIN),
+                                        'option_none_value' => '',
+                                    ));
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><?php esc_html_e('Dashboard Page:', PGFC_TEXT_DOMAIN); ?></th>
+                            <td>
+                                <?php
+                                    wp_dropdown_pages(array(
+                                        'name'              => 'pgfc_option[login_page]',
+                                        'selected'          => isset($this->login_page) ? $this->login_page : '',
+                                        'show_option_none'  => __('-- Select a page --', PGFC_TEXT_DOMAIN),
+                                        'option_none_value' => '',
+                                    ));
+                                ?>
+                            </td>
+                        </tr>
                         <tr>
                             <th></th>
                             <td><input name="pgfc_submit" class="button button-primary" type="submit" value="<?php esc_html_e('Save', PGFC_TEXT_DOMAIN); ?>" /></td>
-                        </tr>              
+                        </tr>   
                         <tr>
                             <th><?php esc_html_e('Resync pipedrive all the custom fields:', PGFC_TEXT_DOMAIN); ?></th>
                             <td>
@@ -151,13 +197,14 @@ class PGFC_Settings_Page {
                         <td>
                             <?php 
                                 printf(
-                                    __('1. Set the field value to <b>%s</b> if you want an account to be created when the checkbox is selected. <br> 2. Creating user accounts requires an email. The email will be taken from either <b>%s</b> field or an email field with <b>%s</b> as its "Admin Field Label". Ensure that at least one of these email fields exists in the form.', PGFC_TEXT_DOMAIN),
+                                    __('1. Set the field value to <b>%s</b> if you want an account to be created when the checkbox is selected. <br> 2. Creating user accounts requires an email. The email will be taken from either <b>%s</b> field or an email field with <b>%s</b> as its "Field Class". Ensure that at least one of these email fields exists in the form.', PGFC_TEXT_DOMAIN),
                                     'createAccountWP',
                                     'Pipedrive → Persons → Email',
                                     'userEmail'
                                 ); 
                                 ?>
                         </td>
+
                     </tr>
                     <tr>
                         <th><?php _e('For Privacy Policy', PGFC_TEXT_DOMAIN);?></th>
@@ -196,7 +243,14 @@ class PGFC_Settings_Page {
                             ?>
                         </td>
                     </tr>
-
+                    <tr>
+                        <th><?php _e('Organization Fields Note:', PGFC_TEXT_DOMAIN); ?></th>
+                        <td>
+                            <?php 
+                            _e('To display organization options to the user, please ensure that the organization field has the class "organizationName".', PGFC_TEXT_DOMAIN);
+                            ?>
+                        </td>
+                    </tr>
 
                 </table>
             <div>

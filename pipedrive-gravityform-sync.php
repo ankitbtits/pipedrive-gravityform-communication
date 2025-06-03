@@ -75,11 +75,22 @@ function scriptsFrontendBackend() {
 	wp_enqueue_style(PGFC_SLUG.'_style', plugin_dir_url(__FILE__).'assets/css/style.css', array(), PGFC_VERSION);
     //wp_enqueue_script('jquery', false, array(), true, true); // Load jQuery in the footer
     wp_enqueue_script(PGFC_SLUG.'_js', plugin_dir_url(__FILE__).'assets/js/script.js', array('jquery'), PGFC_VERSION, true); 
-    wp_localize_script(PGFC_SLUG.'_js', 'dynamicConten', array(
-        'ajaxurl' => admin_url('admin-ajax.php'),
-        'loadingText' => __('Checking', PGFC_TEXT_DOMAIN),
-        'nonce' => wp_create_nonce('pgfc_generate_pdf_nonce'),
+    // wp_localize_script(PGFC_SLUG.'_js', 'dynamicConten', array(
+    //     'ajaxurl' => admin_url('admin-ajax.php'),
+    //     'loadingText' => __('Checking', PGFC_TEXT_DOMAIN),
+    //     'searchingText'=> __('Searching', PGFC_TEXT_DOMAIN),
+    //     'orgNotFound'=> __('A new organization with this name will be created.', PGFC_TEXT_DOMAIN),
+    //     'nonce' => wp_create_nonce('pgfc_generate_pdf_nonce'),
+    // ));
+
+    wp_localize_script(PGFC_SLUG . '_js', 'dynamicConten', array_merge(
+        staticText(),
+        array(
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('pgfc_generate_pdf_nonce'),
+        )
     ));
+
 }
 add_action('wp_enqueue_scripts', 'scriptsFrontendBackend');
 add_action('admin_enqueue_scripts', 'scriptsFrontendBackend');

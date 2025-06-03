@@ -1,6 +1,5 @@
 const ajaxurlFront = dynamicConten.ajaxurl;
 const checkingText = dynamicConten.loadingText;
-console.log(checkingText)
 const nonce = dynamicConten.nonce;
 jQuery(document).ready(function($){
     // Function to set cookie
@@ -175,8 +174,159 @@ jQuery(document).ready(function($) {
 });
 jQuery(document).ready(function($) {
     $('.pgfc-readonly').each(function() {
-        $(this).find('input[type="checkbox"], input[type="radio"], input[type="url"], input[type="text"], textarea, select').each(function() {
+        $(this).find('input[type="radio"], input[type="url"], textarea').each(function() {
+            $(this).prop('readonly', true);
+        });
+         $(this).find('input[type="checkbox"]').each(function() {
             $(this).prop('disabled', true);
         });
+
     });
+    $('.pgfc-readonly select').attr('readonly' , true);
+});
+
+
+jQuery(document).ready(function($) {
+    let delayTimer;
+
+    $('.userEmail input').on('input', function() {
+        clearTimeout(delayTimer);
+        const email = $(this).val();
+        // Basic validation
+         $(".userEmail .ginput_container .login-message").remove()
+        if (!email || !email.includes('@')) return;
+           
+            delayTimer = setTimeout(function() {
+            $.ajax({
+                url: ajaxurlFront,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    action: 'check_or_create_user_by_email',
+                    current_url: window.location.href,
+                    email: email
+                },
+                success: function(response) {
+                    if(!response.success){
+                        $(".gform_button").css({
+                        'opacity': '0.5',
+                        'pointer-events': 'none'
+                        });
+                    }
+                    if(response.success){
+                        $(".gform_button").css({
+                        'opacity': '',
+                        'pointer-events': ''
+                        });
+                    }
+                    if(response.data.message){
+                        $('.userEmail .ginput_container').append(
+                            '<div class="login-message gfield_validation_message" style="margin-top:5px;">' + response.data.message + '</div>'
+                        );
+                    }
+                   
+                },
+                error: function(err) {
+                    console.error('Error checking/creating user:', err);
+                }
+            });
+        }, 600); // delay to prevent spamming the server
+    });
+});
+
+
+
+jQuery(document).ready(function($) {
+    const $input = $('.organizationName input');
+    let timeout;
+    let orgMatched = false; // default
+    $input.on('input', function () {
+        $('.organizationField').show();
+        const query = $(this).val();
+        if (query.length >= 2) {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
+                $('.org-suggestions, .org-loader').remove();
+                $input.after('<div class="org-loader">'+dynamicConten.searchingText+'...</div>');
+                $.ajax({
+                    url: ajaxurlFront, // Provided by WordPress in admin or manually define
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        action: 'search_organizations_by_name',
+                        term: query
+                    },
+                    success: function(response) {
+                        $('.org-loader').remove();
+                        $('.org-suggestions, .org-suggestions-noresult').remove(); // remove old suggestions and messages
+                        orgMatched = false; 
+                        if (response.success && response.data.length > 0) {
+                            let suggestionHTML = '<ul class="org-suggestions">';
+                            const inputVal = $input.val().trim().toLowerCase();
+                            response.data.forEach(function(org) {
+                                if (org.name.trim().toLowerCase() === inputVal) {
+                                    orgMatched = true;
+                                }
+                                suggestionHTML += `<li data-id="${org.id}">${org.name}</li>`;
+                            });
+                            suggestionHTML += '</ul>';
+                            $input.after(suggestionHTML);
+                        }else{
+                            const message = `<div class="org-suggestions-noresult no-results gfield_validation_message">${dynamicConten.orgNotFound}</div>`;
+                            $input.after(message);
+                        }
+                    },
+                    error: function () {
+                        $('.org-loader').remove(); // Also remove loader on error
+                    }
+                });
+            }, 300); // debounce
+        } else {
+                $('.org-suggestions, .org-loader').remove();
+        }
+    });
+    // Optional: fill input on suggestion click
+    let suggestionClicked = false;
+    $(document).on('click', '.org-suggestions li', function () {
+        suggestionClicked = true;
+        const $clickedSuggestion = $(this);
+        const $input = $clickedSuggestion.closest('.organizationField').find('input'); // Assuming there's an input inside
+        $input.val($clickedSuggestion.text());
+        $('.org-suggestions , .org-suggestions-noresult').remove();
+        $('.organizationField').each(function () {
+            console.log('**');
+            const $orgField = $(this);
+            const isPersonField = $orgField.hasClass('personField');
+            if ($orgField.hasClass('organizationName')) {
+                console.log('org');
+                $orgField.show();
+                return;
+            }
+            if (!isPersonField) {
+                console.log('Hiding organization field');
+                $orgField.hide();
+            }
+        });
+    });
+    $input.on('focusout', function () {
+        console.log('orgMatched:' + orgMatched);
+        setTimeout(function () {
+            $('.org-suggestions, .org-loader').remove();
+           if (!suggestionClicked) {
+                 $('.org-suggestions-noresult').remove();
+                const message = `<div class="org-suggestions-noresult no-results gfield_validation_message">${dynamicConten.orgNotFound}</div>`;
+                $input.after(message);
+            }
+            if(orgMatched){
+                 $('.org-suggestions-noresult').remove();
+            }
+        }, 100); // delay allows click to register before cleanup
+    });
+
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.organizationName').length) {
+            $('.org-suggestions').remove();
+        }
+    });
+    
 });

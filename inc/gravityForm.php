@@ -6,24 +6,32 @@ function handle_pipedrive_integration($entries, $form) {
     $formID = $form['id'];
     $action = 'Through Form: '.$formTitle.'('.$formID.')';
     $payloads = getPayLoads($entries); 
-
     $personId = null;
     $orgId = null;
     $dealID = null;
     $user_id = null;
     $create_account = false;
     $userEmail = null;
-
     if(isset($payloads['persons']['email'])){
         $userEmail = $payloads['persons']['email'];
     }
+    if (!is_user_logged_in()) {
+         $emailID   = $payloads['persons']['email'];
+         $pipePerson =  toemailExistPipeDrive($emailID);
+         if (!email_exists($emailID) && $pipePerson) {
+            $create_account = true;
+            $personId = $pipePerson;
+         }
+    }
     foreach($form['fields'] as $field){
-        $adminLabel = $field->adminLabel;
         $fieldType = $field->type;
-        if($adminLabel == 'userEmail' && $fieldType == 'email'){
-            $fieldID = $field->id;
-            $userEmail = $entries[$fieldID];
-            break;
+        if(isset($field->cssClass) && !empty($field->cssClass)){
+            $adminClass = $field->cssClass;
+            if($adminClass == 'userEmail' && $fieldType == 'email'){
+                $fieldID = $field->id;
+                $userEmail = $entries[$fieldID];
+                break;
+            }
         }
     }
     foreach ($entries as $field_value) {
@@ -33,10 +41,9 @@ function handle_pipedrive_integration($entries, $form) {
         }
     }
     // Create WordPress account only if "createAccountWP" is found
-    if ($create_account && !is_user_logged_in() && $userEmail) {
+    if ( ( $create_account && !is_user_logged_in() && $userEmail ) ||  $flagCreateAccont ) {
         $user_id = createAccount($userEmail);
     }
-    
     // Check if user is logged in
     if (is_user_logged_in()) {
         $user_id = get_current_user_id();
@@ -50,34 +57,26 @@ function handle_pipedrive_integration($entries, $form) {
     }
     // 1. Create Organization and link with person
     if (!$orgId && isset($payloads['organizations']) && !empty($payloads['organizations'])) {
-      
         $searchRes = [];
         if (isset($payloads['organizations']['name']) && !empty($payloads['organizations']['name'])) {
             $orgName = $payloads['organizations']['name']; // Organization name
-            // Try to search for existing organization
-            error_log("orgName" . $orgName );
             $searchRes = pipedrive_api_request('GET', 'organizations/search', [
                 'term'   => $orgName,
                 'fields' => 'name',
                 'exact_match'=>1,
                 'limit'  => 1,
-            ], $action);
+            ], $action);            
         }
-
-       
         if (isset($searchRes['data']['items']) && isset($searchRes['data']['items'][0]) && !empty($searchRes['data']['items'][0]['item']['id'])) 
         {
             $orgId = $searchRes['data']['items'][0]['item']['id'];
-            //error_log("GET ORD ID" . $orgId );
         }else{
             $org = pipedrive_api_request('POST','organizations', $payloads['organizations'], $action);     
             if (isset($org['data']['id']) && !empty($org['data']['id'])) {
                 $orgId = $org['data']['id'];
-               // error_log("GET POST ID" . $orgId );
             }
         }
     }
-
     // 1. Create Person only if it doesn't exist
     if (!$personId && isset($payloads['persons']) && !empty($payloads['persons'])) {
         if (!empty($orgId)) {
@@ -88,11 +87,7 @@ function handle_pipedrive_integration($entries, $form) {
             return; // Stop execution if person creation fails
         }
         $personId = $person['data']['id'];
-
-        // Save Person ID in user meta
-        if ($user_id) {
-            update_user_meta($user_id, 'pipedrive_person_id', $personId);
-        }
+        // Save Person ID in user meta        
     }else{
         if (empty($orgId)) {
             return;
@@ -102,7 +97,9 @@ function handle_pipedrive_integration($entries, $form) {
             return; // Stop execution if person creation fails
         }
     }
-
+    if ($user_id && $personId) {
+        update_user_meta($user_id, 'pipedrive_person_id', $personId);
+    }
     // 3. Create Deal
     if (isset($payloads['deals']) && !empty($payloads['deals'])) {
         $payloads['deals']['person_id'] = $personId;
@@ -114,12 +111,10 @@ function handle_pipedrive_integration($entries, $form) {
             $dealID = $deal['data']['id'];
         }
     }
-
     // 4. Create Activity
     if (isset($payloads['activities']) && !empty($payloads['activities'])) {        
         foreach($payloads['activities'] as $activity){
             if(!is_array($activity)){ return;}
-            
             $activity['person_id'] = $personId;
             if ($dealID) {
                 $activity['deal_id'] = $dealID;
@@ -137,7 +132,6 @@ function pipedrive_api_request($method, $endpoint, $data = [], $action = false) 
     $url = "$domain/v1/$endpoint?api_token=$pipeDriveApiToken";
     // Initialize cURL session
     $ch = curl_init();
-
     // Set HTTP method
     switch (strtoupper($method)) {
         case "POST":
@@ -159,16 +153,13 @@ function pipedrive_api_request($method, $endpoint, $data = [], $action = false) 
         default:
             return false; // Invalid method
     }
-
     // Set common cURL options
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-
     // Decode response
     $decodedResponse = json_decode($response, true);
     if (!isset($decodedResponse['success']) || $decodedResponse['success'] === false) {
@@ -181,8 +172,6 @@ function getPayLoads($entries){
     if(isset($entries['form_id'])){
         $formId = $entries['form_id'];
         $mapping = getMapping($formId);
-
-
         foreach($mapping as $key => $val){
             $endPoint = getPipeDriveAPIEndPoint($key);
             if(is_array($val) && !empty($val)){
@@ -258,8 +247,6 @@ function getPayLoads($entries){
             }
         }
     }
-
-   // die();
     return $payLoads;
 }
 
@@ -277,7 +264,6 @@ function createAccount($email){
         'user_pass' => wp_generate_password(), // Generate a random password
         'role' => 'subscriber', // Set the role as needed
     ]);
-
     if (is_wp_error($user_id)) {
         return;
     }
@@ -294,13 +280,11 @@ function createAccount($email){
         $reset_link,
         __("Thank you!", PGFC_TEXT_DOMAIN)
         );
-
         // Send email
         wp_mail($email, $subject, $message);
     }
     return $user_id;
 }
-
 function extractAndJoinDecimalValues(&$array, $baseKey, $separator = ' ') {
     $matches = [];
     // Step 1: Find all keys that start with baseKey + decimal (e.g., "1.3", "1.6")
@@ -314,17 +298,14 @@ function extractAndJoinDecimalValues(&$array, $baseKey, $separator = ' ') {
         uksort($matches, function ($a, $b) {
             return floatval($a) <=> floatval($b);
         });
-
         // Step 3: Collect only non-empty values
         $values = array_filter($matches, function($val) {
             return $val !== null && $val !== '';
         });
-
         // Step 4: Remove those keys from original array
         foreach (array_keys($matches) as $key) {
             unset($array[$key]);
         }
-
         // Step 5: Concatenate the values and return
         return implode($separator, $values);
     }
@@ -334,17 +315,28 @@ function extractAndJoinDecimalValues(&$array, $baseKey, $separator = ' ') {
         unset($array[$baseKey]);
         return $val;
     }
-
     return null; // Nothing found
 }
-
-
-
 add_action('wp_head', 'updatePersonManually');
 function updatePersonManually(){
     if(isset($_GET['pipedrive_person']) && is_user_logged_in()){
         update_user_meta(get_current_user_id(), 'pipedrive_person_id', $_GET['pipedrive_person']);
     }
 }
-
-
+function toemailExistPipeDrive($emailID){
+    $emailExistPipeDrive = false;
+    if( $emailID)
+    {
+        $action = 'Checking email Id pipedrive';
+        $response = pipedrive_api_request('GET', "persons/search", [
+        'term' => $emailID,
+        'fields' => 'email', // Specify searching by email
+        "limit"=> 1,
+        'exact_match'=>1,
+        ], $action);
+        if (isset($response['data']['items']) && count($response['data']['items']) > 0) {
+           return $response['data']['items'][0]['item']['id']; //personID
+        }
+    }
+    return $emailExistPipeDrive;
+}

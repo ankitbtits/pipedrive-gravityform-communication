@@ -96,8 +96,8 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                                                         >'.$field['label'].'</option>';
                                                     if(allowSubFieldsType($field['type']) && isset($field['inputs']) && !empty($field['inputs']) && is_array($field['inputs'])){
                                                         foreach($field['inputs'] as $input){
-
-                                                            if(!isset($input['isHidden']) || (isset($input['isHidden']) && !$input['isHidden'])){
+                                                            $isHidden = $input['isHidden'] ?? false;
+                                                            if(!$isHidden){
                                                                 echo '<option value="'.$input['id'].'"
                                                                 
                                                                 '.(( $fieldID == $input['id'])?'selected':'').'
@@ -199,7 +199,8 @@ $mapping = get_post_meta($pgrcID, 'mapping', true);
                             echo '<option value="'.$field->id.'">'.$field['label'].'</option>';
                             if(allowSubFieldsType($field['type']) && !empty($field['inputs']) && is_array($field['inputs'])){
                                 foreach($field['inputs'] as $input){
-                                    if(!$input['isHidden']){
+                                    $isHidden = $input['isHidden'] ?? false;
+                                    if(!$isHidden){
                                         echo '<option value="'.$input['id'].'">'.$input['label'].'('.$field['label'].')</option>';
                                     }
                                 }

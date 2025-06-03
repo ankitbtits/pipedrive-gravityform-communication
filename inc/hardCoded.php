@@ -245,6 +245,10 @@ function skipPopulateFieldTypesNew(){
     return ['date', 'multi_choice'];
 }
 
-function getDefaultPipeLineId(){
-    return 3;
+function staticText() {
+    return array(
+        'loadingText'    => __('Checking', PGFC_TEXT_DOMAIN),
+        'searchingText'  => __('Searching', PGFC_TEXT_DOMAIN),
+        'orgNotFound'    => __('A new organization with this name will be created.', PGFC_TEXT_DOMAIN),
+    );
 }
